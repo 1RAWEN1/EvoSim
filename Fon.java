@@ -32,17 +32,9 @@ public class Fon extends Actor
     }
     public void setImage1(GreenfootImage im, GreenfootImage image){
         image.clear();
-        //image.setColor(new Color(80,80,80,255));
-        //image.fill();
-        //System.out.println(((double)w/getWorld().getWidth()));
-        //im.scale(1200,700);
-        //image.drawImage(im,500-(int)(cof*MyWorld.pl.getX()),300-(int)(cof*MyWorld.pl.getY()));
+
         image.drawImage(im,0,0);
-        //image.setColor(Color.GRAY);
-        //image.fillRect(0,0,100,getWorld().getHeight());
-        //image.fillRect(getWorld().getWidth()-100,0,100,getWorld().getHeight());
-        //image.setColor(Color.BLACK);
-        //image.drawRect(100,-100,1000,1000);
+
         temp.setValue("Temp:"+MyWorld.pl.tg);
         if(MyWorld.pl.tg>36){
             red=Math.abs(MyWorld.pl.tg-36)*20;
@@ -75,24 +67,7 @@ public class Fon extends Actor
         else{
             image.drawImage(drawBar(100,20,MyWorld.plants,50,Color.WHITE,Color.GREEN,"растения"),0,40);
         }
-        /*image.setColor(Color.WHITE);
-        image.fillRect(0,10,100,20);
-        image.setColor(Color.BLACK);
-        image.drawRect(0,10,100,20);
-        image.setColor(new Color(0,255,255,255));
-        image.fillRect(1,11,(int)(((double)MyWorld.pl.myAn/30)*98),19);
-        image.setColor(Color.WHITE);
-        image.fillRect(0,40,100,20);
-        image.setColor(Color.BLACK);
-        image.drawRect(0,40,100,20);
-        image.setColor(new Color(255,30,0,255));
-        image.fillRect(1,41,(int)(((double)MyWorld.bot1.myAn/30)*98),19);
-        image.setColor(Color.WHITE);
-        image.fillRect(0,70,100,20);
-        image.setColor(Color.BLACK);
-        image.drawRect(0,70,100,20);
-        image.setColor(Color.GREEN);
-        image.fillRect(1,71,(int)(((double)MyWorld.plants/50)*98),19);*/
+
         if(MyWorld.pl.can==0){
             unLab.setValue("Super: 0");
         }
@@ -157,17 +132,9 @@ public class Fon extends Actor
             }
         }
         if(MyWorld.plmode==0){
-            //GreenfootImage water1=new GreenfootImage("Sit"+(MyWorld.pl.wt3)+".png");
-            //water1.scale(water1.getWidth()*5, water1.getHeight()*5);
             image.drawImage(drawBar(100,20,MyWorld.pl.water2,MyWorld.pl.mw,new Color(153,217,234),new Color(0,126,232),"вода"),0, 130);
-            //GreenfootImage sit1=new GreenfootImage("Sit"+(20+MyWorld.pl.sit2+1)+".png");
-            //sit1.scale(sit1.getWidth()*5, sit1.getHeight()*5);
             image.drawImage(drawBar(100,20,MyWorld.pl.sit1,MyWorld.pl.msit,new Color(255,242,0),new Color(255,127,39),"еда"),0, 160);
-            //GreenfootImage xp1=new GreenfootImage("XP"+(MyWorld.pl.xp*3/MyWorld.pl.mxp)+".png");
-            //xp1.scale(xp1.getWidth()*5, xp1.getHeight()*5);
             image.drawImage(drawBar(100,20,MyWorld.pl.xp,MyWorld.pl.mxp,new Color(181,230,29),new Color(34,177,76),"здоровье"),0, 190);
-            //unLab.setValue(MyWorld.pl.air+"/"+MyWorld.pl.mair);
-            //unLab.setFillColor(Color.BLACK);
             image.drawImage(drawBar(100,20,MyWorld.pl.air,MyWorld.pl.mair,Color.WHITE,new Color(205,205,205),"О2"), 0,215);
         }
         
@@ -176,16 +143,6 @@ public class Fon extends Actor
             image.drawImage(drawBar(100,20,MyWorld.plan.sit1,MyWorld.plan.msit,new Color(255,242,0),new Color(255,127,39),"еда"),1100, 40);
             image.drawImage(drawBar(100,20,MyWorld.plan.xp,MyWorld.plan.mxp,new Color(181,230,29),new Color(34,177,76),"здоровье"),1100, 70);
             image.drawImage(drawBar(100,20,MyWorld.plan.air,MyWorld.plan.mair,Color.WHITE,new Color(205,205,205),"О2"), 1100,100);
-            /*image.drawImage(drawBar(100,20,MyWorld.pl.air,MyWorld.pl.mair,Color.WHITE,new Color(205,205,205)), 0,215);
-            GreenfootImage water=new GreenfootImage("Sit"+(MyWorld.plan.wt3)+".png");
-            water.scale(water.getWidth()*5, water.getHeight()*5);
-            image.drawImage(water,950-water.getWidth()/2, 20);
-            GreenfootImage sit=new GreenfootImage("Sit"+(20+MyWorld.plan.sit2+1)+".png");
-            sit.scale(sit.getWidth()*5, sit.getHeight()*5);
-            image.drawImage(sit,950-sit.getWidth()/2, 60);
-            GreenfootImage xp=new GreenfootImage("XP"+(MyWorld.plan.xp*3/MyWorld.plan.mxp)+".png");
-            xp.scale(xp.getWidth()*5, xp.getHeight()*5);
-            image.drawImage(xp,950-xp.getWidth()/2, 100);*/
             unLab.setValue("Temp:"+MyWorld.plan.tg);
             if(MyWorld.plan.tg>36){
                 red=Math.abs(MyWorld.plan.tg-36)*20;
@@ -249,9 +206,6 @@ public class Fon extends Actor
                 unLab.setFillColor(new Color(0, 255-blue/2,blue,255));
             }
             image.drawImage(unLab.updateImage(), 1100,95);
-            /*unLab.setValue(MyWorld.plan.air+"/"+MyWorld.plan.mair);
-            unLab.setFillColor(Color.BLACK);
-            image.drawImage(unLab.updateImage(), 1100,160);*/
             unLab.setValue("Age:"+MyWorld.observedPlant.myage+"/"+MyWorld.observedPlant.age);
             unLab.setFillColor(Color.BLACK);
             image.drawImage(unLab.updateImage(), 1100,120);
@@ -272,9 +226,6 @@ public class Fon extends Actor
                     newSelect.setColor(Color.RED);
                 }
                 newSelect.drawRect((i/2)*100+(i/2)*50,0,100,99);
-                /*unLab.setValue("?");
-                unLab.setFillColor(Color.BLACK);
-                newSelect.drawImage(unLab.updateImage(), ((i/2)*100+(i/2)*50)+50-unLab.updateImage().getWidth()/2,50-unLab.updateImage().getHeight()/2);*/
             }
             image.drawImage(newSelect,600-newSelect.getWidth()/2,400);
             image.setColor(Color.RED);
@@ -299,9 +250,6 @@ public class Fon extends Actor
             unLab.setValue(Lobby.scenario.get(Lobby.slide));
             image.drawImage(unLab.updateImage2(),600-unLab.updateImage2().getWidth()/2,100);
         }
-        //MyWorld mw=(MyWorld)getWorld();
-        //unLab.setValue("FPS: "+mw.fps);
-        //image.drawImage(unLab.updateImage(),0,600);
         setImage(image);
     }
     public void act() 

@@ -264,13 +264,6 @@ public class Plant extends RealObject
         }
         else{
             cof=4;
-            /*prok=Greenfoot.getRandomNumber(3)+1;
-            if(prok==1){
-                cof=cof+(cof*MyWorld.cofic);
-            }
-            else if(prok==2){
-                cof=cof-(cof*MyWorld.cofic);
-            }*/
             par.set(11, cof);
         }
         
@@ -339,21 +332,16 @@ public class Plant extends RealObject
             damage=1;
         }
         tim=0;
-        //mcolf=size3*17000;
         updateImage();
         MyWorld.plants++;
     }
     int transparent;
     public void updateImage(){
-        /*image = new GreenfootImage(n, n);
-        image.setColor(new Color((int)(xich*255), (int)((1-xich)*255), 0, 255));
-        image.fillOval(0, 0, n, n);*/
         size3=size;
         transparent=255;
         if(agesp>myage){
             size3=(int)(size*((double)(myage)/agesp));
             mcolf=(int)((((double)(myage)/(agesp*2))+0.5)*mcolf1);
-            //eat=mcolf/50;
             mw=(int)((((double)(myage)/(agesp*2))+0.5)*mw1);
         }
         if(agesp>=myage){
@@ -385,8 +373,6 @@ public class Plant extends RealObject
             image.setColor(new Color(153, 217, 234, transparent));
             image.fillOval(0, 0, size3, size3);
         }
-        //image.setColor(Color.BLACK);
-        //image.drawOval(0,0,image.getWidth()-1,image.getHeight()-1);
         setImage(image);
         
         mxp=size3;
@@ -445,13 +431,6 @@ public class Plant extends RealObject
             }
         }
         if(touchHole && ist==0 && h.loc==onground){
-            /*r=getRotation();
-            turnTowards(h.getX(),h.getY());
-            rtoh=Math.abs(r-getRotation());
-            setRotation(r);
-            if(rtoh>180){
-                rtoh=360-rtoh;
-            }*/
             if(!inHole && h.size>size){
                 inHole=true;
             }
@@ -536,12 +515,7 @@ public class Plant extends RealObject
             }
         }
         
-        /*if(seclater>=30){
-        }*/
         fenergi=0;
-        /*if(isTouching(Water.class) || isTouching(Ocean.class)){
-            colfood-=(image.getWidth());
-        }*/
         updateImage();
         if(anabioz==false && !inHole || anabioz==false && inHole && touchHole){
             fotosintez();
@@ -588,80 +562,6 @@ public class Plant extends RealObject
         }
         water2=water2-fenergi;
     }
-    
-    /*public void barMove(){
-        sit.setLocation(x,y-30);
-        hlbr.setLocation(x,y-10);
-        t.setLocation(x,y-40);
-        wb.setLocation(x,y-20);
-        label1.setLocation(x,y-50);
-        if(mcolf>0){
-            sit2=colfood/(mcolf/10);
-            if(sit2<0){
-                sit2=0;
-            }
-            if(sit2>10){
-                sit2=10;
-            }
-        }
-        if(mw>0){
-            wt3=water2/(mw/10);
-            if(wt3<0){
-                wt3=0;
-            }
-            if(wt3>10){
-                wt3=10;
-            }
-        }
-        tg=(int)((needt*sogr+(ts*(1-sogr))));
-        if(MyWorld.showbars==1){
-            setImageToBar();
-        }
-        else if(MyWorld.showbars==0){
-            sit.setImage("nblok.png");
-            hlbr.setImage("nblok.png");
-            t.setImage("nblok.png");
-            wb.setImage("nblok.png");
-            label1.setValue("");
-        }
-    }
-    public void setImageToBar(){
-        if(ts>=needt){
-            if(tg>needt+10){
-                t.setImage("T3.png");
-            }
-            else if(tg<needt-20){
-                t.setImage("T0.png");
-            }
-            else if(tg<needt-10){
-                t.setImage("T1.png");
-            }
-            else{
-                t.setImage("T2.png");
-            }
-        }
-        else if(ts<needt){
-            if(tg>needt+10){
-                t.setImage("T3.png");
-            }
-            else if(tg<needt-20){
-                t.setImage("T0.png");
-            }
-            else if(tg<needt-10){
-                t.setImage("T1.png");
-            }
-            else{
-                t.setImage("T2.png");
-            }
-        }
-        wb.setImage("Sit"+wt3+".png");
-        
-        sit.setImage("Sit"+(sit2+21)+".png");
-        
-        if(xp>=0){
-            hlbr.setImage("XP"+(int)((double)(xp*3)/mxp)+".png"); 
-        }
-    }*/
     
     public void fotosintez(){
         fenergi=(int)(size3*size3*5*cof);
@@ -874,15 +774,6 @@ public class Plant extends RealObject
                 stopp=1;
             }
         }
-        /*else if(tPl!=null && xich<0.7){
-            dob1=tPl;
-            if(dob1.onground==onground && colfood<mcolf){
-                colfood+=eat;
-                dob1.colfood-=eat;
-                xp-=dob1.poisondam;
-                stopp=1;
-            }
-        }*/
     }
     
     public void temp(){

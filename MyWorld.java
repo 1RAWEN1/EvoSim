@@ -90,27 +90,6 @@ public class MyWorld extends World
         addObject(fm, 600, 350);
         fon1=new Fon(null);
         addObject(fon1, 600, 350);
-        //Greenfoot.setSpeed(100);
-        /*GreenfootImage fon1=new GreenfootImage(getWidth(),getHeight());
-        for(int i=0;i<getWidth()/5;i++){
-            for(int i1=0;i1<getHeight()/5;i1++){
-                ts=(int)(((double)(5*i)/getWidth())*temp)+Greenfoot.getRandomNumber(10)-5;
-                if(ts<=10){
-                    snow.rotate(Greenfoot.getRandomNumber(4)*90);
-                    fon1.drawImage(snow,i*5,i1*5);
-                }
-                else if(ts>10 && ts<40){
-                    ground.rotate(Greenfoot.getRandomNumber(4)*90);
-                    fon1.drawImage(ground,i*5,i1*5);
-                }
-                else if(ts>=40){
-                    sand.rotate(Greenfoot.getRandomNumber(4)*90);
-                    fon1.drawImage(sand,i*5,i1*5);
-                }
-            }
-        }
-        setBackground(fon1);*/
-        //addObject(new Hole(10,1), 500, 500);
     }
     Actor crt;
     
@@ -125,74 +104,57 @@ public class MyWorld extends World
     GreenfootImage im;
     
     GreenfootImage eye;
-    
-    //static GreenfootImage fon2=new GreenfootImage("fon2.jpg");
     public void updateFon(){
         fon.setColor(new Color(80,80,80,255));
         fon.fill();
-        //System.out.println(pl.getList().size());
+
         if(!pl.inHole || MyWorld.plmode>0){
             fon.drawImage(getBackground(), 0, 0);
             for(int i=0;i<pl.getWRList().size();i++){
                 crt=pl.getWRList().get(i);
-                //cri=new GreenfootImage(crt.getImage());
-                //cri.rotate(crt.getRotation());
                 fon.drawImage(crt.getImage(), crt.getX()-crt.getImage().getWidth()/2, crt.getY()-crt.getImage().getHeight()/2);
             }
             for(int i=0;i<pl.getWList().size();i++){
                 crt=pl.getWList().get(i);
-                //cri=new GreenfootImage(crt.getImage());
-                //cri.rotate(crt.getRotation());
                 fon.drawImage(crt.getImage(), crt.getX()-crt.getImage().getWidth()/2, crt.getY()-crt.getImage().getHeight()/2);
             }
         }
+
         if(pl.inHole || MyWorld.plmode>0){
             for(int i=0;i<pl.getHRList().size();i++){
                 crt=pl.getHRList().get(i);
-                //cri=new GreenfootImage(crt.getImage());
-                //cri.rotate(crt.getRotation());
                 fon.drawImage(crt.getImage(), crt.getX()-crt.getImage().getWidth()/2, crt.getY()-crt.getImage().getHeight()/2);
             }
         }
+
         for(int i=0;i<pl.getHList().size();i++){
             crt=pl.getHList().get(i);
-            //cri=new GreenfootImage(crt.getImage());
-            //cri.rotate(crt.getRotation());
             fon.drawImage(crt.getImage(), crt.getX()-crt.getImage().getWidth()/2, crt.getY()-crt.getImage().getHeight()/2);
         }
+
         if(!pl.inHole || MyWorld.plmode>0){
-            /*for(int i=0;i<pl.getPList().size();i++){
-                crt=pl.getPList().get(i);
-                //cri=new GreenfootImage(crt.getImage());
-                //cri.rotate(crt.getRotation());
-                fon.drawImage(crt.getImage(), crt.getX()-crt.getImage().getWidth()/2, crt.getY()-crt.getImage().getHeight()/2);
-            }*/
             for(int i=0;i<pl.getDAList().size();i++){
                 crt=pl.getDAList().get(i);
-                //cri=new GreenfootImage(crt.getImage());
-                //cri.rotate(crt.getRotation());
                 fon.drawImage(crt.getImage(), crt.getX()-crt.getImage().getWidth()/2, crt.getY()-crt.getImage().getHeight()/2);
             }
         }
+
         for(int i=0;i<pl.getAList().size();i++){
-            //cri=new GreenfootImage(crt.getImage());
-            //cri.rotate(crt.getRotation());
             if(pl.getAList().get(i).inHole==pl.inHole || MyWorld.plmode>0){
                 crt=pl.getAList().get(i);
                 fon.drawImage(crt.getImage(), crt.getX()-crt.getImage().getWidth()/2, crt.getY()-crt.getImage().getHeight()/2);
             }
         }
+
         if(plmode==0){
             crt=pl;
-            //cri=new GreenfootImage(crt.getImage());
             fon.drawImage(crt.getImage(), crt.getX()-crt.getImage().getWidth()/2, crt.getY()-crt.getImage().getHeight()/2);
             if(bot1!=null && bot1.inHole==pl.inHole){
                 crt=bot1;
-                //cri=new GreenfootImage(crt.getImage());
                 fon.drawImage(crt.getImage(), crt.getX()-crt.getImage().getWidth()/2, crt.getY()-crt.getImage().getHeight()/2);
             }
         }
-        //fon.drawImage(pl.getImage(), 200-pl.getImage().getWidth(), 200-pl.getImage().getHeight());
+
         fon.setColor(Color.RED);
         if(plan!=null){
             xc=plan.getX()-plan.getImage().getWidth()/2;
@@ -207,7 +169,6 @@ public class MyWorld extends World
         fon1.cof=((double)Fon.w/1200);
         
         im=new GreenfootImage((int)(1200/fon1.cof), (int)(700/fon1.cof));
-        //im.drawImage(fon2,-pl.getX()+(im.getWidth()/2)-600,-pl.getY()+(im.getHeight()/2)-350);
         im.setColor(new Color(58,171,221));
         im.fill();
         im.drawImage(fon,(im.getWidth()/2)-pl.getX(),(im.getHeight()/2)-pl.getY());
@@ -246,20 +207,13 @@ public class MyWorld extends World
                     pl1.setColor(new Color(153, 217, 234, 100));
                     pl1.fillOval(0, 0, pl1.getWidth() - 1, pl1.getHeight() - 1);
                 }
-                //cri=new GreenfootImage(crt.getImage());
-                //cri.rotate(crt.getRotation());
+
                 im.drawImage(pl1, (plant.size3%2)*(int)((fon1.cof/2)+0.5)+(int)(0.5+(plant.getX()-pl.getX()+(int)(600/fon1.cof))*fon1.cof)-pl1.getWidth()/2, (plant.size3%2)*(int)((fon1.cof/2)+0.5)+(int)(0.5+(plant.getY()-pl.getY()+(int)(350/fon1.cof))*fon1.cof)-pl1.getHeight()/2);
             }
         }
         for(int i=0;i<pl.getAList().size();i++){
-            //cri=new GreenfootImage(crt.getImage());
-            //cri.rotate(crt.getRotation());
             if(pl.getAList().get(i).inHole==pl.inHole || MyWorld.plmode>0){
                 an1=pl.getAList().get(i);
-                //cri=new GreenfootImage(crt.getImage());
-                //cri.drawImage(crt.getImage(),10,10);
-                //cri.rotate(crt.getRotation());
-                //cri.scale((int)(crt.getImage().getWidth()*fon1.cof),(int)(crt.getImage().getHeight()*fon1.cof));
                 eye=new GreenfootImage("eye.png");
                 int eyesize;
                 eyesize=(int)(an1.size*0.85*fon1.cof);
@@ -276,13 +230,9 @@ public class MyWorld extends World
                     t=(int)(255*(1-an1.maskcof));
                 }
                 eye.setTransparency(t);
-                //cri.drawImage(eye,(int)(0.1*cri.getWidth()),(int)(0.1*cri.getHeight()));
-                //System.out.println(((int)(cri.getWidth()/fon1.cof)/2));
-                //(int)(((int)(cri.getWidth()/fon1.cof)/2)*fon1.cof)
                 im.drawImage(eye, (an1.size%2)*(int)((fon1.cof/2)+0.5)+(int)(0.5+(an1.getX()-pl.getX()+(int)(600/fon1.cof))*fon1.cof)-eye.getWidth()/2, (an1.size%2)*(int)((fon1.cof/2)+0.5)+(int)(0.5+(an1.getY()-pl.getY()+(int)(350/fon1.cof))*fon1.cof)-eye.getHeight()/2);
             }
         }
-        //fon.drawOval(0,0,fon.getWidth()-1,fon.getHeight()-1);
         fon1.setImage1(im,image);
     }
     int t;
@@ -292,49 +242,13 @@ public class MyWorld extends World
     public void act(){
         getFPS();
         maxwr=0;
-        /*if(Greenfoot.isKeyDown("E")){
-            cofic=Math.random();
-            setmytcof=50;
-        }
-        if(setmytcof>0){
-            setmytcof--;
-            if(setmytcof==0){
-                cofic=0.2;
-            }
-        }*/
+
         res+=100;
         if(res>200){
             res=200;
         }
-        /*x=Greenfoot.getRandomNumber(getWidth());
-        y=Greenfoot.getRandomNumber(getHeight());
-        t=(int)(((double)(x)/getWidth())*MyWorld.temp);
-        if(t<=10){
-            c=255-Greenfoot.getRandomNumber(50);
-            //worldImage.setColorAt(x,y,new Color(c,c,c,255));
-            worldImage.setColor(new Color(c,c,c,255));
-            worldImage.fillRect(x,y,Greenfoot.getRandomNumber(3)+1,Greenfoot.getRandomNumber(3)+1);
-        }
-        else if(t>=40){
-            //c=255-Greenfoot.getRandomNumber(100);
-            //worldImage.setColorAt(x,y,new Color(230+Greenfoot.getRandomNumber(50)-25,220,150+Greenfoot.getRandomNumber(50)-25,255));
-            worldImage.setColor(new Color(255,220,150+Greenfoot.getRandomNumber(50),255));
-            worldImage.fillRect(x,y,Greenfoot.getRandomNumber(3)+1,Greenfoot.getRandomNumber(3)+1);
-        }
-        else{
-            Color c1=worldFon.getColorAt(x,y);
-            worldImage.setColorAt(x,y,c1);
-        }
-        setBackground(worldImage);*/
-        //try{
+
         updateFon();
-        //}catch(Exception e){plan=null;System.out.println(e);}
-        /*if(plants<=2){
-            for(int i=0;i<10;i++){
-                addObject(new Plant(par2), Greenfoot.getRandomNumber(getWidth()), Greenfoot.getRandomNumber(getHeight()));
-            }
-            fon1.update();
-        }*/
     }
     int frames=49;
     int fps;

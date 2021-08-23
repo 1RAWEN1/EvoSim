@@ -25,8 +25,6 @@ public class Water extends RealObject
     int b;
     int t;
     int timer;
-    //int sozd;
-    //int aorp;
     double cof2;
     double cof3;
     int t1;
@@ -34,8 +32,6 @@ public class Water extends RealObject
     
     int rot;
     int dist;
-    
-    //WaterRadius wr;
     public void act() 
     {
         if(start==0){
@@ -91,9 +87,7 @@ public class Water extends RealObject
                     getWorld().addObject(new Plant(par2,0,false), getX() + Greenfoot.getRandomNumber(size)-size/2, getY() + Greenfoot.getRandomNumber(size)-size/2);
                 }
             }
-            
-            //wr=new WaterRadius(size);
-            //getWorld().addObject(wr,getX(),getY());
+
             start=1;
         }
         try{
@@ -116,24 +110,7 @@ public class Water extends RealObject
                 dist=Greenfoot.getRandomNumber(size/2);
                 getWorld().addObject(new Animal(par,MyWorld.pl,0,false,false), getX() + (int)(dist*Math.cos(Math.toRadians(Greenfoot.getRandomNumber(rot)))), getY() + (int)(dist*Math.sin(Math.toRadians(Greenfoot.getRandomNumber(rot)))));
             }
-            /*sozd=Greenfoot.getRandomNumber(10);
-            if(sozd==1 && MyWorld.an<4 || sozd==1 && MyWorld.pl<2){
-                aorp=Greenfoot.getRandomNumber(2)+1;
-                if(aorp==1 && MyWorld.an<4){
-                    Animal an=new Animal(par);
-                    getWorld().addObject(an, getX()+Greenfoot.getRandomNumber(size/2)-size/4, getY()+Greenfoot.getRandomNumber(size/2)-size/4);
-                }
-                else if(aorp==2 && MyWorld.pl<2){
-                    Plant plant=new Plant(par2);
-                    getWorld().addObject(plant, getX()+Greenfoot.getRandomNumber(size/2)-size/4, getY()+Greenfoot.getRandomNumber(size/2)-size/4);
-                }
-            } */
-            /*if(MyWorld.temp!=ntim && isTouching(Ocean.class)==false){
-                ts=(int)(((double)(getX())/getWorld().getWidth()*MyWorld.temp + (double)(getY())/getWorld().getHeight()*MyWorld.temp)/2);
-                cof=(double)(ts)/tg;
-                ntim=MyWorld.temp;
-                nsize=size;
-            }*/
+
             if(timer==10){
                 ts=(int)((double)(getX())/getWorld().getWidth()*MyWorld.temp);
                 size-=(int)(size*ts*0.0001);
@@ -157,12 +134,10 @@ public class Water extends RealObject
                         image.setColor(new Color(0, g1, 232, t1));
                         image.fillOval(0+(int)(size*cof3), 0+(int)(size*cof3), (int)(size*cof2), (int)(size*cof2));
                     }
-                    //wr.updateImage(size);
                     setImage(image);
                 }
                 timer=0;
                 if(size==1){
-                    //getWorld().removeObject(wr);
                     getWorld().removeObject(this);
                 }
             }

@@ -27,11 +27,7 @@ public class Egg extends RealObject
     double movecof;
     boolean evolve;
     ArrayList <Double> par=new ArrayList<Double>();
-    //ArrayList<Double> neyroneMass=new ArrayList<Double>();
-    //ArrayList<Double> f=new ArrayList<Double>();
     public Egg(ArrayList<Double> par1, int onground, Player pl, int tn, boolean inHole, double movecof, boolean evolve){
-        //neyroneMass=(ArrayList<Double>) ns.clone();
-        //f=(ArrayList<Double>) f1.clone();
         this.evolve=evolve;
         this.movecof=movecof;
         teamNum=tn;
