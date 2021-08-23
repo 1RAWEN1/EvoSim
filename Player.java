@@ -243,7 +243,7 @@ public class Player extends RealObject
         can=0;
         if(sel==1){
             for(int i=0;i<3;i++){
-                pl=new Plant(plantpar,0,false);
+                pl=new Plant(plantpar,0, 0, false);
                 pl.myage=pl.agesp;
                 pl.colfood=pl.mcolf1;
                 getWorld().addObject(pl, getX() + Greenfoot.getRandomNumber(50)-50/2, getY() + Greenfoot.getRandomNumber(50)-50/2);
@@ -284,7 +284,7 @@ public class Player extends RealObject
             if(MyWorld.plmode<2){
                 for(int i=0; i<4; i++){
                     //int age1, int plod1, int speed1, int radius1, int size1, double sogr1, double xich1, int tg1, int msit1
-                    Animal an=new Animal(par, this, teamNum, inHole, false);
+                    Animal an=new Animal(par, this, teamNum, inHole, 0, 0);
                     getWorld().addObject(an, getX(), getY());
                 }
                 if(botorno==1 && Lobby.slide==8 && Lobby.train){
@@ -293,7 +293,7 @@ public class Player extends RealObject
                 }
             }
             else{
-                Animal an=new Animal(par, this, 0, false, false);
+                Animal an=new Animal(par, this, 0, false, 0, 0);
                 getWorld().addObject(an, getX(), getY());
                 touchWater();
                 if(touchWater && Lobby.slide==2){

@@ -84,7 +84,7 @@ public class Water extends RealObject
             setImage(image);
             if(MyWorld.plmode != 2){
                 for(int i=0;i<10;i++){
-                    getWorld().addObject(new Plant(par2,0,false), getX() + Greenfoot.getRandomNumber(size)-size/2, getY() + Greenfoot.getRandomNumber(size)-size/2);
+                    getWorld().addObject(new Plant(par2,0, 0, false), getX() + Greenfoot.getRandomNumber(size)-size/2, getY() + Greenfoot.getRandomNumber(size)-size/2);
                 }
             }
 
@@ -96,19 +96,19 @@ public class Water extends RealObject
                 for(int i=0;i<10;i++){
                     rot=Greenfoot.getRandomNumber(360);
                     dist=Greenfoot.getRandomNumber(size/2);
-                    getWorld().addObject(new Plant(par2,0,false), getX() + (int)(dist*Math.cos(Math.toRadians(Greenfoot.getRandomNumber(rot)))), getY() + (int)(dist*Math.sin(Math.toRadians(Greenfoot.getRandomNumber(rot)))));
+                    getWorld().addObject(new Plant(par2,0, 0, false), getX() + (int)(dist*Math.cos(Math.toRadians(Greenfoot.getRandomNumber(rot)))), getY() + (int)(dist*Math.sin(Math.toRadians(Greenfoot.getRandomNumber(rot)))));
                 }
             }
             else if(MyWorld.plants<8 && ts>26 && MyWorld.plmode == 2 && Greenfoot.getRandomNumber(100)==1){
                 rot=Greenfoot.getRandomNumber(360);
                 dist=Greenfoot.getRandomNumber(size/2);
-                getWorld().addObject(new Plant(par2,0,false), getX() + (int)(dist*Math.cos(Math.toRadians(Greenfoot.getRandomNumber(rot)))), getY() + (int)(dist*Math.sin(Math.toRadians(Greenfoot.getRandomNumber(rot)))));
+                getWorld().addObject(new Plant(par2,0, 0, false), getX() + (int)(dist*Math.cos(Math.toRadians(Greenfoot.getRandomNumber(rot)))), getY() + (int)(dist*Math.sin(Math.toRadians(Greenfoot.getRandomNumber(rot)))));
             }
 
             if(isTouching(Plant.class) && MyWorld.plmode==2 && ts>26 && MyWorld.pl.myAn<8 && Greenfoot.getRandomNumber(100)==1){
                 rot=Greenfoot.getRandomNumber(360);
                 dist=Greenfoot.getRandomNumber(size/2);
-                getWorld().addObject(new Animal(par,MyWorld.pl,0,false,false), getX() + (int)(dist*Math.cos(Math.toRadians(Greenfoot.getRandomNumber(rot)))), getY() + (int)(dist*Math.sin(Math.toRadians(Greenfoot.getRandomNumber(rot)))));
+                getWorld().addObject(new Animal(par,MyWorld.pl,0,false, 0, 0), getX() + (int)(dist*Math.cos(Math.toRadians(Greenfoot.getRandomNumber(rot)))), getY() + (int)(dist*Math.sin(Math.toRadians(Greenfoot.getRandomNumber(rot)))));
             }
 
             if(timer==10){

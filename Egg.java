@@ -25,11 +25,10 @@ public class Egg extends RealObject
     int onground;
     double livebirth;
     double movecof;
-    boolean evolve;
-    ArrayList <Double> par=new ArrayList<Double>();
-    public Egg(ArrayList<Double> par1, int onground, Player pl, int tn, boolean inHole, double movecof, boolean evolve){
-        this.evolve=evolve;
+    ArrayList <Double> par;
+    public Egg(ArrayList<Double> par1, int onground, Player pl, int tn, boolean inHole, double movecof){
         this.movecof=movecof;
+        this.inHole = inHole;
         teamNum=tn;
         myPl=pl;
         this.onground=onground;
@@ -39,7 +38,7 @@ public class Egg extends RealObject
         xich=par.get(20);
         per=(int)(par.get(10)*1);
         size3=(int)(par.get(18)*0.1);
-        if(size3<=0){
+        if(size3<1){
             size3=1;
         }
         updateImage(size3, 255);
@@ -56,11 +55,11 @@ public class Egg extends RealObject
             if(isTouching(Plant.class) && onground==2){
                 updateImage((int)(size3*1.5), 255);
             }
+            else if(onground==3 || inHole){
+                updateImage(size3, 100);
+            }
             else if(onground==1){
                 updateImage(size3, 255);
-            }
-            else if(onground==3){
-                updateImage(size3, 100);
             }
             start=1;
         }
@@ -70,7 +69,8 @@ public class Egg extends RealObject
             tim++;
         }
         if(tim>=per){
-            Animal an=new Animal(par, myPl, teamNum, inHole, evolve);
+            Animal an=new Animal(par, myPl, teamNum, inHole
+                    , (int) (Math.pow(size3, 3) * livebirth), (int) (Math.pow(size3, 3) * livebirth));
             getWorld().addObject(an, getX(), getY());
             getWorld().removeObject(this);
         }// Add your action code here.

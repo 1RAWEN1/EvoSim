@@ -15,7 +15,7 @@ public class ForMouse extends Actor
     int x;
     int y;
     public ForMouse(){
-        GreenfootImage image=new GreenfootImage(20, 20);
+        GreenfootImage image=new GreenfootImage(10, 10);
         //image.setColor(Color.RED);
         //image.fill();
         setImage(image);
@@ -28,15 +28,18 @@ public class ForMouse extends Actor
             y=(int)((mi.getY()-350)/MyWorld.fon1.cof)+MyWorld.pl.getY();
             setLocation(x,y);
         }
-        if(Greenfoot.mousePressed(null) && isTouching(Animal.class)/* && getIntersectingObjects(Animal.class).get(0).teamNum==0*/){
+
+        if(Greenfoot.mousePressed(null) && isTouching(Animal.class)){
             MyWorld.plan=getIntersectingObjects(Animal.class).get(0);
         }
         else if(Greenfoot.mousePressed(null) && isTouching(Plant.class)){
+            MyWorld.plan = null;
+
             MyWorld.observedPlant = getIntersectingObjects(Plant.class).get(0);
         }
         else if(Greenfoot.mousePressed(null) && !isTouching(Animal.class) && !isTouching(Plant.class)){
             MyWorld.plan=null;
             MyWorld.observedPlant = null;
-        }// Add your action code here.
+        }
     }    
 }

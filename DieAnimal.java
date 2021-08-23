@@ -19,8 +19,8 @@ public class DieAnimal extends RealObject
     GreenfootImage myimage;
     public DieAnimal(int size1, int sit1, int msit1){
         size=size1;
-        msit=size*60000;
-        sit=msit;
+        msit=msit1;
+        sit=sit1;
         myimage=new GreenfootImage(size,size);
         myimage.setColor(Color.BLACK);
         myimage.fill();

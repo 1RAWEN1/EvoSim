@@ -59,13 +59,14 @@ public class Fon extends Actor
         else if(MyWorld.plmode==2){
             image.drawImage(temp.updateImage(), 0,70);
         }
-        image.drawImage(drawBar(100,20,MyWorld.pl.myAn,30,Color.WHITE,new Color(0,255,255,255),"животные"),0,10);
         if(MyWorld.bot1!=null){
+            image.drawImage(drawBar(100,20,MyWorld.pl.myAn,30,Color.WHITE,new Color(0,255,255,255),"животные"),0,10);
             image.drawImage(drawBar(100,20,MyWorld.bot1.myAn,30,Color.WHITE,new Color(255,30,0,255),"животные"),0,40);
             image.drawImage(drawBar(100,20,MyWorld.plants,50,Color.WHITE,Color.GREEN,"растения"),0,70);
         }
         else{
-            image.drawImage(drawBar(100,20,MyWorld.plants,50,Color.WHITE,Color.GREEN,"растения"),0,40);
+            image.drawImage(drawBar(100,20,MyWorld.pl.myAn,100,Color.WHITE,new Color(0,255,255,255),"животные"),0,10);
+            image.drawImage(drawBar(100,20,MyWorld.plants,100,Color.WHITE,Color.GREEN,"растения"),0,40);
         }
 
         if(MyWorld.pl.can==0){

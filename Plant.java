@@ -12,7 +12,7 @@ public class Plant extends RealObject
      * Act - do whatever the Plant wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
-    ArrayList<Double> par=new ArrayList<Double>();
+    ArrayList<Double> par;
     ArrayList<Double> par2=new ArrayList<Double>();
     int onground=1;
     int moven;
@@ -104,7 +104,7 @@ public class Plant extends RealObject
     Egg egg;
     DieAnimal food;
     
-    public Plant(ArrayList<Double> par1, int food1,boolean inHole){
+    public Plant(ArrayList<Double> par1, int food1, int water1, boolean inHole){
         this.inHole=inHole;
         if(this.inHole){
             ist=1;
@@ -163,7 +163,7 @@ public class Plant extends RealObject
         else{
             mw1=80000;
             mw=mw1/2;
-            water2=mw;
+            water2=water1;
             par.set(2, (double)mw);
         }
         
@@ -582,20 +582,17 @@ public class Plant extends RealObject
     int rtoc;
     public void replicase(){
         pl=null;
-        //for(int i=0;i<getObjectsInRange(radius, Plant.class).size();i++){
-            if(getObjectsInRange(radius, Plant.class).size()>0){
-                pl=getObjectsInRange(radius, Plant.class).get(0);
-                if(inHole==pl.inHole && tim>p/* && colfood>(mcolf/3)*2 && water2>(mw/3)*2*/ && pl.onground==onground && pl.tim>pl.p && Math.abs(pl.xich-xich)<=0.1){
-                    //break;
-                }
-                else{
-                    pl=null;
-                }
+        if(getObjectsInRange(radius, Plant.class).size()>0){
+            pl=getObjectsInRange(radius, Plant.class).get(0);
+            if(inHole==pl.inHole && tim>p && pl.onground==onground && pl.tim>pl.p && Math.abs(pl.xich-xich)<=0.1){
+                //break;
             }
-        //}
+            else{
+                pl=null;
+            }
+        }
         if(pl!=null){
             for(int i=0; i<plod; i++){
-                //double xich1,double sogr1, int age1, int size1, int plod1, int tg1
                 par2.clear();
                 for(int i1=0;i1<par.size();i1++){
                     if(Greenfoot.getRandomNumber(2)==1){
@@ -605,7 +602,7 @@ public class Plant extends RealObject
                         par2.add(pl.par.get(i1));
                     }
                 }
-                Plant an=new Plant(par2,size*size*size*1000,inHole);
+                Plant an=new Plant(par2,size*size*size*1000, size*size*size*1000, inHole);
                 cx=((x+pl.getX())/2)+Greenfoot.getRandomNumber(radis)-radis/2;
                 cy=((y+pl.getY())/2)+Greenfoot.getRandomNumber(radis)-radis/2;
                 if(inHole){
@@ -631,14 +628,13 @@ public class Plant extends RealObject
                 tim=0;
             }
         }
-        else if(tim>p*2/* && water2>(mw/3)*2 && colfood>(mcolf/3)*2*/){
+        else if(tim>p*2){
             for(int i=0; i<plod; i++){
-                //double xich1,double sogr1, int age1, int size1, int plod1, int tg1
                 par2.clear();
                 for(int i1=0;i1<par.size();i1++){
                     par2.add(par.get(i1));
                 }
-                Plant an=new Plant(par2, size*size*size*1000,inHole);
+                Plant an=new Plant(par2, size*size*size*1000, size*size*size*1000, inHole);
                 cx=x+Greenfoot.getRandomNumber(radis)-radis/2;
                 cy=y+Greenfoot.getRandomNumber(radis)-radis/2;
                 if(inHole){
@@ -935,6 +931,9 @@ public class Plant extends RealObject
             xp=0;
         }
         if(xp<=0){
+            if(MyWorld.observedPlant == this){
+                MyWorld.observedPlant = null;
+            }
             MyWorld.plants--;
             getWorld().removeObject(this);
         }

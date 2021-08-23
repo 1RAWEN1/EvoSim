@@ -15,7 +15,7 @@ public class Animal extends RealObject
     Player myPl;
     int teamNum;
     boolean canSee;
-    ArrayList<Double> par=new ArrayList<Double>();
+    ArrayList<Double> par;
     ArrayList<Double> par2=new ArrayList<Double>();
     int onground=1;
     int stopf;
@@ -135,10 +135,8 @@ public class Animal extends RealObject
     boolean touchWater;
     
     int radis;
-
-    int turn;
     
-    public Animal(ArrayList<Double> par1, Player pl, int tn,boolean inHole,boolean evolve){
+    public Animal(ArrayList<Double> par1, Player pl, int tn, boolean inHole, int food1, int water1){
         this.inHole=inHole;
         if(this.inHole){
             ist=1;
@@ -148,27 +146,25 @@ public class Animal extends RealObject
         teamNum=tn;
         myPl=pl;
         par=(ArrayList<Double>) par1.clone();
-        if(evolve){
-            for(int i=0;i<par.size();i++){
-                double d=par.get(i);
-                if(d>1){
-                    if(Greenfoot.getRandomNumber(3)+1==1){
-                        d+=d*MyWorld.cofic;
-                    }
-                    else if(Greenfoot.getRandomNumber(2)+1==1){
-                        d-=d*MyWorld.cofic;
-                    }
+        for(int i=0;i<par.size();i++){
+            double d=par.get(i);
+            if(d>1){
+                if(Greenfoot.getRandomNumber(3)+1==1){
+                    d+=d*MyWorld.cofic;
                 }
-                else if(d<=1){
-                    if(Greenfoot.getRandomNumber(3)+1==1){
-                        d+=MyWorld.cofic;
-                    }
-                    else if(Greenfoot.getRandomNumber(2)+1==1){
-                        d-=MyWorld.cofic;
-                    }
+                else if(Greenfoot.getRandomNumber(2)+1==1){
+                    d-=d*MyWorld.cofic;
                 }
-                par.set(i, d);
             }
+            else{
+                if(Greenfoot.getRandomNumber(3)+1==1){
+                    d+=MyWorld.cofic;
+                }
+                else if(Greenfoot.getRandomNumber(2)+1==1){
+                    d-=MyWorld.cofic;
+                }
+            }
+            par.set(i, d);
         }
         
         if(par.get(18)>=0){
@@ -221,7 +217,7 @@ public class Animal extends RealObject
         }
         else{
             canclimb=0.0;
-            par.set(2, (double)canclimb);
+            par.set(2, canclimb);
         }
         if(canclimb>1){
             canclimb=1;
@@ -273,7 +269,7 @@ public class Animal extends RealObject
         }
         else{
             pspeed=0;
-            par.set(6, (double)pspeed);
+            par.set(6, pspeed);
         }
         
         if(par.get(7)>=0){
@@ -301,7 +297,7 @@ public class Animal extends RealObject
         if(par.get(9)>=0){
             mw1=par.get(9).intValue();
             mw=mw1/2;
-            water2=mw;
+            water2=water1;
         }
         else{
             mw1=msize*35000;
@@ -323,7 +319,7 @@ public class Animal extends RealObject
         }
         else{
             protection=0;
-            par.set(11, (double)protection);
+            par.set(11, protection);
         }
         if(protection>1){
             protection=1;
@@ -336,8 +332,8 @@ public class Animal extends RealObject
             wspeed=par.get(12);
         }
         else{
-            wspeed=(double)1/msize;
-            par.set(12, 1.5);
+            wspeed=(double) 1 / msize;
+            par.set(12, wspeed);
         }
         
         if(par.get(13)>=0){
@@ -375,7 +371,7 @@ public class Animal extends RealObject
         }
         else{
             speed=0;
-            par.set(16, (double)speed);
+            par.set(16, speed);
         }
         
         if(par.get(17)>=0){
@@ -422,7 +418,7 @@ public class Animal extends RealObject
         if(par.get(21)>0){
             msit1=par.get(21).intValue();
             msit=msit1/2;
-            sit1=msit;
+            sit1=food1;
         }
         else{
             msit1=msize*35000;
@@ -495,7 +491,7 @@ public class Animal extends RealObject
         if(poicof<xich){
             bcof=xich;
         }
-        if(anabioz==false){
+        if(!anabioz){
             if(MyWorld.plmode<2 || MyWorld.plan!=null && MyWorld.plmode==2){
                 if(MyWorld.plan!=null && MyWorld.plmode==2){
                     if(Math.abs(MyWorld.plan.xich-xich) <= MyWorld.cofic){
@@ -647,7 +643,7 @@ public class Animal extends RealObject
             dy=getY();
             start=1;
         }
-        if(anabioz==false){
+        if(!anabioz){
             turnTo();
             move();
             touchWater();
@@ -680,7 +676,7 @@ public class Animal extends RealObject
         
         temp();
         
-        if(anabioz==false){
+        if(!anabioz){
             attack();
             if(onground!=0 && myage>=agesp && sit2>=7 && wt3>=7){
                 replicase();
@@ -729,9 +725,7 @@ public class Animal extends RealObject
             if(tim>p*2){
                 for(int i=0; i<plod; i++){
                     par2.clear();
-                    for(int i1=0;i1<par.size();i1++){
-                        par2.add(par.get(i1));
-                    }
+                    par2.addAll(par);
                     cx=x+Greenfoot.getRandomNumber(radis)-radis/2;
                     cy=y+Greenfoot.getRandomNumber(radis)-radis/2;
                     if(inHole){
@@ -748,11 +742,12 @@ public class Animal extends RealObject
                         }
                     }
                     if(livebirth>=0.5){
-                        Animal an=new Animal(par2, myPl, teamNum, inHole, false);
+                        Animal an=new Animal(par2, myPl, teamNum, inHole
+                                , (int)(msize*msize*msize*1000*livebirth), (int)(msize*msize*msize*1000*livebirth));
                         getWorld().addObject(an, cx, cy);
                     }
                     else{
-                        Egg an=new Egg(par2, onground, myPl, teamNum, inHole, movecof, false);
+                        Egg an=new Egg(par2, onground, myPl, teamNum, inHole, movecof);
                         getWorld().addObject(an, cx, cy);
                     }
                     sit1=sit1-(int)(msize*msize*msize*1000*livebirth);
@@ -762,7 +757,7 @@ public class Animal extends RealObject
             }
         }
         else{
-            if(tim>p && tAn!=null && tAn.teamNum==teamNum && tAn.anabioz==false/* && getIntersectingObjects(Animal.class).get(0).krstr>=0.5*/ && tAn.onground==onground && tAn.tim>tAn.p){
+            if(tim>p && tAn!=null && tAn.teamNum==teamNum && !tAn.anabioz && tAn.onground==onground && tAn.tim>tAn.p){
                 for(int i=0; i<plod; i++){
                     an1=tAn;
                     par2.clear();
@@ -775,15 +770,17 @@ public class Animal extends RealObject
                         }
                     }
                     if(livebirth>=0.5){
-                        Animal an=new Animal(par2, myPl, teamNum, inHole, true);
+                        Animal an=new Animal(par2, myPl, teamNum, inHole
+                                , (int)(msize*msize*msize*1000*livebirth), (int)(msize*msize*msize*1000*livebirth));
                         getWorld().addObject(an, x, y);
                     }
                     else{
-                        Egg an=new Egg(par2, onground, myPl, teamNum, inHole, movecof, true);
+                        Egg an=new Egg(par2, onground, myPl, teamNum, inHole, movecof);
                         getWorld().addObject(an, x, y);
                     }
                     sit1=sit1-(int)(msize*msize*msize*1000*livebirth);
                     water2=water2-(int)(msize*msize*msize*1000*livebirth);
+
                     tim=0;
                 }
             }
@@ -792,11 +789,12 @@ public class Animal extends RealObject
                     par2.clear();
                     par2.addAll(par);
                     if(livebirth>=0.5){
-                        Animal an=new Animal(par2, myPl, teamNum, inHole, false);
+                        Animal an=new Animal(par2, myPl, teamNum, inHole
+                                , (int)(msize*msize*msize*1000*livebirth), (int)(msize*msize*msize*1000*livebirth));
                         getWorld().addObject(an, x, y);
                     }
                     else{
-                        Egg an=new Egg(par2, onground, myPl, teamNum,inHole, movecof, false);
+                        Egg an=new Egg(par2, onground, myPl, teamNum,inHole, movecof);
                         getWorld().addObject(an, x, y);
                     }
                     sit1=sit1-(int)(msize*msize*msize*1000*livebirth);
@@ -832,8 +830,8 @@ public class Animal extends RealObject
             }
         }
     }
+
     public void turnTo(){
-        canSee=false;
         An=null;
         AnInR=null;
         SopInR=null;
@@ -844,39 +842,45 @@ public class Animal extends RealObject
             teamNum=0;
         }
         if(getObjectsInRange(radius, Animal.class).size()>0){
-            An=getObjectsInRange(radius, Animal.class).get(0);
-            if(An.inHole!=inHole){
-                An=null;
-            }
-            if(MyWorld.plmode==2 && An!=null){
-                if(Math.abs(An.xich-xich) <= MyWorld.cofic){
-                    An.teamNum=0;
+            for(Animal animalInRange : getObjectsInRange(radius, Animal.class)) {
+                An = animalInRange;
+                if (An.inHole != inHole) {
+                    An = null;
                 }
-                else{
-                    An.teamNum=1;
-                }
-            }
-            if(An!=null){
-                if(Math.sqrt(Math.pow(getX()-An.getX(),2)+Math.pow(getY()-An.getY(),2))<radius-(int)(An.maskcof*radius)){
-                    canSee=true;
-                }
-                else if(intersects(An)){
-                    canSee=true;
-                }
-                if(canSee){
-                    if(An.teamNum==teamNum){
-                        AnInR=An;
+                else {
+                    canSee=false;
+                    if (MyWorld.plmode == 2) {
+                        if (Math.abs(An.xich - xich) <= MyWorld.cofic) {
+                            An.teamNum = 0;
+                        } else {
+                            An.teamNum = 1;
+                        }
                     }
-                    else{
-                        SopInR=An;
+                    if(AnInR == null && An.teamNum == teamNum) {
+                        if (Math.sqrt(Math.pow(getX() - An.getX(), 2) + Math.pow(getY() - An.getY(), 2)) < radius - (int) (An.maskcof * radius)) {
+                            canSee = true;
+                        } else if (intersects(An)) {
+                            canSee = true;
+                        }
+                        if (canSee) {
+                            AnInR = An;
+                        }
+                    }
+                    else if(SopInR == null && An.teamNum != teamNum) {
+                        if (Math.sqrt(Math.pow(getX() - An.getX(), 2) + Math.pow(getY() - An.getY(), 2)) < radius - (int) (An.maskcof * radius)) {
+                            canSee = true;
+                        } else if (intersects(An)) {
+                            canSee = true;
+                        }
+                        if (canSee) {
+                            SopInR = An;
+                        }
                     }
                 }
-            }
-        }
-        if(getObjectsInRange(radius, Plant.class).size()>0){
-            PlInR=getObjectsInRange(radius, Plant.class).get(0);
-            if(PlInR.inHole!=inHole){
-                PlInR=null;
+
+                if(AnInR != null && SopInR != null){
+                    break;
+                }
             }
         }
         if(getObjectsInRange(radius, Egg.class).size()>0){
@@ -895,6 +899,11 @@ public class Animal extends RealObject
             foodx=PlInR.getX();
             foody=PlInR.getY();
         }
+        else if(food != null && xich > 0.3){
+            foodx = food.getX();
+            foody = food.getY();
+        }
+
         if(inHole && !touchHole && getObjectsInRange((msize+2)*2,Hole.class).size()>0){
             turnTowards(getObjectsInRange((msize+2)*2,Hole.class).get(0).getX(), getObjectsInRange((msize+2)*2,Hole.class).get(0).getY());
             r1=getRotation();
@@ -921,6 +930,25 @@ public class Animal extends RealObject
             setRotation(r);
             turntor1=1;
         }
+        else if(SopInR!=null && xich<=0.3 && SopInR.xich>0.3){
+            /*if(getObjectsInRange(radius,Hole.class).size() > 0 && SopInR.size>size){
+                turnTowards(getObjectsInRange(radius,Hole.class).get(0).getX(), getObjectsInRange(radius,Hole.class).get(0).getY());
+                r1=getRotation();
+            }
+            else{*/
+                r=getRotation();
+                turnTowards(SopInR.x, SopInR.y);
+                if(r1>=180){
+                    r1=getRotation()-(180-Greenfoot.getRandomNumber(30));
+                }
+                else{
+                    r1=getRotation()+(180-Greenfoot.getRandomNumber(30));
+                }
+            //}
+
+            setRotation(r);
+            turntor1 = 1;
+        }
         else if(getObjectsInRange(radius, Water.class).size()>0 && wt3<7
                 || getObjectsInRange(radius, Water.class).size() > 0 && (double)air / mair <= 0.5 && sysdix <= 0.5){
             turnTowards(getObjectsInRange(radius, Water.class).get(0).getX(), getObjectsInRange(radius, Water.class).get(0).getY());
@@ -935,13 +963,25 @@ public class Animal extends RealObject
             setRotation(r);
             turntor1=1;
         }
-        else if(xich<0.7 && PlInR!=null && sit2<7){
-            turnTowards(PlInR.getX(), PlInR.getY());
-            r1=getRotation();
-            setRotation(r);
-            turntor1=1;
+        else if(xich<0.7 && sit2<7){
+            for (Plant plant : getObjectsInRange(radius, Plant.class)){
+                PlInR = plant;
+                if (PlInR.inHole != inHole) {
+                    PlInR = null;
+                }
+
+                if(plant.tg !=26 && plant.tg != 46) {
+                    break;
+                }
+            }
+            if(PlInR != null) {
+                turnTowards(PlInR.getX(), PlInR.getY());
+                r1 = getRotation();
+                setRotation(r);
+                turntor1 = 1;
+            }
         }
-        else if(xich<0.7 && sit2<7 && foodx!=0 && foody!=0){
+        else if(sit2<7 && foodx!=0 && foody!=0){
             turnTowards(foodx, foody);
             r1=getRotation();
             setRotation(r);
@@ -959,26 +999,7 @@ public class Animal extends RealObject
             setRotation(r);
             turntor1=1;
         }
-        else if(SopInR!=null && xich<=0.3 && SopInR.xich>0.3){
-            if(getObjectsInRange(radius,Hole.class).size()==0){
-                r=getRotation();
-                turnTowards(SopInR.x, SopInR.y);
-                if(r1>=180){
-                    r1=getRotation()-(180-Greenfoot.getRandomNumber(30));
-                }
-                else{
-                    r1=getRotation()+(180-Greenfoot.getRandomNumber(30));
-                }
-            }
-            else{
-                turnTowards(getObjectsInRange(radius,Hole.class).get(0).getX(), getObjectsInRange(radius,Hole.class).get(0).getY());
-                r1=getRotation();
-            }
-
-            setRotation(r);
-            turntor1 = 1;
-        }
-        else if(pl!=null && xich>0.3){
+       else if(pl!=null && xich>0.3){
             turnTowards(pl.getX(), pl.getY());
             r1=getRotation();
             setRotation(r);
@@ -1000,9 +1021,11 @@ public class Animal extends RealObject
             randomMove();
         }
 
-        r1 += turn;
-        r1 %= 360;
-        turn=0;
+        if(movementAlongTheEdge != -1) {
+            r1 = movementAlongTheEdge;
+            r1 %= 360;
+            movementAlongTheEdge = -1;
+        }
         //(int)Math.sqrt(Math.pow(getObjectsInRange(radius, Animal.class).get(0).getX()-getX(),2)+Math.pow(getObjectsInRange(radius, Animal.class).get(0).getY()-getY(),2))<=radius-(int)((radius*getObjectsInRange(radius, Animal.class).get(0).maskcof)/100)
     }
 
@@ -1051,9 +1074,9 @@ public class Animal extends RealObject
     }
     
     public void eat(){
-        if(getX()>foodx-10 && getX()<foodx+10 && getY()>foody-10 && getY()<foody+10 && getObjectsInRange(radius, Plant.class).size()==0){
-            foodx=0;
-            foody=0;
+        if(Math.abs(getX() - foodx) < getImage().getWidth() / 2 && Math.abs(getY() - foody) < getImage().getHeight() / 2){
+            foodx = 0;
+            foody = 0;
         }
         if(tPl!=null && xich<0.7 && sit1<msit && onground==2 || tPl!=null && xich<0.7 && sit1<msit && onground==tPl.onground){
             sit1=sit1+(int)(eat*(1-xich));
@@ -1217,32 +1240,39 @@ public class Animal extends RealObject
     double dx;
     double dy;
     public void dmove(double v){
-        dx+=v*Math.cos(Math.toRadians(getRotation()));
-        dy+=v*Math.sin(Math.toRadians(getRotation()));
+        dx += v*Math.cos(Math.toRadians(getRotation()));
+        dy += v*Math.sin(Math.toRadians(getRotation()));
         
-        if(dx<0){
-            dx=0;
+        if(dx < 0){
+            dx = 0;
         }
-        if(dy<0){
-            dy=0;
+        if(dy < 0){
+            dy = 0;
         }
-        if((int)dx>getWorld().getWidth()){
-            dx=getWorld().getWidth();
+        if((int) dx > getWorld().getWidth()){
+            dx = getWorld().getWidth();
         }
-        if((int)dy>getWorld().getHeight()){
-            dy=getWorld().getHeight();
+        if((int) dy > getWorld().getHeight()){
+            dy = getWorld().getHeight();
         }
-        setLocation((int)dx,(int)dy);
+        setLocation((int) dx,(int) dy);
     }
 
+    private int movementAlongTheEdge = -1;
     public void moveBack(){
         if(touchWater && fly==0 && wspeed==0 && !inHole || inHole && !touchHR && onground==1 || 
         !touchWater && fly==0 && !inHole && speed==0 || inHole && !touchHR && onground==3){
             dx=startx;
             dy=starty;
-            setLocation((int)startx,(int)starty);
-            
+
+            turnTowards(waterX, waterY);
+            movementAlongTheEdge = getRotation() + 100;
+
+            turntor1 = 1;
+            setRotation(0);
             touchWater();
+
+            setLocation((int)startx,(int)starty);
         }
 
         tPl=(Plant)getOneIntersectingObject(Plant.class);
