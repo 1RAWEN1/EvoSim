@@ -24,21 +24,21 @@ public class ForMouse extends Actor
     {
         MouseInfo mi=Greenfoot.getMouseInfo();
         if(mi!=null && mi.getX()>=100 && mi.getX()<=1100 && MyWorld.pl.xp>0){
-            x=(int)((mi.getX()-600)/MyWorld.fon1.cof)+MyWorld.pl.getX();
-            y=(int)((mi.getY()-350)/MyWorld.fon1.cof)+MyWorld.pl.getY();
+            x=(int)((mi.getX()-600)/Fon.cof)+MyWorld.pl.getX();
+            y=(int)((mi.getY()-350)/Fon.cof)+MyWorld.pl.getY();
             setLocation(x,y);
         }
 
         if(Greenfoot.mousePressed(null) && isTouching(Animal.class)){
-            MyWorld.plan=getIntersectingObjects(Animal.class).get(0);
+            MyWorld.observedAnimal =getIntersectingObjects(Animal.class).get(0);
         }
         else if(Greenfoot.mousePressed(null) && isTouching(Plant.class)){
-            MyWorld.plan = null;
+            MyWorld.observedAnimal = null;
 
             MyWorld.observedPlant = getIntersectingObjects(Plant.class).get(0);
         }
         else if(Greenfoot.mousePressed(null) && !isTouching(Animal.class) && !isTouching(Plant.class)){
-            MyWorld.plan=null;
+            MyWorld.observedAnimal =null;
             MyWorld.observedPlant = null;
         }
     }    

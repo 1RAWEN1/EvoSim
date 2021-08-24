@@ -14,23 +14,23 @@ public class Player extends RealObject
      * Act - do whatever the Player wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
-    ArrayList<Double> par=new ArrayList<Double>();
+    ArrayList<Double> dna;
     
-    ArrayList<Double> plantpar=new ArrayList<Double>();
+    ArrayList<Double> plantDna =new ArrayList<>();
     
     int teamNum;
     
-    int newselect;
+    int newSelection;
     int[] parameters=new int[6];
-    public Player(int botorno1){
-        botorno=botorno1;
-        par=new ArrayList<Double>();
-        for(int i=0;i<MyWorld.parsizean;i++){
-            par.add(-1.0);
+    public Player(int botOrNo1){
+        btoOrNo = botOrNo1;
+        dna = new ArrayList<>();
+        for(int i=0;i<MyWorld.dnaSizeOfAnimal;i++){
+            dna.add(-1.0);
         }
         
-        for(int i=0;i<MyWorld.parsizepl;i++){
-            plantpar.add(-1.0);
+        for(int i=0;i<MyWorld.dnaSizeOfPlant;i++){
+            plantDna.add(-1.0);
         }
         setRotation(Greenfoot.getRandomNumber(360));
         
@@ -41,7 +41,7 @@ public class Player extends RealObject
         speed=1;
         teamNum=MyWorld.teams;
         MyWorld.teams++;
-        if(MyWorld.plmode>0){
+        if(MyWorld.plMode >0){
             speed=10;
         }
         updateImage(size,255);
@@ -50,15 +50,15 @@ public class Player extends RealObject
         image = new GreenfootImage(size1, size1);
         setImage(image);
     }
-    int botorno;
+    int btoOrNo;
     int myAn;
     
     int timer1;
     
-    int superselection;
+    int selectionOfSuper;
     
     int elixir;
-    int qpush;
+    int pushQ;
     public void act() 
     {
         timer1++;
@@ -68,58 +68,58 @@ public class Player extends RealObject
             }
             timer1=0;
         }
-        if(MyWorld.plmode==2){
+        if(MyWorld.plMode ==2){
             elixir=10;
         }
-        if(myAn<4 && MyWorld.plmode<2 || MyWorld.plmode==2){
+        if(myAn<4 && MyWorld.plMode <2 || MyWorld.plMode ==2){
             replicase();
         }
         if(myAn>0){
             newSelect();
         }
-        if(botorno==1){
-            if(Greenfoot.isKeyDown("Backspace") && MyWorld.plmode==2){
+        if(btoOrNo ==1){
+            if(Greenfoot.isKeyDown("Backspace") && MyWorld.plMode ==2){
                 if(Lobby.slide==6){
                     Lobby.slide++;
                 }
                 Greenfoot.setWorld(new Lobby());
             }
-            if(MyWorld.plmode==0){
+            if(MyWorld.plMode ==0){
                 act2();
             }
             else{
                 temp1();
                 plmove();
             }
-            if(Greenfoot.isKeyDown(Lobby.b.get(1)) && elixir>=7 && qpush==0 && can==0 || botorno==0 && elixir>=7 && Greenfoot.getRandomNumber(10)==0 ||  botorno==0 && elixir==10){
+            if(Greenfoot.isKeyDown(Lobby.buttons.get(1)) && elixir>=7 && pushQ ==0 && can==0 || btoOrNo ==0 && elixir>=7 && Greenfoot.getRandomNumber(10)==0 ||  btoOrNo ==0 && elixir==10){
                 elixir-=7;
                 can=1;
             }
-            if(!Greenfoot.isKeyDown(Lobby.b.get(1))){
-                qpush=0;
+            if(!Greenfoot.isKeyDown(Lobby.buttons.get(1))){
+                pushQ =0;
             }
-            if(can==1 && newselect==0){
-                if(Greenfoot.isKeyDown(Lobby.b.get(2))){
-                    superselection=1;
+            if(can==1 && newSelection ==0){
+                if(Greenfoot.isKeyDown(Lobby.buttons.get(2))){
+                    selectionOfSuper =1;
                 }
-                else if(Greenfoot.isKeyDown(Lobby.b.get(3))){
-                    superselection=2;
+                else if(Greenfoot.isKeyDown(Lobby.buttons.get(3))){
+                    selectionOfSuper =2;
                 }
-                else if(Greenfoot.isKeyDown(Lobby.b.get(4))){
-                    superselection=3;
+                else if(Greenfoot.isKeyDown(Lobby.buttons.get(4))){
+                    selectionOfSuper =3;
                 }
-                if(Greenfoot.isKeyDown(Lobby.b.get(1)) && superselection!=0){
-                    mysuper(superselection);
-                    if(superselection==1 && Lobby.slide==3){
+                if(Greenfoot.isKeyDown(Lobby.buttons.get(1)) && selectionOfSuper !=0){
+                    mysuper(selectionOfSuper);
+                    if(selectionOfSuper ==1 && Lobby.slide==3){
                         Lobby.slide++;
                     }
-                    superselection=0;
-                    qpush=1;
+                    selectionOfSuper =0;
+                    pushQ =1;
                 }
             }
         }
-        else if(botorno==0){
-            if(MyWorld.plmode==0){
+        else if(btoOrNo ==0){
+            if(MyWorld.plMode ==0){
                 act1();
             }
             else{
@@ -127,7 +127,7 @@ public class Player extends RealObject
                 botturnTo();
                 botmove();
             }
-            if(newselect==0 && can==1){
+            if(newSelection ==0 && can==1){
                 mysuper(1);
             }
         }
@@ -139,39 +139,39 @@ public class Player extends RealObject
     
     double val=0.5;
     public void newSelect(){
-        if(Greenfoot.isKeyDown(Lobby.b.get(0)) && elixir>=5 && newselect==0 && botorno==1 && epush==0 || botorno==0 && elixir>=5 && Greenfoot.getRandomNumber(100)==0){
+        if(Greenfoot.isKeyDown(Lobby.buttons.get(0)) && elixir>=5 && newSelection ==0 && btoOrNo ==1 && epush==0 || btoOrNo ==0 && elixir>=5 && Greenfoot.getRandomNumber(100)==0){
             elixir-=5;
             for(int i=0;i<6;i+=2){
                 parameters[i]=Greenfoot.getRandomNumber(22);
                 parameters[i+1]=Greenfoot.getRandomNumber(2);
             }
-            newselect=1;
+            newSelection =1;
             selection=0;
             val=0.5;
-            if(botorno==0){
+            if(btoOrNo ==0){
                 selection=Greenfoot.getRandomNumber(3);
                 updateAnimals(parameters[selection*2],parameters[(selection*2)+1],val);
-                newselect=0;
+                newSelection =0;
             }
         }
-        if(!Greenfoot.isKeyDown(Lobby.b.get(0))){
+        if(!Greenfoot.isKeyDown(Lobby.buttons.get(0))){
             epush=0;
         }
-        if(botorno==1){
-            if(Greenfoot.isKeyDown(Lobby.b.get(2))){
+        if(btoOrNo ==1){
+            if(Greenfoot.isKeyDown(Lobby.buttons.get(2))){
                 selection=1;
             }
-            else if(Greenfoot.isKeyDown(Lobby.b.get(3))){
+            else if(Greenfoot.isKeyDown(Lobby.buttons.get(3))){
                 selection=2;
             }
-            else if(Greenfoot.isKeyDown(Lobby.b.get(4))){
+            else if(Greenfoot.isKeyDown(Lobby.buttons.get(4))){
                 selection=3;
             }
             
-            if(Greenfoot.isKeyDown(Lobby.b.get(5))){
+            if(Greenfoot.isKeyDown(Lobby.buttons.get(5))){
                 val+=0.01;
             }
-            else if(Greenfoot.isKeyDown(Lobby.b.get(6))){
+            else if(Greenfoot.isKeyDown(Lobby.buttons.get(6))){
                 val-=0.01;
             }
             
@@ -182,12 +182,12 @@ public class Player extends RealObject
                 val=0;
             }
             
-            if(Greenfoot.isKeyDown(Lobby.b.get(0)) && selection!=0){
+            if(Greenfoot.isKeyDown(Lobby.buttons.get(0)) && selection!=0){
                 updateAnimals(parameters[(selection-1)*2],parameters[((selection-1)*2)+1],val);
                 if(Lobby.slide==4){
                     Lobby.slide++;
                 }
-                newselect=0;
+                newSelection =0;
                 epush=1;
             }
         }
@@ -204,16 +204,16 @@ public class Player extends RealObject
         for(int i=0;i<getObjectsInRange(100, Animal.class).size();i++){
             an=getObjectsInRange(100, Animal.class).get(i);
             if(an.teamNum==teamNum){
-                if(an.par.get(num)>1){
-                    an.par.set(num,an.par.get(num)+evolve*an.par.get(num));
+                if(an.dna.get(num)>1){
+                    an.dna.set(num,an.dna.get(num)+evolve*an.dna.get(num));
                 }
-                else if(an.par.get(num)<1){
-                    an.par.set(num,an.par.get(num)+evolve);
-                    if(an.par.get(num)<0){
-                        an.par.set(num,0.0);
+                else if(an.dna.get(num)<1){
+                    an.dna.set(num,an.dna.get(num)+evolve);
+                    if(an.dna.get(num)<0){
+                        an.dna.set(num,0.0);
                     }
-                    if(an.par.get(num)>1){
-                        an.par.set(num,1.0);
+                    if(an.dna.get(num)>1){
+                        an.dna.set(num,1.0);
                     }
                 }
             }
@@ -229,11 +229,11 @@ public class Player extends RealObject
         }
         for(int i=0;i<getObjectsInRange(100, Animal.class).size();i++){
             an=getObjectsInRange(100, Animal.class).get(i);
-            if(an.par.get(num)>1){
-                an.par.set(num,an.par.get(num)+evolve*an.par.get(num));
+            if(an.dna.get(num)>1){
+                an.dna.set(num,an.dna.get(num)+evolve*an.dna.get(num));
             }
-            else if(an.par.get(num)<=1){
-                an.par.set(num,an.par.get(num)+evolve);
+            else if(an.dna.get(num)<=1){
+                an.dna.set(num,an.dna.get(num)+evolve);
             }
         }
     }
@@ -243,9 +243,9 @@ public class Player extends RealObject
         can=0;
         if(sel==1){
             for(int i=0;i<3;i++){
-                pl=new Plant(plantpar,0, 0, false);
-                pl.myage=pl.agesp;
-                pl.colfood=pl.mcolf1;
+                pl=new Plant(plantDna,0, 0, false);
+                pl.myAge =pl.ageFodGrow;
+                pl.satiety =pl.maxSatiety1;
                 getWorld().addObject(pl, getX() + Greenfoot.getRandomNumber(50)-50/2, getY() + Greenfoot.getRandomNumber(50)-50/2);
             }
         }
@@ -253,13 +253,13 @@ public class Player extends RealObject
             for(int i=0;i<getObjectsInRange(30, Animal.class).size();i++){
                 an=getObjectsInRange(30, Animal.class).get(i);
                 if(an.teamNum==teamNum){
-                    an.myage=an.agesp;
+                    an.myAge =an.ageForGrow;
                 }
             }
         }
         else if(sel==3){
-            updateAnimals1(Greenfoot.getRandomNumber(MyWorld.parsizean),Greenfoot.getRandomNumber(2));
-            updateAnimals1(Greenfoot.getRandomNumber(MyWorld.parsizean),Greenfoot.getRandomNumber(2));
+            updateAnimals1(Greenfoot.getRandomNumber(MyWorld.dnaSizeOfAnimal),Greenfoot.getRandomNumber(2));
+            updateAnimals1(Greenfoot.getRandomNumber(MyWorld.dnaSizeOfAnimal),Greenfoot.getRandomNumber(2));
         }
     }
     double sogr2;
@@ -272,7 +272,7 @@ public class Player extends RealObject
         }
         i=getObjectsInRange(radius,Animal.class).size();
         if(i>0){
-            sogr2=getObjectsInRange(radius,Animal.class).get(0).sogr;
+            sogr2=getObjectsInRange(radius,Animal.class).get(0).heatCof;
         }
         else if(i==0){
             sogr2=sogr;
@@ -280,20 +280,20 @@ public class Player extends RealObject
         tg=(int)((needt*sogr2+(ts*(1-sogr2))));
     }
     public void replicase(){
-        if(Greenfoot.isKeyDown("Space") && botorno==1 || botorno==0){
-            if(MyWorld.plmode<2){
+        if(Greenfoot.isKeyDown("Space") && btoOrNo ==1 || btoOrNo ==0){
+            if(MyWorld.plMode <2){
                 for(int i=0; i<4; i++){
                     //int age1, int plod1, int speed1, int radius1, int size1, double sogr1, double xich1, int tg1, int msit1
-                    Animal an=new Animal(par, this, teamNum, inHole, 0, 0);
+                    Animal an=new Animal(dna, this, teamNum, inHole, 0, 0);
                     getWorld().addObject(an, getX(), getY());
                 }
-                if(botorno==1 && Lobby.slide==8 && Lobby.train){
+                if(btoOrNo ==1 && Lobby.slide==8 && Lobby.train){
                     Lobby.train=false;
                     save();
                 }
             }
             else{
-                Animal an=new Animal(par, this, 0, false, 0, 0);
+                Animal an=new Animal(dna, this, 0, false, 0, 0);
                 getWorld().addObject(an, getX(), getY());
                 touchWater();
                 if(touchWater && Lobby.slide==2){
@@ -367,7 +367,7 @@ public class Player extends RealObject
     }
     
     boolean canSee;
-    int onground=1;
+    int location=1;
     int stopf;
     int m;
     Actor water;
@@ -458,17 +458,17 @@ public class Player extends RealObject
         t4=255;
         size3=size;
         
-        if(onground==0){
+        if(location==0){
             size3=(int)(size3*flycof);
             t4=(int)(255*(1.0/flycof));
             if(t4>255){
                 t4=255;
             }
         }
-        else if(onground==2){
+        else if(location==2){
             size3=(int)(size3*1.5);
         }
-        else if(onground==3 || inHole){
+        else if(location==3 || inHole){
             t4=100;
         }  
         
@@ -537,11 +537,11 @@ public class Player extends RealObject
             }
         }
         
-        if(touchHole && ist==0 && h.loc==onground){
+        if(touchHole && ist==0 && h.loc==location){
             
-            if(!inHole && h.size>size && botorno==1 || 
-            !inHole && h.size>size && sysdix<=0.5 && h.loc==3 && botorno==0 ||
-            !inHole && h.size>size && sysdix>0.5 && h.loc==1 && botorno==0){
+            if(!inHole && h.size>size && btoOrNo ==1 ||
+            !inHole && h.size>size && sysdix<=0.5 && h.loc==3 && btoOrNo ==0 ||
+            !inHole && h.size>size && sysdix>0.5 && h.loc==1 && btoOrNo ==0){
                 inHole=true;
             }
             else if(inHole){
@@ -554,8 +554,8 @@ public class Player extends RealObject
             ist=0;
         }
         
-        if(h!=null && inHole && h.loc!=onground){
-            onground=h.loc;
+        if(h!=null && inHole && h.loc!=location){
+            location=h.loc;
         }
     }
     
@@ -696,7 +696,7 @@ public class Player extends RealObject
                 An=null;
             }
             if(An!=null){
-                if(Math.sqrt(Math.pow(getX()-An.getX(),2)+Math.pow(getY()-An.getY(),2))<radius-(int)(An.maskcof*radius)){
+                if(Math.sqrt(Math.pow(getX()-An.getX(),2)+Math.pow(getY()-An.getY(),2))<radius-(int)(An.maskCof *radius)){
                     canSee=true;
                 }
                 else if(intersects(An)){
@@ -779,7 +779,7 @@ public class Player extends RealObject
             setRotation(r);
             turntor1=1;
         }
-        else if(SopInR!=null && xich<=0.3 && SopInR.xich>0.3){
+        else if(SopInR!=null && xich<=0.3 && SopInR.predation >0.3){
             r=getRotation();
             turnTowards(SopInR.x, SopInR.y);
             if(r1>=180){
@@ -801,19 +801,19 @@ public class Player extends RealObject
     }
     
     public void brith(){
-        if(sysdix<=0.5 && onground!=3 && air>0){
+        if(sysdix<=0.5 && location!=3 && air>0){
             air=air-(size*size*size);
         }
-        else if(sysdix<=0.5 && air<mair && onground==3){
+        else if(sysdix<=0.5 && air<mair && location==3){
             air+=(size*size*size);
             if(air>mair){
                 air=mair;
             }
         }
-        if(sysdix>0.5 && onground==3 && air>0){
+        if(sysdix>0.5 && location==3 && air>0){
             air=air-(size*size*size);
         }
-        else if(sysdix>0.5 && onground!=3 && air<mair){
+        else if(sysdix>0.5 && location!=3 && air<mair){
             air+=(size*size*size);
             if(air>mair){
                 air=mair;
@@ -822,7 +822,7 @@ public class Player extends RealObject
     }
     
     public void drink(){
-        if(onground==3 && water2<mw || touchWater && water2<mw && onground==1){
+        if(location==3 && water2<mw || touchWater && water2<mw && location==1){
             water2=water2+drink;
             if(wt3<9){
                 stopp=1;
@@ -842,18 +842,18 @@ public class Player extends RealObject
             foodx=0;
             foody=0;
         }
-        if(tPl!=null && xich<0.7 && sit1<msit && onground==2 || tPl!=null && xich<0.7 && sit1<msit && onground==tPl.onground){
+        if(tPl!=null && xich<0.7 && sit1<msit && location==2 || tPl!=null && xich<0.7 && sit1<msit && location==tPl.location){
             sit1=sit1+(int)(eat*(1-xich));
-            tPl.colfood-=eat;
-            xp-=tPl.poisondam;
+            tPl.satiety -=eat;
+            xp-=tPl.poison;
             if(sit2<9){
                 stopp=1;
             }
         }
         
-        if(tFood!=null && xich>0.3 && sit1<msit && onground==1){
+        if(tFood!=null && xich>0.3 && sit1<msit && location==1){
             sit1=sit1+eat;
-            tFood.sit-=eat;
+            tFood.satiety -=eat;
             if(sit2<9){
                 stopp=1;
             }
@@ -870,15 +870,15 @@ public class Player extends RealObject
     
     public void attack(){
         if(xich>0.3 && tEgg!=null && tEgg.teamNum!=teamNum){
-            if(sit1<msit && tEgg.image.getWidth()<=image.getWidth() && onground==tEgg.onground){
+            if(sit1<msit && tEgg.image.getWidth()<=image.getWidth() && location==tEgg.location){
                 sit1=sit1+(tEgg.image.getWidth()*35000);
                 getWorld().removeObject(tEgg);
                 tEgg=null;
             }
-            else if(tEgg!=null && sit1<msit && tEgg.image.getWidth()<=image.getWidth() && onground==1 && tEgg.onground==3){
+            else if(tEgg!=null && sit1<msit && tEgg.image.getWidth()<=image.getWidth() && location==1 && tEgg.location==3){
                 dive1();
             }
-            else if(tEgg!=null && sit1<msit && tEgg.image.getWidth()<=image.getWidth() && onground==3 && tEgg.onground==1){
+            else if(tEgg!=null && sit1<msit && tEgg.image.getWidth()<=image.getWidth() && location==3 && tEgg.location==1){
                 up();
             }
         }
@@ -888,11 +888,11 @@ public class Player extends RealObject
     }
     
     public void defance(){
-        if(xp<mxp && xichan!=null && onground==xichan.onground){
-            xichan.xp-=(damage+poisondam);
+        if(xp<mxp && xichan!=null && location==xichan.location){
+            xichan.hp -=(damage+poisondam);
         }
-        if(xp<mxp && xichpl!=null && onground==xichpl.onground){
-            xichpl.xp-=(damage+poisondam);
+        if(xp<mxp && xichpl!=null && location==xichpl.location){
+            xichpl.hp -=(damage+poisondam);
         }
         xichan=null;
         xichpl=null;
@@ -901,7 +901,7 @@ public class Player extends RealObject
     int rotspeed;
     public void move(){
         if(moven>0 && dei==0){
-            if(onground!=3 && pspeed>=speed && pspeed>=wspeed && sit2>5 && wt3>5 && stopf==0 || onground==0){
+            if(location!=3 && pspeed>=speed && pspeed>=wspeed && sit2>5 && wt3>5 && stopf==0 || location==0){
                 move(-pspeed);
                 sit1=sit1-(pspeed*size);
                 water2=water2-(pspeed*size);
@@ -952,7 +952,7 @@ public class Player extends RealObject
             }
         }
         if(dei==0 && stopp==0){
-            if(onground!=3 && pspeed>=speed && pspeed>=wspeed && sit2>5 && wt3>5 && stopf==0 || onground==0){
+            if(location!=3 && pspeed>=speed && pspeed>=wspeed && sit2>5 && wt3>5 && stopf==0 || location==0){
                 move(pspeed);
                 sit1=sit1-(pspeed*size);
                 water2=water2-(pspeed*size);
@@ -974,7 +974,7 @@ public class Player extends RealObject
     
     public void move1(){
         if(moven>0 && dei==0){
-            if(onground!=3 && pspeed>=speed && pspeed>=wspeed && sit2>5 && wt3>5 && stopf==0 || onground==0){
+            if(location!=3 && pspeed>=speed && pspeed>=wspeed && sit2>5 && wt3>5 && stopf==0 || location==0){
                 move(-pspeed);
                 sit1=sit1-(pspeed*size);
                 water2=water2-(pspeed*size);
@@ -1028,7 +1028,7 @@ public class Player extends RealObject
             }
         }
         if(Math.sqrt(Math.pow(getX()-MyWorld.fm.x,2)+Math.pow(getY()-MyWorld.fm.y,2))>30 && stopp==0){
-            if(onground!=3 && pspeed>=speed && pspeed>=wspeed && sit2>5 && wt3>5 && stopf==0 || onground==0){
+            if(location!=3 && pspeed>=speed && pspeed>=wspeed && sit2>5 && wt3>5 && stopf==0 || location==0){
                 move(pspeed);
                 sit1=sit1-(pspeed*size);
                 water2=water2-(pspeed*size);
@@ -1045,11 +1045,11 @@ public class Player extends RealObject
         inHole();
     }
     public void moveBack(){
-        if(touchWater && fly==0 && wspeed==0 && !inHole || inHole && !touchHR && onground==1){
+        if(touchWater && fly==0 && wspeed==0 && !inHole || inHole && !touchHR && location==1){
             drink();
             move(-speed);
         }
-        else if(!touchWater && fly==0 && !inHole && speed==0 || inHole && !touchHR && onground==3){
+        else if(!touchWater && fly==0 && !inHole && speed==0 || inHole && !touchHR && location==3){
             move(-wspeed);
         }
         
@@ -1073,16 +1073,16 @@ public class Player extends RealObject
     }
     
     public void dive1(){
-        if(touchWater && onground==1){
-            onground=3;
+        if(touchWater && location==1){
+            location=3;
             if(air<=0 && sysdix<=0.5){
                 air=1;
             }
         }
     }
     public void up(){
-        if(onground==3 && !inHole){
-            onground=1;
+        if(location==3 && !inHole){
+            location=1;
             if(air<=0 && sysdix>0.5){
                 air=1;
             }
@@ -1091,10 +1091,10 @@ public class Player extends RealObject
     
     public void dive(){
         touchWater();
-        if(sysdix<=0.5 && onground==1 || tPl!=null && xich<0.7 && sit1<msit && onground==1 && tPl.onground==3){
+        if(sysdix<=0.5 && location==1 || tPl!=null && xich<0.7 && sit1<msit && location==1 && tPl.location==3){
             dive1();
         }
-        if(tFood!=null && xich>0.3 && sit1<msit && onground==3 || !touchWater && onground==3 || air<=1 && onground==3 && sysdix>0.5 || tPl!=null && xich<0.7 && sit2<7 && onground==3 && tPl.onground==1){
+        if(tFood!=null && xich>0.3 && sit1<msit && location==3 || !touchWater && location==3 || air<=1 && location==3 && sysdix>0.5 || tPl!=null && xich<0.7 && sit2<7 && location==3 && tPl.location==1){
             up();
         }
     }
@@ -1104,33 +1104,33 @@ public class Player extends RealObject
     int mp;
     public void diveForPl(){
         mi=Greenfoot.getMouseInfo();
-        if(sysdix<=0.5 && onground==1
-        || Lobby.b.get(7).equals("лкм") && mi!=null && Greenfoot.mousePressed(null) && mi.getButton()==3 && dive==0 && mp==0
-        || Greenfoot.isKeyDown(Lobby.b.get(7)) && dive==0 && mp==0){
+        if(sysdix<=0.5 && location==1
+        || Lobby.buttons.get(7).equals("лкм") && mi!=null && Greenfoot.mousePressed(null) && mi.getButton()==3 && dive==0 && mp==0
+        || Greenfoot.isKeyDown(Lobby.buttons.get(7)) && dive==0 && mp==0){
             dive1();
             dive=1;
             mp=1;
         }
-        if(air<=0 && onground==3 && sysdix>0.5 || !touchWater && onground==3
-        || Lobby.b.get(7).equals("лкм") && mi!=null && Greenfoot.mousePressed(null) && mi.getButton()==3 && dive==1 && mp==0
-        || Greenfoot.isKeyDown(Lobby.b.get(7)) && dive==0 && mp==0){
+        if(air<=0 && location==3 && sysdix>0.5 || !touchWater && location==3
+        || Lobby.buttons.get(7).equals("лкм") && mi!=null && Greenfoot.mousePressed(null) && mi.getButton()==3 && dive==1 && mp==0
+        || Greenfoot.isKeyDown(Lobby.buttons.get(7)) && dive==0 && mp==0){
             up();
             dive=0;
             mp=1;
         }
-        if(Lobby.b.get(7).equals("лкм") && !Greenfoot.mousePressed(null) || !Greenfoot.isKeyDown(Lobby.b.get(7))){
+        if(Lobby.buttons.get(7).equals("лкм") && !Greenfoot.mousePressed(null) || !Greenfoot.isKeyDown(Lobby.buttons.get(7))){
             mp=0;
         }
     }
     
     public void climb(){
-        if(canclimb>0.5 && onground==1){
-            if(tPl!=null && tPl.onground==1 && tPl.size>size && onground==1){
-                onground=2;
+        if(canclimb>0.5 && location==1){
+            if(tPl!=null && tPl.location==1 && tPl.maxSize >size && location==1){
+                location=2;
             }
         }
-        if(onground==2 && tPl==null){
-            onground=1;
+        if(location==2 && tPl==null){
+            location=1;
         }
     }
     
@@ -1139,12 +1139,12 @@ public class Player extends RealObject
             fly=0;
             stopf=1;
         }
-        if(tPl!=null && xich<0.7 && sit2<7 && onground==0){
+        if(tPl!=null && xich<0.7 && sit2<7 && location==0){
             fly=0;
             stopf=1;
         }
         if(tAn!=null && xich>0.3 && tAn.teamNum!=teamNum){
-            if(sit2<7 && tAn.onground==1){
+            if(sit2<7 && tAn.location==1){
                 fly=0;
                 stopf=1;
             }
@@ -1163,11 +1163,11 @@ public class Player extends RealObject
                 flycof=2;
             }
         }
-        if(fly==0 && flycof==1 && onground==0){
-            onground=1;
+        if(fly==0 && flycof==1 && location==0){
+            location=1;
         }
         else if(fly==1){
-            onground=0;
+            location=0;
         }
     }
     

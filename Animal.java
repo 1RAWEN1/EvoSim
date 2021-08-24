@@ -14,128 +14,125 @@ public class Animal extends RealObject
      */
     Player myPl;
     int teamNum;
-    boolean canSee;
-    ArrayList<Double> par;
-    ArrayList<Double> par2=new ArrayList<Double>();
-    int onground=1;
-    int stopf;
-    Actor water;
+    ArrayList<Double> dna;
+    ArrayList<Double> dna2=new ArrayList<>();
+    int location;
+    int stopFly;
     int r;
     int x;
     int y;
     int r1;
-    int moven;
-    int stopp;
-    int dei;
-    int turntor1;
+    int moveBack;
+    int stopMoveForward;
+    int action;
+    int turnToR1;
     double timer;
     int start;
     GreenfootImage image;
     GreenfootImage fon;
             
-    double startx;
-    double starty;
+    double startX;
+    double startY;
     
-    int foodx;
-    int foody;
+    int foodX;
+    int foodY;
     
     //эволюционирующие показатели
-    int msize;
+    int maxSize;
     int size;
     int size1;
-    int mxp;
-    int xp;
+    int maxHp;
+    int hp;
     
-    int mair;
+    int maxAir;
     int air;
     
-    double sysdix;
+    double respiratorySystem;
     
-    double canclimb;
+    double canClimb;
     
-    double anabiozcof;
-    boolean anabioz;
+    double hibernationCof;
+    boolean hibernation;
     
-    double livebirth;
+    double liveBirth;
     
-    int agesp;
-    int myage;
+    int ageForGrow;
+    int myAge;
     
-    double pspeed;
-    double flycof;
+    double flyingSpeed;
+    double flyCof;
     int fly;
     
-    double poicof;
-    int poisondam;
+    double poisonCof;
+    int poison;
     
-    double maskcof;
+    double maskCof;
     
-    int mw1;
-    int mw;
-    int wt3;
+    int maxWater1;
+    int maxWater;
+    int waterValueForBar;
     int drink;
-    int water2;
+    int water;
     
-    int p;
+    int period;
     int tim;
-    int pol;
-    
-    //int rad;
+    int sex;
+
     double protection;
     
-    double wspeed;
+    double waterSpeed;
     
-    double movecof;
+    double moveCof;
     
     int age;
     
-    int plod;
+    int fertility;
     
     double speed;
     
     int radius;
     
-    double sogr;
-    int tg;
-    int ts;
-    int needt=36;
+    double heatCof;
+    int creatureTemp;
+    int surroundingTemp;
+    private final int needTemp = 36;
     
-    double xich;
+    double predation;
     int damage;
     
-    int msit1;
-    int msit;
-    int sit1;
-    int sit2;
+    int maxSatiety1;
+    int maxSatiety;
+    int satiety;
+    int satietyValueForBar;
     int eat;
     
-    double dspeed;
+    double digSpeed;
     
     //партнер
     Animal an1;
     
     //на меня охотятся
-    Plant xichpl;
-    Animal xichan;
+    Plant hunterPlant;
+    Animal hunter;
     
     //добыча
-    Animal dob;
+    Animal extraction;
     
-    Animal tAn;
-    Plant tPl;
-    Egg tEgg;
-    DieAnimal tFood;
+    Animal touchingAn;
+    Plant touchingPl;
+    Egg touchingEgg;
+    DieAnimal touchingFood;
     
-    Animal AnInR;
-    Animal SopInR;
-    Plant PlInR;
-    Egg EggInR;
+    Animal teammateAnimal;
+    Animal enemyAnimal;
+    Plant plant;
+    Egg egg;
     
     boolean touchWater;
     
-    int radis;
+    int distToChild;
     
-    public Animal(ArrayList<Double> par1, Player pl, int tn, boolean inHole, int food1, int water1){
+    public Animal(ArrayList<Double> dna1, Player pl, int tn, boolean inHole, int food1, int water1){
         this.inHole=inHole;
         if(this.inHole){
             ist=1;
@@ -143,181 +140,181 @@ public class Animal extends RealObject
         r=Greenfoot.getRandomNumber(360);
         teamNum=tn;
         myPl=pl;
-        par=(ArrayList<Double>) par1.clone();
-        for(int i=0;i<par.size();i++){
-            double d=par.get(i);
+        dna = new ArrayList<>(dna1);
+        for(int i=0;i<dna.size();i++){
+            double d=dna.get(i);
             if(d>1){
                 if(Greenfoot.getRandomNumber(3)+1==1){
-                    d+=d*MyWorld.cofic;
+                    d+=d*MyWorld.cofOfEvolution;
                 }
                 else if(Greenfoot.getRandomNumber(2)+1==1){
-                    d-=d*MyWorld.cofic;
+                    d-=d*MyWorld.cofOfEvolution;
                 }
             }
             else{
                 if(Greenfoot.getRandomNumber(3)+1==1){
-                    d+=MyWorld.cofic;
+                    d+=MyWorld.cofOfEvolution;
                 }
                 else if(Greenfoot.getRandomNumber(2)+1==1){
-                    d-=MyWorld.cofic;
+                    d-=MyWorld.cofOfEvolution;
                 }
             }
-            par.set(i, d);
+            dna.set(i, d);
         }
         
-        if(par.get(18)>=0){
-            msize=par.get(18).intValue();
-            if(msize<=0){
-                msize=1;
+        if(dna.get(18)>=0){
+            maxSize=dna.get(18).intValue();
+            if(maxSize<=0){
+                maxSize=1;
             }
-            size=(int)(msize*0.1);
+            size=(int)(maxSize*0.1);
             if(size<=0){
                 size=1;
             }
         }
         else{
-            msize=3;
-            size=(int)(msize*0.1);
+            maxSize=3;
+            size=(int)(maxSize*0.1);
             if(size<=0){
                 size=1;
             }
-            par.set(18, (double)msize);
+            dna.set(18, (double)maxSize);
         }
-        radis=2*msize;
-        fon=new GreenfootImage(msize, msize);
+        distToChild =2*maxSize;
+        fon=new GreenfootImage(maxSize, maxSize);
         
-        if(par.get(0)>=0){
-            mair=par.get(0).intValue();
-            air=mair;
+        if(dna.get(0)>=0){
+            maxAir=dna.get(0).intValue();
+            air=maxAir;
         }
         else{
-            mair=msize*1000;
-            air=mair;
-            par.set(0, (double)mair);
+            maxAir=maxSize*1000;
+            air=maxAir;
+            dna.set(0, (double)maxAir);
         }
         
-        if(par.get(1)>=0){
-            sysdix=par.get(1);
+        if(dna.get(1)>=0){
+            respiratorySystem=dna.get(1);
         }
         else{
-            sysdix=0.0;
-            par.set(1, sysdix);
+            respiratorySystem=0.0;
+            dna.set(1, respiratorySystem);
         }
-        if(sysdix>1){
-            sysdix=1;
+        if(respiratorySystem>1){
+            respiratorySystem=1;
         }
-        else if(sysdix<0){
-            sysdix=0;
+        else if(respiratorySystem<0){
+            respiratorySystem=0;
         }
         
-        if(par.get(2)>=0){
-            canclimb=par.get(2);
+        if(dna.get(2)>=0){
+            canClimb=dna.get(2);
         }
         else{
-            canclimb=0.0;
-            par.set(2, canclimb);
+            canClimb=0.0;
+            dna.set(2, canClimb);
         }
-        if(canclimb>1){
-            canclimb=1;
+        if(canClimb>1){
+            canClimb=1;
         }
-        else if(canclimb<0){
-            canclimb=0;
+        else if(canClimb<0){
+            canClimb=0;
         }
         
-        pol=Greenfoot.getRandomNumber(2);
+        sex =Greenfoot.getRandomNumber(2);
         
-        if(par.get(3)>=0){
-            anabiozcof=par.get(3);
+        if(dna.get(3)>=0){
+            hibernationCof =dna.get(3);
         }
         else{
-            anabiozcof=1;
-            par.set(3, anabiozcof);
+            hibernationCof =1;
+            dna.set(3, hibernationCof);
         }
-        if(anabiozcof<0){
-            anabiozcof=0;
+        if(hibernationCof <0){
+            hibernationCof =0;
         }
-        if(anabiozcof>1){
-            anabiozcof=1;
+        if(hibernationCof >1){
+            hibernationCof =1;
         }
         
-        if(par.get(4)>=0){
-            livebirth=par.get(4);
+        if(dna.get(4)>=0){
+            liveBirth =dna.get(4);
         }
         else{
-            livebirth=1;
-            par.set(4, livebirth);
+            liveBirth =1;
+            dna.set(4, liveBirth);
         }
-        if(livebirth>1){
-            livebirth=1;
+        if(liveBirth >1){
+            liveBirth =1;
         }
-        else if(livebirth<0){
-            livebirth=0;
+        else if(liveBirth <0){
+            liveBirth =0;
         }
         
-        if(par.get(5)>=0){
-            agesp=par.get(5).intValue();
+        if(dna.get(5)>=0){
+            ageForGrow =dna.get(5).intValue();
         }
         else{
-            agesp=10;
-            par.set(5, (double)agesp);
+            ageForGrow =10;
+            dna.set(5, (double) ageForGrow);
         }
         
-        if(par.get(6)>=0){
-            pspeed=par.get(6);
+        if(dna.get(6)>=0){
+            flyingSpeed =dna.get(6);
         }
         else{
-            pspeed=0;
-            par.set(6, pspeed);
+            flyingSpeed =0;
+            dna.set(6, flyingSpeed);
         }
         
-        if(par.get(7)>=0){
-            poisondam=par.get(7).intValue();
+        if(dna.get(7)>=0){
+            poison=dna.get(7).intValue();
         }
         else{
-            poisondam=0;
-            par.set(7, (double)poisondam);
+            poison=0;
+            dna.set(7, (double)poison);
         }
         
-        if(par.get(8)>=0){
-            maskcof=par.get(8);
+        if(dna.get(8)>=0){
+            maskCof =dna.get(8);
         }
         else{
-            maskcof=0.0;
-            par.set(8, maskcof);
+            maskCof =0.0;
+            dna.set(8, maskCof);
         }
-        if(maskcof>1){
-            maskcof=1;
+        if(maskCof >1){
+            maskCof =1;
         }
-        else if(maskcof<0){
-            maskcof=0;
+        else if(maskCof <0){
+            maskCof =0;
         }
         
-        if(par.get(9)>=0){
-            mw1=par.get(9).intValue();
-            mw=mw1/2;
-            water2=water1;
+        if(dna.get(9)>=0){
+            maxWater1 =dna.get(9).intValue();
+            maxWater = maxWater1 /2;
+            water =water1;
         }
         else{
-            mw1=msize*35000;
-            mw=mw1/2;
-            water2=mw;
-            par.set(9, (double)mw);
+            maxWater1 =maxSize*35000;
+            maxWater = maxWater1 /2;
+            water = maxWater;
+            dna.set(9, (double) maxWater);
         }
         
-        if(par.get(10)>=0){
-            p=par.get(10).intValue();
+        if(dna.get(10)>=0){
+            period =dna.get(10).intValue();
         }
         else{
-            p=6;
-            par.set(10, (double)p);
+            period =6;
+            dna.set(10, (double) period);
         }
         
-        if(par.get(11)>=0){
-            protection=par.get(11);
+        if(dna.get(11)>=0){
+            protection=dna.get(11);
         }
         else{
             protection=0;
-            par.set(11, protection);
+            dna.set(11, protection);
         }
         if(protection>1){
             protection=1;
@@ -326,150 +323,150 @@ public class Animal extends RealObject
             protection=0;
         }
         
-        if(par.get(12)>=0){
-            wspeed=par.get(12);
+        if(dna.get(12)>=0){
+            waterSpeed =dna.get(12);
         }
         else{
-            wspeed=(double) 1 / msize;
-            par.set(12, wspeed);
+            waterSpeed =(double) 1 / maxSize;
+            dna.set(12, waterSpeed);
         }
         
-        if(par.get(13)>=0){
-            movecof=par.get(13);
+        if(dna.get(13)>=0){
+            moveCof =dna.get(13);
         }
         else{
-            movecof=0.0;
-            par.set(13, movecof);
+            moveCof =0.0;
+            dna.set(13, moveCof);
         }
-        if(movecof>1.0){
-            movecof=1.0;
+        if(moveCof >1.0){
+            moveCof =1.0;
         }
-        else if(movecof<0){
-            movecof=0;
+        else if(moveCof <0){
+            moveCof =0;
         }
         
-        if(par.get(14)>=0){
-            age=par.get(14).intValue();
+        if(dna.get(14)>=0){
+            age=dna.get(14).intValue();
         }
         else{
             age=70;
-            par.set(14, (double)age);
+            dna.set(14, (double)age);
         }
         
-        if(par.get(15)>0){
-            plod=par.get(15).intValue();
+        if(dna.get(15)>0){
+            fertility =dna.get(15).intValue();
         }
         else{
-            plod=1;
-            par.set(15, (double)plod);
+            fertility =1;
+            dna.set(15, (double) fertility);
         }
         
-        if(par.get(16)>=0){
-            speed=par.get(16);
+        if(dna.get(16)>=0){
+            speed=dna.get(16);
         }
         else{
             speed=0;
-            par.set(16, speed);
+            dna.set(16, speed);
         }
         
-        if(par.get(17)>=0){
-            radius=par.get(17).intValue();
+        if(dna.get(17)>=0){
+            radius=dna.get(17).intValue();
         }
         else{
             radius=100;
-            par.set(17, (double)radius);
+            dna.set(17, (double)radius);
         }
         
-        if(par.get(19)>=0){
-            sogr=par.get(19);
+        if(dna.get(19)>=0){
+            heatCof =dna.get(19);
         }
         else{
-            sogr=0.5;
-            par.set(19, sogr);
+            heatCof =0.5;
+            dna.set(19, heatCof);
         }
-        if(sogr>0.9){
-            sogr=0.9;
+        if(heatCof >0.9){
+            heatCof =0.9;
         }
-        else if(sogr<0){
-            sogr=0;
+        else if(heatCof <0){
+            heatCof =0;
         }
         
-        if(par.get(20)>=0){
-            xich=par.get(20);
+        if(dna.get(20)>=0){
+            predation =dna.get(20);
         }
         else{
-            if(MyWorld.plmode<2){
-                xich=0.0;
+            if(MyWorld.plMode <2){
+                predation =0.0;
             }
             else{
-                xich = Greenfoot.getRandomNumber(4)==1 ? 0.7 : 0;
+                predation = Greenfoot.getRandomNumber(4)==1 ? 0.7 : 0;
             }
-            par.set(20, xich);
+            dna.set(20, predation);
         }
-        if(xich>1){
-            xich=1;
+        if(predation >1){
+            predation =1;
         }
-        else if(xich<0){
-            xich=0;
+        else if(predation <0){
+            predation =0;
         }
         
-        if(par.get(21)>0){
-            msit1=par.get(21).intValue();
-            msit=msit1/2;
-            sit1=food1;
+        if(dna.get(21)>0){
+            maxSatiety1 =dna.get(21).intValue();
+            maxSatiety = maxSatiety1 /2;
+            satiety =food1;
         }
         else{
-            msit1=msize*35000;
-            msit=msit1/2;
-            sit1=msit;
-            par.set(21, (double)msit);
+            maxSatiety1 =maxSize*35000;
+            maxSatiety = maxSatiety1 /2;
+            satiety = maxSatiety;
+            dna.set(21, (double) maxSatiety);
         }
         
-        if(par.get(22)>0){
-            dspeed=par.get(22);
+        if(dna.get(22)>0){
+            digSpeed =dna.get(22);
         }
         else{
-            dspeed=0.0;
-            par.set(22, dspeed);
+            digSpeed =0.0;
+            dna.set(22, digSpeed);
         }
         
-        onground=1;
-        mxp=size;
-        xp=mxp;
+        location=1;
+        maxHp =size;
+        hp = maxHp;
         tim=0;
-        damage=(int)(size*xich);
-        if(damage<=1 && xich>=0.3){
+        damage=(int)(size* predation);
+        if(damage<=1 && predation >=0.3){
             damage=1;
         }
         updateImage();
         myPl.myAn++;
     }
     int t4;
-    double bcof;
+    double blueCof;
     public void updateImage(){
         t4=255;
-        size=msize;
-        if(agesp>myage){
-            size=(int)(msize*((double)(myage)/agesp));
-            msit=(int)((((double)(myage)/(agesp*2))+0.5)*msit1);
-            mw=(int)((((double)(myage)/(agesp*2))+0.5)*mw1);
+        size=maxSize;
+        if(ageForGrow > myAge){
+            size=(int)(maxSize*((double)(myAge)/ ageForGrow));
+            maxSatiety =(int)((((double)(myAge)/(ageForGrow *2))+0.5)* maxSatiety1);
+            maxWater =(int)((((double)(myAge)/(ageForGrow *2))+0.5)* maxWater1);
         }
-        if(agesp>=myage){
-            msit=msit1;
-            mw=mw1;
+        if(ageForGrow >= myAge){
+            maxSatiety = maxSatiety1;
+            maxWater = maxWater1;
         }
         size1=size;
-        if(onground==0){
-            size1=(int)(size*flycof);
-            t4=(int)(255*(1.0/flycof));
+        if(location==0){
+            size1=(int)(size* flyCof);
+            t4=(int)(255*(1.0/ flyCof));
             if(t4>255){
                 t4=255;
             }
         }
-        else if(onground==2){
+        else if(location==2){
             size1=(int)(size*1.5);
         }
-        else if(onground==3 || inHole){
+        else if(location==3 || inHole){
             t4=100;
         }  
         
@@ -480,19 +477,19 @@ public class Animal extends RealObject
             size1=1;
         }
         image = new GreenfootImage(size,size);
-        poicof=(double)poisondam/size;
-        if(poicof>1){
-            poicof=1;
+        poisonCof =(double)poison/size;
+        if(poisonCof >1){
+            poisonCof =1;
         }
         
-        bcof=poicof;
-        if(poicof<xich){
-            bcof=xich;
+        blueCof = poisonCof;
+        if(poisonCof < predation){
+            blueCof = predation;
         }
-        if(!anabioz){
-            if(MyWorld.plmode<2 || MyWorld.plan!=null && MyWorld.plmode==2){
-                if(MyWorld.plan!=null && MyWorld.plmode==2){
-                    if(Math.abs(MyWorld.plan.xich-xich) <= MyWorld.cofic){
+        if(!hibernation){
+            if(MyWorld.plMode <2 || MyWorld.observedAnimal !=null && MyWorld.plMode ==2){
+                if(MyWorld.observedAnimal !=null && MyWorld.plMode ==2){
+                    if(Math.abs(MyWorld.observedAnimal.predation - predation) <= MyWorld.cofOfEvolution){
                         teamNum=0;
                     }
                     else{
@@ -517,27 +514,27 @@ public class Animal extends RealObject
                 else if(teamNum==5){
                     image.setColor(new Color(0, 0, 0, 255));
                 }
-                if(MyWorld.plmode==2){
+                if(MyWorld.plMode ==2){
                     teamNum=0;
                 }
             }
             else{
-                image.setColor(new Color((int)(xich*255), (((int)(55*poicof)+(int)((1-bcof)*255))/255)*255, (int)((1-bcof)*255), 255));
+                image.setColor(new Color((int)(predation *255), (((int)(55* poisonCof)+(int)((1- blueCof)*255))/255)*255, (int)((1- blueCof)*255), 255));
             }
         }
         else{
             image.setColor(new Color(153, 217, 234, 255));
         }
         image.fill();
-        fon.setTransparency((int)(255*(maskcof)));
+        fon.setTransparency((int)(255*(maskCof)));
         image.drawImage(fon,0,0);
         image.setTransparency(t4);
         image.scale(size1,size1);
         setImage(image);
         
-        mxp=size;
-        damage=(int)(size*xich);
-        if(damage<=0 && xich>0.3){
+        maxHp =size;
+        damage=(int)(size* predation);
+        if(damage<=0 && predation >0.3){
             damage=1;
         }
         eat=size*700;
@@ -584,8 +581,8 @@ public class Animal extends RealObject
             }
         }
         
-        if(touchHole && ist==0 && h.loc==onground){
-            if(!inHole && h.size>msize && sysdix<=0.5 && h.loc==3 || !inHole && h.size>msize && sysdix>0.5 && h.loc==1){
+        if(touchHole && ist==0 && h.loc==location){
+            if(!inHole && h.size>maxSize && respiratorySystem<=0.5 && h.loc==3 || !inHole && h.size>maxSize && respiratorySystem>0.5 && h.loc==1){
                 inHole=true;
             }
             else if(inHole){
@@ -613,22 +610,22 @@ public class Animal extends RealObject
                 }
             }
         
-            if(hr!=null && inHole && hr.loc!=onground){
-                onground=hr.loc;
+            if(hr!=null && inHole && hr.loc!=location){
+                location=hr.loc;
             }
         }
     }
     
-    int digtimer;
+    int digTimer;
     
     public void dig(){
-        if(getObjectsInRange(radius,Hole.class).size()==0 && digtimer==0 && sit2>5 && wt3>5 && onground!=0 && onground!=2 && dspeed>=1){
-            digtimer=(int)(Math.pow((msize+2)*2,2)/(size*size*dspeed));
+        if(getObjectsInRange(radius,Hole.class).size()==0 && digTimer ==0 && satietyValueForBar >5 && waterValueForBar >5 && location!=0 && location!=2 && digSpeed >=1){
+            digTimer =(int)(Math.pow((maxSize+2)*2,2)/(size*size* digSpeed));
         }
-        if(timer==0 && digtimer>0){
-            digtimer--;
-            if(digtimer==0){
-                getWorld().addObject(new Hole(msize+2,onground),getX(),getY());
+        if(timer==0 && digTimer >0){
+            digTimer--;
+            if(digTimer ==0){
+                getWorld().addObject(new Hole(maxSize+2,location),getX(),getY());
             }
         }
     }
@@ -641,41 +638,41 @@ public class Animal extends RealObject
             dy=getY();
             start=1;
         }
-        if(!anabioz){
-            turnTo();
+        if(!hibernation){
+            think();
             move();
             touchWater();
             moveBack();
         }
         x=getX();
         y=getY();
-        if(sit1<0){
-            sit1=0;
+        if(satiety <0){
+            satiety =0;
         }
         
-        ts=(int)(((double)(x)/getWorld().getWidth())*MyWorld.temp);
-        if(touchWater || onground==3){
-            ts-=10;
+        surroundingTemp =(int)(((double)(x)/getWorld().getWidth())*MyWorld.temp);
+        if(touchWater || location==3){
+            surroundingTemp -=10;
         }
-        anabioz();
-        if(digtimer>0){
-            stopp=1;
+        hibernation();
+        if(digTimer >0){
+            stopMoveForward=1;
         }
         if(timer>=50){
             timer=0;
-            myage++;
+            myAge++;
             tim++;
-            if(sit2>=7 && wt3>=7 && xp<mxp && tg>=needt-10 && tg<=needt+10){
-                xp++;
+            if(satietyValueForBar >=7 && waterValueForBar >=7 && hp < maxHp && creatureTemp >= needTemp -10 && creatureTemp <= needTemp +10){
+                hp++;
             }
         }
         updateImage();
         
         temp();
         
-        if(!anabioz){
+        if(!hibernation){
             attack();
-            if(onground!=0 && myage>=agesp && sit2>=7 && wt3>=7){
+            if(location!=0 && myAge >= ageForGrow && satietyValueForBar >=7 && waterValueForBar >=7){
                 replicase();
             }
             drink();
@@ -683,118 +680,117 @@ public class Animal extends RealObject
             dig();
         }
         
-        brith();
+        breathe();
         dive();
         climb();
-        FlyOrNo();
+        fly();
         die();
     }  
     
-    public void anabioz(){
-        tg=(int)((needt*sogr+(ts*(1-sogr))));
-        if(tg<needt-10 || tg>needt+10){
-            sit1=sit1-(int)(anabiozcof*size*size*size);
-            water2=water2-(int)(anabiozcof*size*size*size);
-            timer+=anabiozcof;
-            anabioz=true;
+    public void hibernation(){
+        creatureTemp =(int)((needTemp * heatCof +(surroundingTemp *(1- heatCof))));
+        if(creatureTemp < needTemp -10 || creatureTemp > needTemp +10){
+            satiety = satiety -(int)(hibernationCof *size*size*size);
+            water = water -(int)(hibernationCof *size*size*size);
+            timer+= hibernationCof;
+            hibernation =true;
         }
         else{
-            sit1=sit1-(size*size*size);
-            water2=water2-(size*size*size);
+            satiety = satiety -(size*size*size);
+            water = water -(size*size*size);
             timer++;
-            anabioz=false;
+            hibernation =false;
         }
     }
     
     public void temp(){
-        tg=(int)((needt*sogr+(ts*(1-sogr))));
-        sit1=sit1-(int)(Math.abs(ts-needt)*sogr*size);
-        water2=water2-(int)(Math.abs(ts-needt)*sogr*size);
+        creatureTemp =(int)((needTemp * heatCof +(surroundingTemp *(1- heatCof))));
+        satiety = satiety -(int)(Math.abs(surroundingTemp - needTemp)* heatCof *size);
+        water = water -(int)(Math.abs(surroundingTemp - needTemp)* heatCof *size);
     }
     
-    int cx;
-    int cy;
+    int childX;
+    int childY;
     
-    int rtoc;
+    int rotToMyChild;
     public void replicase(){
-        if(speed==0 && wspeed==0 && pspeed==0){
-            water=getOneIntersectingObject(Water.class);
-            if(tim>p*2){
-                for(int i=0; i<plod; i++){
-                    par2.clear();
-                    par2.addAll(par);
-                    cx=x+Greenfoot.getRandomNumber(radis)-radis/2;
-                    cy=y+Greenfoot.getRandomNumber(radis)-radis/2;
+        if(speed == 0 && waterSpeed == 0 && flyingSpeed == 0){
+            if(tim > period *2){
+                for(int i = 0; i< fertility; i++){
+                    dna2.clear();
+                    dna2.addAll(dna);
+                    childX =x+Greenfoot.getRandomNumber(distToChild)- distToChild /2;
+                    childY =y+Greenfoot.getRandomNumber(distToChild)- distToChild /2;
                     if(inHole){
                         inHole();
-                        if(hr!=null && Math.sqrt(Math.pow(hr.getX()-cx,2)+Math.pow(hr.getY()-cy,2))>hr.size/2){
-                            startx=getX();
-                            starty=getY();
+                        if(hr!=null && Math.sqrt(Math.pow(hr.getX() - childX, 2) + Math.pow(hr.getY() - childY, 2)) > (double) hr.size / 2){
                             setLocation(hr.getX(),hr.getY());
-                            turnTowards(cx,cy);
-                            rtoc=getRotation();
-                            cx=hr.getX()+(int)(Math.cos(Math.toRadians(rtoc))*((hr.size/2)-1));
-                            cy=hr.getY()+(int)(Math.sin(Math.toRadians(rtoc))*((hr.size/2)-1));
+                            turnTowards(childX, childY);
+                            rotToMyChild =getRotation();
+                            childX =hr.getX()+(int)(Math.cos(Math.toRadians(rotToMyChild))*((hr.size/2)-1));
+                            childY =hr.getY()+(int)(Math.sin(Math.toRadians(rotToMyChild))*((hr.size/2)-1));
                         }
                     }
-                    if(livebirth>=0.5){
-                        Animal an=new Animal(par2, myPl, teamNum, inHole
-                                , (int)(msize*msize*msize*1000*livebirth), (int)(msize*msize*msize*1000*livebirth));
-                        getWorld().addObject(an, cx, cy);
+                    if(liveBirth >=0.5){
+                        Animal child=new Animal(dna2, myPl, teamNum, inHole
+                                , (int)(maxSize*maxSize*maxSize*1000* liveBirth), (int)(maxSize*maxSize*maxSize*1000* liveBirth));
+                        getWorld().addObject(child, childX, childY);
                     }
                     else{
-                        Egg an=new Egg(par2, onground, myPl, teamNum, inHole, movecof);
-                        getWorld().addObject(an, cx, cy);
+                        Egg child = new Egg(dna2, location, myPl, teamNum, inHole, moveCof);
+                        getWorld().addObject(child, childX, childY);
                     }
-                    sit1=sit1-(int)(msize*msize*msize*1000*livebirth);
-                    water2=water2-(int)(msize*msize*msize*1000*livebirth);
-                    tim=0;
+
+                    satiety = satiety - (int) (maxSize * maxSize * maxSize * 1000 * liveBirth);
+                    water = water - (int) (maxSize * maxSize * maxSize * 1000 * liveBirth);
+
+                    tim = 0;
                 }
             }
         }
         else{
-            if(tim>p && tAn!=null && tAn.teamNum==teamNum && !tAn.anabioz && tAn.onground==onground && tAn.tim>tAn.p){
-                for(int i=0; i<plod; i++){
-                    an1=tAn;
-                    par2.clear();
-                    for(int i1=0;i1<par.size();i1++){
+            if(tim > period && touchingAn !=null && touchingAn.teamNum==teamNum && !touchingAn.hibernation && touchingAn.location==location && touchingAn.tim> touchingAn.period){
+                for(int i = 0; i< fertility; i++){
+                    an1= touchingAn;
+                    dna2.clear();
+                    for(int i1=0;i1<dna.size();i1++){
                         if(Greenfoot.getRandomNumber(2)==1){
-                            par2.add(par.get(i1));
+                            dna2.add(dna.get(i1));
                         }
                         else{
-                            par2.add(an1.par.get(i1));
+                            dna2.add(an1.dna.get(i1));
                         }
                     }
-                    if(livebirth>=0.5){
-                        Animal an=new Animal(par2, myPl, teamNum, inHole
-                                , (int)(msize*msize*msize*1000*livebirth), (int)(msize*msize*msize*1000*livebirth));
-                        getWorld().addObject(an, x, y);
+                    if(liveBirth >=0.5){
+                        Animal child=new Animal(dna2, myPl, teamNum, inHole
+                                , (int)(maxSize*maxSize*maxSize*1000* liveBirth), (int)(maxSize*maxSize*maxSize*1000* liveBirth));
+                        getWorld().addObject(child, x, y);
                     }
                     else{
-                        Egg an=new Egg(par2, onground, myPl, teamNum, inHole, movecof);
-                        getWorld().addObject(an, x, y);
+                        Egg child=new Egg(dna2, location, myPl, teamNum, inHole, moveCof);
+                        getWorld().addObject(child, x, y);
                     }
-                    sit1=sit1-(int)(msize*msize*msize*1000*livebirth);
-                    water2=water2-(int)(msize*msize*msize*1000*livebirth);
+                    satiety = satiety -(int)(maxSize*maxSize*maxSize*1000* liveBirth);
+                    water = water -(int)(maxSize*maxSize*maxSize*1000* liveBirth);
 
                     tim=0;
                 }
             }
-            else if(tim>p*2){
-                for(int i=0; i<plod; i++){
-                    par2.clear();
-                    par2.addAll(par);
-                    if(livebirth>=0.5){
-                        Animal an=new Animal(par2, myPl, teamNum, inHole
-                                , (int)(msize*msize*msize*1000*livebirth), (int)(msize*msize*msize*1000*livebirth));
-                        getWorld().addObject(an, x, y);
+            else if(tim> period *2){
+                for(int i = 0; i< fertility; i++){
+                    dna2.clear();
+                    dna2.addAll(dna);
+                    if(liveBirth >=0.5){
+                        Animal child=new Animal(dna2, myPl, teamNum, inHole
+                                , (int)(maxSize*maxSize*maxSize*1000* liveBirth), (int)(maxSize*maxSize*maxSize*1000* liveBirth));
+                        getWorld().addObject(child, x, y);
                     }
                     else{
-                        Egg an=new Egg(par2, onground, myPl, teamNum,inHole, movecof);
-                        getWorld().addObject(an, x, y);
+                        Egg child=new Egg(dna2, location, myPl, teamNum,inHole, moveCof);
+                        getWorld().addObject(child, x, y);
                     }
-                    sit1=sit1-(int)(msize*msize*msize*1000*livebirth);
-                    water2=water2-(int)(msize*msize*msize*1000*livebirth);
+                    satiety = satiety -(int)(maxSize*maxSize*maxSize*1000* liveBirth);
+                    water = water -(int)(maxSize*maxSize*maxSize*1000* liveBirth);
                     tim=0;
                 }
             }
@@ -810,7 +806,7 @@ public class Animal extends RealObject
     double d;
     public void getPlInRange(){
         pl=null;
-        if(MyWorld.plmode==0){
+        if(MyWorld.plMode ==0){
             d=radius+1;
             for(int i=0;i<getObjectsInRange(radius,Player.class).size();i++){
                 pl1=getObjectsInRange(radius,Player.class).get(i);
@@ -827,47 +823,47 @@ public class Animal extends RealObject
         }
     }
 
-    public void turnTo(){
-        AnInR=null;
-        SopInR=null;
-        PlInR=null;
-        EggInR=null;
+    public void think(){
+        teammateAnimal =null;
+        enemyAnimal =null;
+        plant =null;
+        egg =null;
         food=null;
-        if(MyWorld.plmode==2){
+        if(MyWorld.plMode ==2){
             teamNum=0;
         }
         for(Animal animalInRange : getObjectsInRange(radius, Animal.class)) {
             if (animalInRange.inHole == inHole) {
-                if (MyWorld.plmode == 2) {
-                    if (Math.abs(animalInRange.xich - xich) <= MyWorld.cofic) {
+                if (MyWorld.plMode == 2) {
+                    if (Math.abs(animalInRange.predation - predation) <= MyWorld.cofOfEvolution) {
                         animalInRange.teamNum = 0;
                     } else {
                         animalInRange.teamNum = 1;
                     }
                 }
-                if(AnInR == null && animalInRange.teamNum == teamNum) {
-                    if (Math.sqrt(Math.pow(getX() - animalInRange.getX(), 2) + Math.pow(getY() - animalInRange.getY(), 2)) < radius - (int) (animalInRange.maskcof * radius)) {
-                        AnInR = animalInRange;
+                if(teammateAnimal == null && animalInRange.teamNum == teamNum) {
+                    if (Math.sqrt(Math.pow(getX() - animalInRange.getX(), 2) + Math.pow(getY() - animalInRange.getY(), 2)) < radius - (int) (animalInRange.maskCof * radius)) {
+                        teammateAnimal = animalInRange;
                     } else if (intersects(animalInRange)) {
-                        AnInR = animalInRange;
+                        teammateAnimal = animalInRange;
                     }
                 }
-                else if(SopInR == null && animalInRange.teamNum != teamNum) {
-                    if (Math.sqrt(Math.pow(getX() - animalInRange.getX(), 2) + Math.pow(getY() - animalInRange.getY(), 2)) < radius - (int) (animalInRange.maskcof * radius)) {
-                        SopInR = animalInRange;
+                else if(enemyAnimal == null && animalInRange.teamNum != teamNum) {
+                    if (Math.sqrt(Math.pow(getX() - animalInRange.getX(), 2) + Math.pow(getY() - animalInRange.getY(), 2)) < radius - (int) (animalInRange.maskCof * radius)) {
+                        enemyAnimal = animalInRange;
                     } else if (intersects(animalInRange)) {
-                        SopInR = animalInRange;
+                        enemyAnimal = animalInRange;
                     }
                 }
             }
-            if(AnInR != null && SopInR != null){
+            if(teammateAnimal != null && enemyAnimal != null){
                 break;
             }
         }
         if(getObjectsInRange(radius, Egg.class).size()>0){
-            EggInR=getObjectsInRange(radius, Egg.class).get(0);
-            if(EggInR.inHole!=inHole){
-                EggInR=null;
+            egg =getObjectsInRange(radius, Egg.class).get(0);
+            if(egg.inHole!=inHole){
+                egg =null;
             }
         }
         if(getObjectsInRange(radius, DieAnimal.class).size()>0 && !inHole){
@@ -876,45 +872,45 @@ public class Animal extends RealObject
         
         getPlInRange();
         
-        if(PlInR!=null && xich<0.7){
-            foodx=PlInR.getX();
-            foody=PlInR.getY();
+        if(plant !=null && predation <0.7){
+            foodX= plant.getX();
+            foodY= plant.getY();
         }
-        else if(food != null && xich > 0.3){
-            foodx = food.getX();
-            foody = food.getY();
+        else if(food != null && predation > 0.3){
+            foodX = food.getX();
+            foodY = food.getY();
         }
 
-        if(inHole && !touchHole && getObjectsInRange((msize+2)*2,Hole.class).size()>0){
-            turnTowards(getObjectsInRange((msize+2)*2,Hole.class).get(0).getX(), getObjectsInRange((msize+2)*2,Hole.class).get(0).getY());
+        if(inHole && !touchHole && getObjectsInRange((maxSize+2)*2,Hole.class).size()>0){
+            turnTowards(getObjectsInRange((maxSize+2)*2,Hole.class).get(0).getX(), getObjectsInRange((maxSize+2)*2,Hole.class).get(0).getY());
             r1=getRotation();
-            turntor1=1;
+            turnToR1=1;
         }
-        else if(MyWorld.plmode<2 && Math.sqrt(Math.pow(myPl.getX()-getX(),2)+Math.pow(myPl.getY()-getY(),2))>radius){
+        else if(MyWorld.plMode <2 && Math.sqrt(Math.pow(myPl.getX()-getX(),2)+Math.pow(myPl.getY()-getY(),2))>radius){
             turnTowards(myPl.getX(), myPl.getY());
             r1=getRotation();
-            turntor1=1;
+            turnToR1=1;
         }
-        else if(isAtEdge() || needt-9>tg || needt+9<tg){
-            if(needt-9>tg){
+        else if(isAtEdge() || needTemp -9> creatureTemp || needTemp +9< creatureTemp){
+            if(needTemp -9> creatureTemp){
                 r1=0;
             }
-            else if(needt+9<tg){
+            else if(needTemp +9< creatureTemp){
                 r1=180;
             }
             else{
                 turnTowards(getWorld().getWidth()/2, getWorld().getHeight()/2);
                 r1=getRotation();
             }
-            turntor1=1;
+            turnToR1=1;
         }
-        else if(SopInR!=null && SopInR.xich>xich){
+        else if(enemyAnimal !=null && enemyAnimal.predation > predation){
             /*if(getObjectsInRange(radius,Hole.class).size() > 0 && SopInR.size>size){
                 turnTowards(getObjectsInRange(radius,Hole.class).get(0).getX(), getObjectsInRange(radius,Hole.class).get(0).getY());
                 r1=getRotation();
             }
             else{*/
-                turnTowards(SopInR.x, SopInR.y);
+                turnTowards(enemyAnimal.x, enemyAnimal.y);
                 if(r1>=180){
                     r1=getRotation()-(180-Greenfoot.getRandomNumber(30));
                 }
@@ -923,66 +919,66 @@ public class Animal extends RealObject
                 }
             //}
 
-            turntor1 = 1;
+            turnToR1 = 1;
         }
-        else if(getObjectsInRange(radius, Water.class).size()>0 && wt3<7
-                || getObjectsInRange(radius, Water.class).size() > 0 && (double)air / mair <= 0.5 && sysdix <= 0.5){
+        else if(getObjectsInRange(radius, Water.class).size()>0 && waterValueForBar <7
+                || getObjectsInRange(radius, Water.class).size() > 0 && (double)air / maxAir <= 0.5 && respiratorySystem <= 0.5){
             turnTowards(getObjectsInRange(radius, Water.class).get(0).getX(), getObjectsInRange(radius, Water.class).get(0).getY());
             r1=getRotation();
-            turntor1=1;
+            turnToR1=1;
         }
-        else if(wt3 < 7 && waterX != 0 && waterY != 0
-                ||  waterX != 0 && waterY != 0 && (double)air / mair <= 0.6 && sysdix <= 0.5){
+        else if(waterValueForBar < 7 && waterX != 0 && waterY != 0
+                ||  waterX != 0 && waterY != 0 && (double)air / maxAir <= 0.6 && respiratorySystem <= 0.5){
             turnTowards(waterX, waterY);
             r1=getRotation();
-            turntor1=1;
+            turnToR1=1;
         }
-        else if(xich<0.7 && sit2<7){
+        else if(predation <0.7 && satietyValueForBar <7){
             for (Plant plant : getObjectsInRange(radius, Plant.class)){
-                PlInR = plant;
-                if (PlInR.inHole != inHole) {
-                    PlInR = null;
+                this.plant = plant;
+                if (this.plant.inHole != inHole) {
+                    this.plant = null;
                 }
 
-                if(plant.tg !=26 && plant.tg != 46) {
+                if(plant.creatureTemp !=26 && plant.creatureTemp != 46) {
                     break;
                 }
             }
-            if(PlInR != null) {
-                turnTowards(PlInR.getX(), PlInR.getY());
+            if(plant != null) {
+                turnTowards(plant.getX(), plant.getY());
                 r1 = getRotation();
-                turntor1 = 1;
+                turnToR1 = 1;
             }
         }
-        else if(sit2<7 && foodx!=0 && foody!=0){
-            turnTowards(foodx, foody);
+        else if(satietyValueForBar <7 && foodX!=0 && foodY!=0){
+            turnTowards(foodX, foodY);
             r1=getRotation();
-            turntor1=1;
+            turnToR1=1;
         }
-        else if(xich>0.3 && food!=null && sit2<7){
+        else if(predation >0.3 && food!=null && satietyValueForBar <7){
             turnTowards(food.getX(), food.getY());
             r1=getRotation();
-            turntor1=1;
+            turnToR1=1;
         }
-        else if(SopInR!=null && xich>0.3 && MyWorld.plmode<2 || SopInR!=null && xich>0.3 && MyWorld.plmode==2 && sit2<7){
-            turnTowards(SopInR.x, SopInR.y);
+        else if(enemyAnimal !=null && predation >0.3 && MyWorld.plMode <2 || enemyAnimal !=null && predation >0.3 && MyWorld.plMode ==2 && satietyValueForBar <7){
+            turnTowards(enemyAnimal.x, enemyAnimal.y);
             r1=getRotation();
-            turntor1=1;
+            turnToR1=1;
         }
-       else if(pl!=null && xich>0.3){
+       else if(pl!=null && predation >0.3){
             turnTowards(pl.getX(), pl.getY());
             r1=getRotation();
-            turntor1=1;
+            turnToR1=1;
         }
-        else if(xich>0.3 && EggInR!=null && sit2<7 && EggInR.teamNum!=teamNum){
-            turnTowards(EggInR.getX(), EggInR.getY());
+        else if(predation >0.3 && egg !=null && satietyValueForBar <7 && egg.teamNum!=teamNum){
+            turnTowards(egg.getX(), egg.getY());
             r1=getRotation();
-            turntor1=1;
+            turnToR1=1;
         }
-        else if(AnInR!=null && tim>p && sit2>=7 && wt3>=7 && !AnInR.anabioz && AnInR.tim>AnInR.p){
-            turnTowards(AnInR.x, AnInR.y);
+        else if(teammateAnimal !=null && tim> period && satietyValueForBar >=7 && waterValueForBar >=7 && !teammateAnimal.hibernation && teammateAnimal.tim> teammateAnimal.period){
+            turnTowards(teammateAnimal.x, teammateAnimal.y);
             r1=getRotation();
-            turntor1=1;
+            turnToR1=1;
         }
         else{
             randomMove();
@@ -992,220 +988,217 @@ public class Animal extends RealObject
             r1 = movementAlongTheEdge;
             movementAlongTheEdge = -1;
         }
-        //(int)Math.sqrt(Math.pow(getObjectsInRange(radius, Animal.class).get(0).getX()-getX(),2)+Math.pow(getObjectsInRange(radius, Animal.class).get(0).getY()-getY(),2))<=radius-(int)((radius*getObjectsInRange(radius, Animal.class).get(0).maskcof)/100)
     }
 
     public void randomMove(){
         if(Greenfoot.getRandomNumber(2)==1){
             r1=Greenfoot.getRandomNumber(360);
         }
-        turntor1=1;
+        turnToR1=1;
     }
     
-    public void brith(){
-        if(sysdix<=0.5 && onground!=3 && air>0){
-            air=air-(msize*msize*msize);
+    public void breathe(){
+        if(respiratorySystem<=0.5 && location!=3 && air>0){
+            air=air-(maxSize*maxSize*maxSize);
         }
-        else if(sysdix<=0.5 && air<mair && onground==3){
-            air+=(msize*msize*msize);
-            if(air>mair){
-                air=mair;
+        else if(respiratorySystem<=0.5 && air<maxAir && location==3){
+            air+=(maxSize*maxSize*maxSize);
+            if(air>maxAir){
+                air=maxAir;
             }
         }
-        if(sysdix>0.5 && onground==3 && air>0){
-            air=air-(msize*msize*msize);
+        if(respiratorySystem>0.5 && location==3 && air>0){
+            air=air-(maxSize*maxSize*maxSize);
         }
-        else if(sysdix>0.5 && onground!=3 && air<mair){
-            air+=(msize*msize*msize);
-            if(air>mair){
-                air=mair;
+        else if(respiratorySystem>0.5 && location!=3 && air<maxAir){
+            air+=(maxSize*maxSize*maxSize);
+            if(air>maxAir){
+                air=maxAir;
             }
         }
     }
     
     public void drink(){
-        if(onground==3 && water2<mw || touchWater && water2<mw && onground==1){
-            water2=water2+drink;
-            if(wt3<9){
-                stopp=1;
+        if(location==3 && water < maxWater || touchWater && water < maxWater && location==1){
+            water = water +drink;
+            if(waterValueForBar <9){
+                stopMoveForward=1;
             }
         }
         
-        if(water2>mw){
-            water2=mw;
+        if(water > maxWater){
+            water = maxWater;
         }
-        if(water2>0){
-            wt3=water2/(mw/10);
+        if(water >0){
+            waterValueForBar = water /(maxWater /10);
         }
     }
     
     public void eat(){
-        if(Math.abs(getX() - foodx) < getImage().getWidth() / 2 && Math.abs(getY() - foody) < getImage().getHeight() / 2){
-            foodx = 0;
-            foody = 0;
+        if(Math.abs(getX() - foodX) < getImage().getWidth() / 2 && Math.abs(getY() - foodY) < getImage().getHeight() / 2){
+            foodX = 0;
+            foodY = 0;
         }
-        if(tPl!=null && xich<0.7 && sit1<msit && onground==2 || tPl!=null && xich<0.7 && sit1<msit && onground==tPl.onground){
-            sit1=sit1+(int)(eat*(1-xich));
-            tPl.colfood-=eat;
-            xp-=tPl.poisondam;
-            if(sit2<9){
-                stopp=1;
+        if(touchingPl !=null && predation <0.7 && satiety < maxSatiety && location==2 || touchingPl !=null && predation <0.7 && satiety < maxSatiety && location== touchingPl.location){
+            satiety = satiety +(int)(eat*(1- predation));
+            touchingPl.satiety -=eat;
+            hp -= touchingPl.poison;
+            if(satietyValueForBar <9){
+                stopMoveForward=1;
             }
         }
         
-        if(tFood!=null && xich>0.3 && sit1<msit && onground==1){
-            sit1=sit1+eat;
-            tFood.sit-=eat;
-            if(sit2<9){
-                stopp=1;
+        if(touchingFood !=null && predation >0.3 && satiety < maxSatiety && location==1){
+            satiety = satiety +eat;
+            touchingFood.satiety -=eat;
+            if(satietyValueForBar <9){
+                stopMoveForward=1;
             }
         }
         
-        if(sit1>msit){
-            sit1=msit;
+        if(satiety > maxSatiety){
+            satiety = maxSatiety;
         }
-        if(sit1>0){
-            sit2=sit1/(msit/10);
+        if(satiety >0){
+            satietyValueForBar = satiety /(maxSatiety /10);
         }
-        // fly==1 || getIntersectingObjects(Plant.class).size()>0 && getIntersectingObjects(Plant.class).get(0).xich<=0.3 && sit1>(msit/3)*2 && xp<mxp && tg>=needt-10 && tg<=needt+10 && age>0 || getIntersectingObjects(Plant.class).size()==0 &&sit1>(msit/3)*2 && xp<mxp && tg>=needt-10 && tg<=needt+10 && age>0 || getIntersectingObjects(Animal.class).size()>0 && getIntersectingObjects(Animal.class).get(0).xich<=0.3 && sit1>(msit/3)*2 && xp<mxp && tg>=needt-10 && tg<=needt+10 && age>0  || getIntersectingObjects(Animal.class).size()==0 && sit1>(msit/3)*2 && xp<mxp && tg>=needt-10 && tg<=needt+10 && age>0
         
     }
     
     public void attack(){
-        dob=null;
-        //if(xich>0.3 && tAn!=null && tAn.xich-0.1>xich || xich>0.3 && tAn!=null && tAn.xich+0.1<xich){
-        if(xich>0.3 && pl!=null && MyWorld.plmode != 2 ||
-                xich>0.3 && pl!=null && sit2<7){
-            if(pl.onground==onground){
-                pl.xp-=(damage+poisondam);
+        extraction =null;
+        if(predation >0.3 && pl!=null && MyWorld.plMode != 2 ||
+                predation >0.3 && pl!=null && satietyValueForBar <7){
+            if(pl.location==location){
+                pl.xp-=(damage+poison);
                 pl.xichan=this;
             }
         }
-        else if(xich>0.3 && tAn!=null && tAn.teamNum!=teamNum){
-            dob=tAn;
-            if(tAn.onground==onground){
-                if((int)(dob.size*dob.protection)<(damage+poisondam)){
-                    dob.xp-=((damage+poisondam)-(dob.size*dob.protection));
+        else if(predation >0.3 && touchingAn !=null && touchingAn.teamNum!=teamNum){
+            extraction = touchingAn;
+            if(touchingAn.location==location){
+                if((int)(extraction.size* extraction.protection)<(damage+poison)){
+                    extraction.hp -=((damage+poison)-(extraction.size* extraction.protection));
                 }
-                dob.xichan=this;
+                extraction.hunter =this;
             }
         }
-        else if(xich>0.3 && tEgg!=null && tEgg.teamNum!=teamNum){
-            if(sit1<msit && tEgg.size3<=size && onground==tEgg.onground){
-                sit1=sit1+(tEgg.size3*35000);
-                getWorld().removeObject(tEgg);
-                tEgg=null;
+        else if(predation >0.3 && touchingEgg !=null && touchingEgg.teamNum!=teamNum){
+            if(satiety < maxSatiety && touchingEgg.size <=size && location== touchingEgg.location){
+                satiety = satiety +(touchingEgg.size *35000);
+                getWorld().removeObject(touchingEgg);
+                touchingEgg =null;
             }
-            else if(tEgg!=null && sit1<msit && tEgg.size3<=size && onground==1 && tEgg.onground==3){
+            else if(satiety < maxSatiety && touchingEgg.size <=size && location==1 && touchingEgg.location==3){
                 dive1();
             }
-            else if(tEgg!=null && sit1<msit && tEgg.size3<=size && onground==3 && tEgg.onground==1){
+            else if(satiety < maxSatiety && touchingEgg.size <=size && location==3 && touchingEgg.location==1){
                 up();
             }
         }
         else{
-            defance();
+            defense();
         }
     }
     
-    public void defance(){
-        if(xp<mxp && xichan!=null && onground==xichan.onground && (int)(xichan.size*xichan.protection)<(damage+poisondam)){
-            xichan.xp-=(damage+poisondam)-(xichan.size*xichan.protection);
+    public void defense(){
+        if(hp < maxHp && hunter !=null && location== hunter.location && (int)(hunter.size* hunter.protection)<(damage+poison)){
+            hunter.hp -=(damage+poison)-(hunter.size* hunter.protection);
         }
-        if(xp<mxp && xichpl!=null && onground==xichpl.onground){
-            xichpl.xp-=(damage+poisondam);
+        if(hp < maxHp && hunterPlant !=null && location== hunterPlant.location){
+            hunterPlant.hp -=(damage+poison);
         }
-        xichan=null;
-        xichpl=null;
+        hunter =null;
+        hunterPlant =null;
     }
     
-    int rotspeed;
-    int isturn;
+    int rotationSpeed;
+    boolean turned;
     public void move(){
-        startx=getX();
-        starty=getY();
-        if(moven>0 && dei==0){
-            if(onground!=3 && pspeed>=speed && pspeed>=wspeed && sit2>5 && wt3>5 && stopf==0 && agesp==0  && !inHole|| onground==0){
-                dmove(-pspeed);
-                sit1=sit1-(int)(pspeed*pspeed);
-                water2=water2-(int)(pspeed*pspeed);
+        startX =getX();
+        startY =getY();
+        if(moveBack>0 && action==0){
+            if(location!=3 && flyingSpeed >=speed && flyingSpeed >= waterSpeed && satietyValueForBar >5 && waterValueForBar >5 && stopFly==0 && ageForGrow ==0  && !inHole|| location==0){
+                doubleMove(-flyingSpeed);
+                satiety = satiety -(int)(flyingSpeed * flyingSpeed);
+                water = water -(int)(flyingSpeed * flyingSpeed);
                 fly=1;
             }
             else if(!touchWater){
-                dmove(-speed);
+                doubleMove(-speed);
             }
-            else if(touchWater){
-                dmove(-wspeed);
+            else{
+                doubleMove(-waterSpeed);
             }
-            if(moven>0){
-                moven=moven-1;
+            if(moveBack>0){
+                moveBack=moveBack-1;
             }
-            dei=1;
+            action=1;
         }
         if(fly==1){
-            rotspeed=(int)(pspeed*size*15);
+            rotationSpeed =(int)(flyingSpeed * size * 15);
         }
-        else if(!touchWater && !inHole|| onground==1){
-            rotspeed=(int)(speed*size*15);
+        else if(!touchWater && !inHole|| location==1){
+            rotationSpeed =(int)(speed*size*15);
         }
-        else if(touchWater && !inHole|| onground==3){
-            rotspeed=(int)(wspeed*size*15);
+        else if(touchWater && !inHole|| location==3){
+            rotationSpeed =(int)(waterSpeed *size*15);
         }
-        if(r-(rotspeed-1)>r1|| r1>r+(rotspeed-1)){
-            if(turntor1==1 && r1>r){
-                r=r+rotspeed;
+        if(r-(rotationSpeed -1)>r1|| r1>r+(rotationSpeed -1)){
+            if(turnToR1==1 && r1>r){
+                r=r+ rotationSpeed;
                 if(r1-r>180){
-                    r=r-(rotspeed*2);
+                    r=r-(rotationSpeed *2);
                 }
-                sit1=sit1-rotspeed;
-                isturn=1;
+                satiety = satiety - rotationSpeed;
+                turned = true;
             }
-            if(turntor1==1 && r1<r){
-                r=r-rotspeed;
+            if(turnToR1==1 && r1<r){
+                r=r- rotationSpeed;
                 if(r-r1>180){
-                    r=r+(rotspeed*2);  
+                    r=r+(rotationSpeed *2);
                 }
-                sit1=sit1-rotspeed;
-                isturn=1;
+                satiety = satiety - rotationSpeed;
+                turned = true;
             }
-            if(r-(rotspeed-1)<=r1 || r1<r+(rotspeed-1)){
+            if(r-(rotationSpeed -1)<=r1 || r1<r+(rotationSpeed -1)){
                 r=r1;
-                turntor1=0;
+                turnToR1=0;
             }
         }
-        if(dei==0 && stopp==0 && !inHole || inHole && isturn==0 && dei==0 && stopp==0){
-            if(onground!=3 && pspeed>=speed && pspeed>=wspeed && sit2>5 && wt3>5 && stopf==0 && agesp==0 && !inHole|| onground==0){
-                dmove(pspeed*size);
-                sit1=sit1-(int)(Math.pow(pspeed*size,2));
-                water2=water2-(int)(Math.pow(pspeed*size,2));
+        if(action==0 && stopMoveForward==0 && !inHole || inHole && !turned && action==0 && stopMoveForward==0){
+            if(location!=3 && flyingSpeed >=speed && flyingSpeed >= waterSpeed && satietyValueForBar >5 && waterValueForBar >5 && stopFly==0 && ageForGrow ==0 && !inHole|| location==0){
+                doubleMove(flyingSpeed *size);
+                satiety = satiety -(int)(Math.pow(flyingSpeed *size,2));
+                water = water -(int)(Math.pow(flyingSpeed *size,2));
                 fly=1;
             }
-            else if(!touchWater && !inHole || onground==1){
-                dmove(speed*size);
-                sit1-=(int)(speed*size);
-                water2-=(int)(speed*size);
+            else if(!touchWater && !inHole || location==1){
+                doubleMove(speed*size);
+                satiety -=(int)(speed*size);
+                water -=(int)(speed*size);
             }
-            else if(touchWater && !inHole|| onground==3){
-                dmove(wspeed*size);
-                sit1-=(int)(wspeed*size);
-                water2-=(int)(wspeed*size);
+            else if(touchWater && !inHole|| location==3){
+                doubleMove(waterSpeed *size);
+                satiety -=(int)(waterSpeed *size);
+                water -=(int)(waterSpeed *size);
             }
-            dei=1;
+            action=1;
         }
         r %= 360;
 
         setRotation(0);
 
-        isturn=0;
-        stopp=0;
-        stopf=0;
-        dei=0;
+        turned = false;
+        stopMoveForward=0;
+        stopFly=0;
+        action=0;
         inHole();
     }
     
     double dx;
     double dy;
-    public void dmove(double v){
+    public void doubleMove(double v){
         dx += v*Math.cos(Math.toRadians(r));
         dy += v*Math.sin(Math.toRadians(r));
         
@@ -1226,166 +1219,166 @@ public class Animal extends RealObject
 
     private int movementAlongTheEdge = -1;
     public void moveBack(){
-        if(touchWater && fly==0 && wspeed==0 && !inHole || inHole && !touchHR && onground==1 || 
-        !touchWater && fly==0 && !inHole && speed==0 || inHole && !touchHR && onground==3){
-            dx=startx;
-            dy=starty;
+        if(touchWater && fly==0 && waterSpeed ==0 && !inHole || inHole && !touchHR && location==1 ||
+        !touchWater && fly==0 && !inHole && speed==0 || inHole && !touchHR && location==3){
+            dx= startX;
+            dy= startY;
 
             turnTowards(waterX, waterY);
             movementAlongTheEdge = getRotation() + 80;
             movementAlongTheEdge %= 360;
 
-            turntor1 = 1;
+            turnToR1 = 1;
             touchWater();
 
-            setLocation((int)startx,(int)starty);
+            setLocation((int) startX,(int) startY);
         }
 
-        tPl=(Plant)getOneIntersectingObject(Plant.class);
-        tAn=(Animal)getOneIntersectingObject(Animal.class);
-        tEgg=(Egg)getOneIntersectingObject(Egg.class);
-        tFood=(DieAnimal)getOneIntersectingObject(DieAnimal.class);
+        touchingPl =(Plant)getOneIntersectingObject(Plant.class);
+        touchingAn =(Animal)getOneIntersectingObject(Animal.class);
+        touchingEgg =(Egg)getOneIntersectingObject(Egg.class);
+        touchingFood =(DieAnimal)getOneIntersectingObject(DieAnimal.class);
         
-        if(MyWorld.plmode==2 && tAn!=null){
-            if(Math.abs(tAn.xich-xich) <= MyWorld.cofic){
-                tAn.teamNum=0;
+        if(MyWorld.plMode ==2 && touchingAn !=null){
+            if(Math.abs(touchingAn.predation - predation) <= MyWorld.cofOfEvolution){
+                touchingAn.teamNum=0;
             }
             else{
-                tAn.teamNum=1;
+                touchingAn.teamNum=1;
             }
         }
-        if(MyWorld.plmode==2 && tEgg!=null){
-            if(Math.abs(tEgg.xich-xich) <= MyWorld.cofic){
-                tEgg.teamNum=0;
+        if(MyWorld.plMode ==2 && touchingEgg !=null){
+            if(Math.abs(touchingEgg.predation - predation) <= MyWorld.cofOfEvolution){
+                touchingEgg.teamNum=0;
             }
             else{
-                tEgg.teamNum=1;
+                touchingEgg.teamNum=1;
             }
         }
         
         if(inHole){
-            tFood=null;
+            touchingFood =null;
         }
-        if(tPl!=null && inHole!=tPl.inHole){
-            tPl=null;
+        if(touchingPl !=null && inHole!= touchingPl.inHole){
+            touchingPl =null;
         }
-        if(tAn!=null && inHole!=tAn.inHole){
-            tAn=null;
+        if(touchingAn !=null && inHole!= touchingAn.inHole){
+            touchingAn =null;
         }
-        if(tEgg!=null && inHole!=tEgg.inHole){
-            tEgg=null;
+        if(touchingEgg !=null && inHole!= touchingEgg.inHole){
+            touchingEgg =null;
         }
         
         touchHole();
     }
     
     public void dive1(){
-        if(touchWater && onground==1){
-            onground=3;
-            if(air<=0 && sysdix<=0.5){
+        if(touchWater && location==1){
+            location=3;
+            if(air<=0 && respiratorySystem<=0.5){
                 air=1;
             }
         }
     }
     public void up(){
-        if(onground==3 && !inHole){
-            onground=1;
-            if(air<=0 && sysdix>0.5){
+        if(location==3 && !inHole){
+            location=1;
+            if(air<=0 && respiratorySystem>0.5){
                 air=1;
             }
         }
     }
     
     public void dive(){
-        if(anabioz==false){
-            if(sysdix<=0.5 && onground==1 || dob!=null && dob.onground==3 && onground==1 || tPl!=null && xich<0.7 && sit1<msit && onground==1 && tPl.onground==3){
+        if(!hibernation){
+            if(respiratorySystem<=0.5 && location==1 || extraction !=null && extraction.location==3 && location==1 || touchingPl !=null && predation <0.7 && satiety < maxSatiety && location==1 && touchingPl.location==3){
                 dive1();
             }
-            if(tFood!=null && xich>0.3 && sit1<msit && onground==3 || dob!=null && dob.onground==1 && onground==3 || air<=0 && onground==3 && sysdix>0.5 || tPl!=null && xich<0.7 && sit2<7 && onground==3 && tPl.onground==1){
+            if(touchingFood !=null && predation >0.3 && satiety < maxSatiety && location==3 || extraction !=null && extraction.location==1 && location==3 || air<=0 && location==3 && respiratorySystem>0.5 || touchingPl !=null && predation <0.7 && satietyValueForBar <7 && location==3 && touchingPl.location==1){
                 up();
             }
         }
         
-        if(!touchWater && onground==3){
+        if(!touchWater && location==3){
             up();
         }
     }
     
     public void climb(){
-        if(canclimb>0.5 && onground==1 && anabioz==false && !inHole){
-            if(tPl!=null && tPl.onground==1 && tPl.size>msize && onground==1){
-                onground=2;
+        if(canClimb>0.5 && location==1 && !hibernation && !inHole){
+            if(touchingPl !=null && touchingPl.location==1 && touchingPl.maxSize >maxSize){
+                location=2;
             }
         }
-        if(onground==2 && tPl==null){
-            onground=1;
+        if(location==2 && touchingPl ==null){
+            location=1;
         }
     }
     
-    public void FlyOrNo(){
-        if(sit2<=5 && fly==1 || wt3<=5 && fly==1){
+    public void fly(){
+        if(satietyValueForBar <=5 && fly==1 || waterValueForBar <=5 && fly==1){
             fly=0;
-            stopf=1;
+            stopFly=1;
         }
-        if(tim>p && onground==0 && sit1>(msit/3)*2 && water2>(mw/3)*2 && tAn!=null && tAn.tim>tAn.p && tAn.teamNum==teamNum){
+        if(tim> period && location==0 && satiety >(maxSatiety /3)*2 && water >(maxWater /3)*2 && touchingAn !=null && touchingAn.tim> touchingAn.period && touchingAn.teamNum==teamNum){
             fly=0;
-            stopf=1;
+            stopFly=1;
         }
-        if(tPl!=null && xich<0.7 && sit2<7 && onground==0){
+        if(touchingPl !=null && predation <0.7 && satietyValueForBar <7 && location==0){
             fly=0;
-            stopf=1;
+            stopFly=1;
         }
-        if(anabioz==true){
+        if(hibernation){
             fly=0;
-            stopf=1;
+            stopFly=1;
         }
-        if(tAn!=null && xich>0.3 && tAn.teamNum!=teamNum){
-            if(sit2<7 && tAn.onground==1){
+        if(touchingAn !=null && predation >0.3 && touchingAn.teamNum!=teamNum){
+            if(satietyValueForBar <7 && touchingAn.location==1){
                 fly=0;
-                stopf=1;
+                stopFly=1;
             }
         }
-        if(flycof>1 && fly==0){
-            flycof-=0.05;
+        if(flyCof >1 && fly==0){
+            flyCof -=0.05;
         }
         if(fly==1){
-            if(flycof>=1 && flycof<2){
-                flycof+=0.05;
+            if(flyCof >=1 && flyCof <2){
+                flyCof +=0.05;
             }
-            else if(flycof<1){
-                flycof=1;
+            else if(flyCof <1){
+                flyCof =1;
             }
-            if(flycof>2){
-                flycof=2;
+            if(flyCof >2){
+                flyCof =2;
             }
         }
-        if(fly==0 && flycof==1 && onground==0){
-            onground=1;
+        if(fly==0 && flyCof ==1 && location==0){
+            location=1;
         }
         else if(fly==1){
-            onground=0;
+            location=0;
         }
     }
     
     public void die(){
-        if(sit1<=0){
-            xp--;
+        if(satiety <=0){
+            hp--;
         }
-        if(myage>age){
-            xp=0;
+        if(myAge >age){
+            hp =0;
         }
-        if(water2<=0){
-            xp--;
+        if(water <=0){
+            hp--;
         }
         if(air<=0){
-            xp--;
+            hp--;
         }
-        if(xp<=0){
-            if(MyWorld.plan==this){
-                MyWorld.plan=null;
+        if(hp <=0){
+            if(MyWorld.observedAnimal ==this){
+                MyWorld.observedAnimal =null;
             }
             myPl.myAn--;
-            DieAnimal da=new DieAnimal(size,sit1,msit);
+            DieAnimal da=new DieAnimal(size, satiety, maxSatiety);
             getWorld().addObject(da,getX(),getY());
             getWorld().removeObject(this);
         } 

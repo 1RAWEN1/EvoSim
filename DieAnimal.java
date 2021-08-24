@@ -13,17 +13,17 @@ public class DieAnimal extends RealObject
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     int size;
-    int sit;
-    int msit;
+    int satiety;
+    int maxSatiety;
     
-    GreenfootImage myimage;
-    public DieAnimal(int size1, int sit1, int msit1){
-        size=size1;
-        msit=msit1;
-        sit=sit1;
-        myimage=new GreenfootImage(size,size);
-        myimage.setColor(Color.BLACK);
-        myimage.fill();
+    GreenfootImage myImage;
+    public DieAnimal(int size1, int satiety1, int maxSatiety1){
+        size = size1;
+        maxSatiety = maxSatiety1;
+        satiety = satiety1;
+        myImage =new GreenfootImage(size,size);
+        myImage.setColor(Color.BLACK);
+        myImage.fill();
         updateImage();
     }
     int start;
@@ -32,23 +32,23 @@ public class DieAnimal extends RealObject
         if(start==0){
             start=1;
         }
-        sit-=100;
+        satiety -= 100;
         updateImage();
-        remove();// Add your action code here.
+        remove();
     } 
     
     int size1;
     public void updateImage(){
-        size1=(int)(((double)sit/msit)*size);
+        size1=(int)(((double) satiety / maxSatiety)*size);
         if(size1<1){
             size1=1;
         }
-        myimage.scale(size1,size1);
-        setImage(myimage);
+        myImage.scale(size1,size1);
+        setImage(myImage);
     }
     
     public void remove(){
-        if(sit<=0){
+        if(satiety <=0){
             getWorld().removeObject(this);
         }
     }

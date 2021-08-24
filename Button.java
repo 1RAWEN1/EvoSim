@@ -42,7 +42,7 @@ public class Button extends Actor
             if(h!=null){
                 Lobby.slide++;
             }
-            MyWorld.plmode=type-1;
+            MyWorld.plMode =type-1;
             MyWorld mw=new MyWorld();
             Greenfoot.setWorld(mw);
         }

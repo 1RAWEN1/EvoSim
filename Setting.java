@@ -31,7 +31,7 @@ public class Setting extends World
         }
         SFon sf=new SFon();
         addObject(sf,600,400);
-        for(int i1=0;i1<Lobby.b.size();i1++){
+        for(int i1 = 0; i1<Lobby.buttons.size(); i1++){
             addObject(new Counter(i1),500,300+i1*30);
         }
         Label lab=new Label("Улучшение: ",30);

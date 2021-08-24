@@ -23,11 +23,11 @@ public class Arrow extends Actor
     {
         if(Greenfoot.mousePressed(this)){
             setImage("parrow1.png");
-            if(up && AnimalWorld.par<MyWorld.parsizean-1){
-                AnimalWorld.par++;
+            if(up && AnimalWorld.selectedParameter <MyWorld.dnaSizeOfAnimal-1){
+                AnimalWorld.selectedParameter++;
             }
-            if(!up && AnimalWorld.par>0){
-                AnimalWorld.par--;
+            if(!up && AnimalWorld.selectedParameter >0){
+                AnimalWorld.selectedParameter--;
             }
         }
         if(Greenfoot.mouseClicked(null)){

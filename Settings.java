@@ -16,6 +16,6 @@ public class Settings extends Actor
     {
         if(Greenfoot.mousePressed(this) && !Lobby.train){
             Greenfoot.setWorld(new Setting());
-        }// Add your action code here.
+        }
     }    
 }

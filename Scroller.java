@@ -44,17 +44,17 @@ public class Scroller extends Actor
         c=c1;
     }
     
-    boolean mpush;
+    boolean pushM;
     public void act() 
     {
         MouseInfo mi=Greenfoot.getMouseInfo();
         if(Greenfoot.mousePressed(this)){
-            mpush=true;
+            pushM =true;
         }
         if(Greenfoot.mouseClicked(null)){
-            mpush=false;
+            pushM =false;
         }
-        if(mpush && mi!=null){
+        if(pushM && mi!=null){
             value=(double)((mi.getX()-getX())+getImage().getWidth()/2)/getImage().getWidth();
             if(value>1){
                 value=1;
