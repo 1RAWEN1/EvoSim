@@ -110,7 +110,7 @@ public class Plant extends RealObject
             ist=1;
         }
         par=(ArrayList<Double>) par1.clone();
-        setRotation(Greenfoot.getRandomNumber(360));
+        r = Greenfoot.getRandomNumber(360);
         
         for(int i=0;i<par.size();i++){
             double d=par.get(i);
@@ -613,7 +613,6 @@ public class Plant extends RealObject
                         setLocation(hr.getX(),hr.getY());
                         turnTowards(cx,cy);
                         rtoc=getRotation();
-                        setRotation(r);
                         cx=hr.getX()+(int)(Math.cos(Math.toRadians(rtoc))*((hr.size/2)-1));
                         cy=hr.getY()+(int)(Math.sin(Math.toRadians(rtoc))*((hr.size/2)-1));
                     }
@@ -645,7 +644,6 @@ public class Plant extends RealObject
                         setLocation(hr.getX(),hr.getY());
                         turnTowards(cx,cy);
                         rtoc=getRotation();
-                        setRotation(r);
                         cx=hr.getX()+(int)(Math.cos(Math.toRadians(rtoc))*((hr.size/2)-1));
                         cy=hr.getY()+(int)(Math.sin(Math.toRadians(rtoc))*((hr.size/2)-1));
                     }
@@ -673,49 +671,41 @@ public class Plant extends RealObject
         if(inHole && !touchHole && getObjectsInRange((size+2)*2,Hole.class).size()>0){
             turnTowards(getObjectsInRange((size+2)*2,Hole.class).get(0).getX(), getObjectsInRange((size+2)*2,Hole.class).get(0).getY());
             r1=getRotation();
-            setRotation(r);
             turntor1=1;
         }
         else if(isAtEdge()){
             turnTowards(getWorld().getWidth()/2, getWorld().getHeight()/2);
             r1=getRotation();
-            setRotation(r);
             turntor1=1;
         }
         else if(getObjectsInRange(radius, Water.class).size()>0 && wt3<7){
             turnTowards(getObjectsInRange(radius, Water.class).get(0).getX(), getObjectsInRange(radius, Water.class).get(0).getY());
             r1=getRotation();
-            setRotation(r);
             turntor1=1;
         }
         else if(xich>0.3 && food!=null && sit2<7){
             turnTowards(food.getX(), food.getY());
             r1=getRotation();
-            setRotation(r);
             turntor1=1;
         }
         else if(xich>0.3 && animal!=null && sit2<7){
             turnTowards(animal.x, animal.y);
             r1=getRotation();
-            setRotation(r);
             turntor1=1;
         }
         else if(xich>0.3 && egg!=null && sit2<7){
-            r=getRotation();
             turnTowards(egg.getX(), egg.getY());
             r1=getRotation();
-            setRotation(r);
             turntor1=1;
         }
         else if(xich<=0.3 && animal!=null && animal.xich<0.7){
             turnTowards(animal.x, animal.y);
             if(r1>=180){
-                r1=getRotation()-(180-Greenfoot.getRandomNumber(90));
+                r1=getRotation()-(180-Greenfoot.getRandomNumber(30));
             }
             else if(r1<180){
-                r1=getRotation()+(180-Greenfoot.getRandomNumber(90));
+                r1=getRotation()+(180-Greenfoot.getRandomNumber(30));
             }
-            setRotation(r);
             turntor1=1;
         }
         else{
@@ -807,9 +797,7 @@ public class Plant extends RealObject
                 if(r1-r>180){
                     r=r-(rotspeed*2);
                 }
-                setRotation(r);
                 colfood-=rotspeed;
-                r=getRotation();
                 isturn=1;
             }
             if(turntor1==1 && r1<r){
@@ -817,9 +805,7 @@ public class Plant extends RealObject
                 if(r-r1>180){
                     r=r+(rotspeed*2);  
                 }
-                setRotation(r);
                 colfood-=rotspeed;
-                r=getRotation();
                 isturn=1;
             }
             if(r-(rotspeed-1)<=r1 || r1<r+(rotspeed-1)){
@@ -838,8 +824,11 @@ public class Plant extends RealObject
                 colfood-=(int)(wspeed*size);
                 water2-=(int)(wspeed*size);
             }
-            dei=1;
         }
+        r %= 360;
+
+        setRotation(0);
+
         isturn=0;
         stopp=0;
         stopf=0;
@@ -849,8 +838,8 @@ public class Plant extends RealObject
     double dx;
     double dy;
     public void dmove(double v){
-        dx+=v*Math.cos(Math.toRadians(getRotation()));
-        dy+=v*Math.sin(Math.toRadians(getRotation()));
+        dx+=v*Math.cos(Math.toRadians(r));
+        dy+=v*Math.sin(Math.toRadians(r));
         
         if(dx<0){
             dx=0;

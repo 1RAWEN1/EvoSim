@@ -126,7 +126,6 @@ public class Animal extends RealObject
     Egg tEgg;
     DieAnimal tFood;
     
-    Animal An;
     Animal AnInR;
     Animal SopInR;
     Plant PlInR;
@@ -141,8 +140,7 @@ public class Animal extends RealObject
         if(this.inHole){
             ist=1;
         }
-        setRotation(Greenfoot.getRandomNumber(360));
-        r=getRotation();
+        r=Greenfoot.getRandomNumber(360);
         teamNum=tn;
         myPl=pl;
         par=(ArrayList<Double>) par1.clone();
@@ -651,7 +649,6 @@ public class Animal extends RealObject
         }
         x=getX();
         y=getY();
-        r=getRotation();
         if(sit1<0){
             sit1=0;
         }
@@ -736,7 +733,6 @@ public class Animal extends RealObject
                             setLocation(hr.getX(),hr.getY());
                             turnTowards(cx,cy);
                             rtoc=getRotation();
-                            setRotation(r);
                             cx=hr.getX()+(int)(Math.cos(Math.toRadians(rtoc))*((hr.size/2)-1));
                             cy=hr.getY()+(int)(Math.sin(Math.toRadians(rtoc))*((hr.size/2)-1));
                         }
@@ -832,7 +828,6 @@ public class Animal extends RealObject
     }
 
     public void turnTo(){
-        An=null;
         AnInR=null;
         SopInR=null;
         PlInR=null;
@@ -841,46 +836,32 @@ public class Animal extends RealObject
         if(MyWorld.plmode==2){
             teamNum=0;
         }
-        if(getObjectsInRange(radius, Animal.class).size()>0){
-            for(Animal animalInRange : getObjectsInRange(radius, Animal.class)) {
-                An = animalInRange;
-                if (An.inHole != inHole) {
-                    An = null;
-                }
-                else {
-                    canSee=false;
-                    if (MyWorld.plmode == 2) {
-                        if (Math.abs(An.xich - xich) <= MyWorld.cofic) {
-                            An.teamNum = 0;
-                        } else {
-                            An.teamNum = 1;
-                        }
-                    }
-                    if(AnInR == null && An.teamNum == teamNum) {
-                        if (Math.sqrt(Math.pow(getX() - An.getX(), 2) + Math.pow(getY() - An.getY(), 2)) < radius - (int) (An.maskcof * radius)) {
-                            canSee = true;
-                        } else if (intersects(An)) {
-                            canSee = true;
-                        }
-                        if (canSee) {
-                            AnInR = An;
-                        }
-                    }
-                    else if(SopInR == null && An.teamNum != teamNum) {
-                        if (Math.sqrt(Math.pow(getX() - An.getX(), 2) + Math.pow(getY() - An.getY(), 2)) < radius - (int) (An.maskcof * radius)) {
-                            canSee = true;
-                        } else if (intersects(An)) {
-                            canSee = true;
-                        }
-                        if (canSee) {
-                            SopInR = An;
-                        }
+        for(Animal animalInRange : getObjectsInRange(radius, Animal.class)) {
+            if (animalInRange.inHole == inHole) {
+                if (MyWorld.plmode == 2) {
+                    if (Math.abs(animalInRange.xich - xich) <= MyWorld.cofic) {
+                        animalInRange.teamNum = 0;
+                    } else {
+                        animalInRange.teamNum = 1;
                     }
                 }
-
-                if(AnInR != null && SopInR != null){
-                    break;
+                if(AnInR == null && animalInRange.teamNum == teamNum) {
+                    if (Math.sqrt(Math.pow(getX() - animalInRange.getX(), 2) + Math.pow(getY() - animalInRange.getY(), 2)) < radius - (int) (animalInRange.maskcof * radius)) {
+                        AnInR = animalInRange;
+                    } else if (intersects(animalInRange)) {
+                        AnInR = animalInRange;
+                    }
                 }
+                else if(SopInR == null && animalInRange.teamNum != teamNum) {
+                    if (Math.sqrt(Math.pow(getX() - animalInRange.getX(), 2) + Math.pow(getY() - animalInRange.getY(), 2)) < radius - (int) (animalInRange.maskcof * radius)) {
+                        SopInR = animalInRange;
+                    } else if (intersects(animalInRange)) {
+                        SopInR = animalInRange;
+                    }
+                }
+            }
+            if(AnInR != null && SopInR != null){
+                break;
             }
         }
         if(getObjectsInRange(radius, Egg.class).size()>0){
@@ -907,13 +888,11 @@ public class Animal extends RealObject
         if(inHole && !touchHole && getObjectsInRange((msize+2)*2,Hole.class).size()>0){
             turnTowards(getObjectsInRange((msize+2)*2,Hole.class).get(0).getX(), getObjectsInRange((msize+2)*2,Hole.class).get(0).getY());
             r1=getRotation();
-            setRotation(r);
             turntor1=1;
         }
         else if(MyWorld.plmode<2 && Math.sqrt(Math.pow(myPl.getX()-getX(),2)+Math.pow(myPl.getY()-getY(),2))>radius){
             turnTowards(myPl.getX(), myPl.getY());
             r1=getRotation();
-            setRotation(r);
             turntor1=1;
         }
         else if(isAtEdge() || needt-9>tg || needt+9<tg){
@@ -927,16 +906,14 @@ public class Animal extends RealObject
                 turnTowards(getWorld().getWidth()/2, getWorld().getHeight()/2);
                 r1=getRotation();
             }
-            setRotation(r);
             turntor1=1;
         }
-        else if(SopInR!=null && xich<=0.3 && SopInR.xich>0.3){
+        else if(SopInR!=null && SopInR.xich>xich){
             /*if(getObjectsInRange(radius,Hole.class).size() > 0 && SopInR.size>size){
                 turnTowards(getObjectsInRange(radius,Hole.class).get(0).getX(), getObjectsInRange(radius,Hole.class).get(0).getY());
                 r1=getRotation();
             }
             else{*/
-                r=getRotation();
                 turnTowards(SopInR.x, SopInR.y);
                 if(r1>=180){
                     r1=getRotation()-(180-Greenfoot.getRandomNumber(30));
@@ -946,21 +923,18 @@ public class Animal extends RealObject
                 }
             //}
 
-            setRotation(r);
             turntor1 = 1;
         }
         else if(getObjectsInRange(radius, Water.class).size()>0 && wt3<7
                 || getObjectsInRange(radius, Water.class).size() > 0 && (double)air / mair <= 0.5 && sysdix <= 0.5){
             turnTowards(getObjectsInRange(radius, Water.class).get(0).getX(), getObjectsInRange(radius, Water.class).get(0).getY());
             r1=getRotation();
-            setRotation(r);
             turntor1=1;
         }
         else if(wt3 < 7 && waterX != 0 && waterY != 0
-                ||  waterX != 0 && waterY != 0 && (double)air / mair <= 0.5 && sysdix <= 0.5){
+                ||  waterX != 0 && waterY != 0 && (double)air / mair <= 0.6 && sysdix <= 0.5){
             turnTowards(waterX, waterY);
             r1=getRotation();
-            setRotation(r);
             turntor1=1;
         }
         else if(xich<0.7 && sit2<7){
@@ -977,44 +951,37 @@ public class Animal extends RealObject
             if(PlInR != null) {
                 turnTowards(PlInR.getX(), PlInR.getY());
                 r1 = getRotation();
-                setRotation(r);
                 turntor1 = 1;
             }
         }
         else if(sit2<7 && foodx!=0 && foody!=0){
             turnTowards(foodx, foody);
             r1=getRotation();
-            setRotation(r);
             turntor1=1;
         }
         else if(xich>0.3 && food!=null && sit2<7){
             turnTowards(food.getX(), food.getY());
             r1=getRotation();
-            setRotation(r);
             turntor1=1;
         }
         else if(SopInR!=null && xich>0.3 && MyWorld.plmode<2 || SopInR!=null && xich>0.3 && MyWorld.plmode==2 && sit2<7){
             turnTowards(SopInR.x, SopInR.y);
             r1=getRotation();
-            setRotation(r);
             turntor1=1;
         }
        else if(pl!=null && xich>0.3){
             turnTowards(pl.getX(), pl.getY());
             r1=getRotation();
-            setRotation(r);
             turntor1=1;
         }
         else if(xich>0.3 && EggInR!=null && sit2<7 && EggInR.teamNum!=teamNum){
             turnTowards(EggInR.getX(), EggInR.getY());
             r1=getRotation();
-            setRotation(r);
             turntor1=1;
         }
         else if(AnInR!=null && tim>p && sit2>=7 && wt3>=7 && !AnInR.anabioz && AnInR.tim>AnInR.p){
             turnTowards(AnInR.x, AnInR.y);
             r1=getRotation();
-            setRotation(r);
             turntor1=1;
         }
         else{
@@ -1023,7 +990,6 @@ public class Animal extends RealObject
 
         if(movementAlongTheEdge != -1) {
             r1 = movementAlongTheEdge;
-            r1 %= 360;
             movementAlongTheEdge = -1;
         }
         //(int)Math.sqrt(Math.pow(getObjectsInRange(radius, Animal.class).get(0).getX()-getX(),2)+Math.pow(getObjectsInRange(radius, Animal.class).get(0).getY()-getY(),2))<=radius-(int)((radius*getObjectsInRange(radius, Animal.class).get(0).maskcof)/100)
@@ -1191,9 +1157,7 @@ public class Animal extends RealObject
                 if(r1-r>180){
                     r=r-(rotspeed*2);
                 }
-                setRotation(r);
                 sit1=sit1-rotspeed;
-                r=getRotation();
                 isturn=1;
             }
             if(turntor1==1 && r1<r){
@@ -1201,9 +1165,7 @@ public class Animal extends RealObject
                 if(r-r1>180){
                     r=r+(rotspeed*2);  
                 }
-                setRotation(r);
                 sit1=sit1-rotspeed;
-                r=getRotation();
                 isturn=1;
             }
             if(r-(rotspeed-1)<=r1 || r1<r+(rotspeed-1)){
@@ -1230,6 +1192,10 @@ public class Animal extends RealObject
             }
             dei=1;
         }
+        r %= 360;
+
+        setRotation(0);
+
         isturn=0;
         stopp=0;
         stopf=0;
@@ -1240,8 +1206,8 @@ public class Animal extends RealObject
     double dx;
     double dy;
     public void dmove(double v){
-        dx += v*Math.cos(Math.toRadians(getRotation()));
-        dy += v*Math.sin(Math.toRadians(getRotation()));
+        dx += v*Math.cos(Math.toRadians(r));
+        dy += v*Math.sin(Math.toRadians(r));
         
         if(dx < 0){
             dx = 0;
@@ -1266,10 +1232,10 @@ public class Animal extends RealObject
             dy=starty;
 
             turnTowards(waterX, waterY);
-            movementAlongTheEdge = getRotation() + 100;
+            movementAlongTheEdge = getRotation() + 80;
+            movementAlongTheEdge %= 360;
 
             turntor1 = 1;
-            setRotation(0);
             touchWater();
 
             setLocation((int)startx,(int)starty);
