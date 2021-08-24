@@ -302,8 +302,8 @@ public class Plant extends RealObject
             satiety =food1;
         }
         else{
-            maxSatiety1 = maxSize *35000;
-            maxSatiety = maxSatiety1 /2;
+            maxSatiety1 = maxSize *50000;
+            maxSatiety = maxSatiety1 / 2;
             satiety = maxSatiety;
             dna.set(15, (double) maxSatiety);
         }
@@ -554,7 +554,7 @@ public class Plant extends RealObject
         if(getObjectsInRange(radius, Plant.class).size()>0){
             pl=getObjectsInRange(radius, Plant.class).get(0);
         }
-        if(inHole == pl.inHole && tim > period && pl.location == location && pl.tim > pl.period && Math.abs(pl.predation - predation) <= 0.1){
+        if(pl!=null && inHole == pl.inHole && tim > period && pl.location == location && pl.tim > pl.period && Math.abs(pl.predation - predation) <= 0.1){
             for(int i = 0; i < fertility; i++){
                 dna2.clear();
                 for(int i1 = 0; i1 < dna.size(); i1++){
@@ -704,19 +704,19 @@ public class Plant extends RealObject
         
         extraction =null;
         extraction1 =null;
-        if(animal!=null && predation >0.3){
-            extraction =animal;
-            if(extraction.location==location){
-                extraction.hp -=((damage+poison)*(1- extraction.protection));
-                extraction.hunterPlant =this;
+        if(animal != null && predation > 0.3 && satietyValueForBar < 7){
+            extraction = animal;
+            if(extraction.location == location){
+                extraction.hp -= ((damage+poison) * (1 - extraction.protection));
+                extraction.hunterPlant = this;
             }
         }
         
-        if(food!=null && predation >0.3 && satiety < maxSatiety && location==1){
-            satiety = satiety +eat;
-            food.satiety -=eat;
-            if(satietyValueForBar <9){
-                stopMoveForward =1;
+        if(food!=null && predation > 0.3 && satiety < maxSatiety && location==1){
+            satiety += eat;
+            food.satiety -= eat;
+            if(satietyValueForBar < 9){
+                stopMoveForward = 1;
             }
         }
     }

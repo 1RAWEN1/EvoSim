@@ -218,7 +218,7 @@ public class MyWorld extends World
                     eyeSize=1;
                 }
                 eye.scale(eyeSize,eyeSize);
-                eye.rotate(an1.getRotation());
+                eye.rotate(an1.r);
                 int t;
                 if(an1.t4>(int)(255*an1.maskCof)){
                     t=an1.t4;

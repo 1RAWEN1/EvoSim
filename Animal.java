@@ -34,8 +34,8 @@ public class Animal extends RealObject
     double startX;
     double startY;
     
-    int foodX;
-    int foodY;
+    int foodX = -1;
+    int foodY = -1;
     
     //эволюционирующие показатели
     int maxSize;
@@ -892,14 +892,14 @@ public class Animal extends RealObject
             turnToR1=1;
         }
         else if(isAtEdge() || needTemp -9> creatureTemp || needTemp +9< creatureTemp){
-            if(needTemp -9> creatureTemp){
+            if(needTemp - 9 > creatureTemp){
                 r1=0;
             }
-            else if(needTemp +9< creatureTemp){
+            else if(needTemp + 9 < creatureTemp){
                 r1=180;
             }
             else{
-                turnTowards(getWorld().getWidth()/2, getWorld().getHeight()/2);
+                turnTowards(getWorld().getWidth() / 2, getWorld().getHeight() / 2);
                 r1=getRotation();
             }
             turnToR1=1;
@@ -940,7 +940,7 @@ public class Animal extends RealObject
                     this.plant = null;
                 }
 
-                if(plant.creatureTemp !=26 && plant.creatureTemp != 46) {
+                if(plant.creatureTemp !=26 && plant.creatureTemp != 46 && plant.damage == 0) {
                     break;
                 }
             }
@@ -950,7 +950,7 @@ public class Animal extends RealObject
                 turnToR1 = 1;
             }
         }
-        else if(satietyValueForBar <7 && foodX!=0 && foodY!=0){
+        else if(satietyValueForBar <7 && foodX != -1 && foodY != -1){
             turnTowards(foodX, foodY);
             r1=getRotation();
             turnToR1=1;
@@ -1035,9 +1035,9 @@ public class Animal extends RealObject
     }
     
     public void eat(){
-        if(Math.abs(getX() - foodX) < getImage().getWidth() / 2 && Math.abs(getY() - foodY) < getImage().getHeight() / 2){
-            foodX = 0;
-            foodY = 0;
+        if(Math.abs(getX() - foodX) < ((double) getImage().getWidth() / 2) + 1 && Math.abs(getY() - foodY) < ((double) getImage().getHeight() / 2) + 1){
+            foodX = -1;
+            foodY = -1;
         }
         if(touchingPl !=null && predation <0.7 && satiety < maxSatiety && location==2 || touchingPl !=null && predation <0.7 && satiety < maxSatiety && location== touchingPl.location){
             satiety = satiety +(int)(eat*(1- predation));
@@ -1144,26 +1144,35 @@ public class Animal extends RealObject
         else if(touchWater && !inHole|| location==3){
             rotationSpeed =(int)(waterSpeed *size*15);
         }
-        if(r-(rotationSpeed -1)>r1|| r1>r+(rotationSpeed -1)){
+        if(r - (rotationSpeed - 1) > r1|| r1 > r + (rotationSpeed - 1)){
             if(turnToR1==1 && r1>r){
-                r=r+ rotationSpeed;
                 if(r1-r>180){
-                    r=r-(rotationSpeed *2);
+                    r -= rotationSpeed;
+                }
+                else{
+                    r += rotationSpeed;
                 }
                 satiety = satiety - rotationSpeed;
                 turned = true;
             }
             if(turnToR1==1 && r1<r){
-                r=r- rotationSpeed;
                 if(r-r1>180){
-                    r=r+(rotationSpeed *2);
+                    r += rotationSpeed;
+                }
+                else {
+                    r -= rotationSpeed;
                 }
                 satiety = satiety - rotationSpeed;
                 turned = true;
             }
-            if(r-(rotationSpeed -1)<=r1 || r1<r+(rotationSpeed -1)){
-                r=r1;
-                turnToR1=0;
+            
+            r %= 360;
+            if(r<0){
+                r += 360;
+            }
+            if(Math.abs(r1 - r) < rotationSpeed){
+                r = r1;
+                turnToR1 = 0;
             }
         }
         if(action==0 && stopMoveForward==0 && !inHole || inHole && !turned && action==0 && stopMoveForward==0){
@@ -1175,8 +1184,8 @@ public class Animal extends RealObject
             }
             else if(!touchWater && !inHole || location==1){
                 doubleMove(speed*size);
-                satiety -=(int)(speed*size);
-                water -=(int)(speed*size);
+                satiety -= (int) (speed * size);
+                water -= (int) (speed * size);
             }
             else if(touchWater && !inHole|| location==3){
                 doubleMove(waterSpeed *size);
@@ -1185,7 +1194,6 @@ public class Animal extends RealObject
             }
             action=1;
         }
-        r %= 360;
 
         setRotation(0);
 
@@ -1225,13 +1233,12 @@ public class Animal extends RealObject
             dy= startY;
 
             turnTowards(waterX, waterY);
-            movementAlongTheEdge = getRotation() + 80;
-            movementAlongTheEdge %= 360;
+            movementAlongTheEdge = getRotation();
 
             turnToR1 = 1;
-            touchWater();
 
             setLocation((int) startX,(int) startY);
+            touchWater();
         }
 
         touchingPl =(Plant)getOneIntersectingObject(Plant.class);

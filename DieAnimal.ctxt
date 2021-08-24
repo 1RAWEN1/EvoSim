@@ -1,7 +1,7 @@
 #BlueJ class context
 comment0.target=DieAnimal
 comment0.text=\r\n\ Write\ a\ description\ of\ class\ DieAnimal\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
-comment1.params=size1\ sit1\ msit1
+comment1.params=size1\ satiety1\ maxSatiety1
 comment1.target=DieAnimal(int,\ int,\ int)
 comment2.params=
 comment2.target=void\ act()
