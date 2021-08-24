@@ -22,7 +22,7 @@ public class Arrow extends Actor
     public void act() 
     {
         if(Greenfoot.mousePressed(this)){
-            setImage("parrow1.png");
+            setImage("upArrow.png");
             if(up && AnimalWorld.selectedParameter <MyWorld.dnaSizeOfAnimal-1){
                 AnimalWorld.selectedParameter++;
             }
