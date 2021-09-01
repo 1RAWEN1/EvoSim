@@ -160,7 +160,7 @@ public class Fon extends Actor
                 unLab.setFillColor(new Color(0, 255-blue/2,blue,255));
             }
             image.drawImage(unLab.updateImage(), 1100,125);
-            unLab.setValue("Age:"+MyWorld.observedAnimal.myAge +"/"+MyWorld.observedAnimal.age);
+            unLab.setValue("Age:"+MyWorld.observedAnimal.myAge +"/"+MyWorld.observedAnimal.maxAge);
             unLab.setFillColor(Color.BLACK);
             image.drawImage(unLab.updateImage(), 1100,150);
             image.drawImage(sword,1110,180);

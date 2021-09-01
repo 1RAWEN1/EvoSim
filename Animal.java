@@ -13,32 +13,32 @@ public class Animal extends RealObject
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     Player myPl;
-    int teamNum;
+    int teamNum; //speciesID
     ArrayList<Double> dna;
-    ArrayList<Double> dna2=new ArrayList<>();
+    ArrayList<Double> dna2=new ArrayList<>(); //childDNA
     int location;
     int stopFly;
-    int r;
-    int x;
-    int y;
-    int r1;
-    int stopMoveForward;
-    int action;
-    int turnToR1;
+    int r;// -> getRotation()
+    int x;// -> getX()
+    int y;// -> getY()
+    int r1;//rotation to target
+    int stopMoveForward;// -> boolean
+    int action;// -> boolean
+    int turnToR1;// -> boolean
     double timer;
-    int start;
+    int start;// -> boolean
     GreenfootImage image;
-    GreenfootImage fon;
+    GreenfootImage fon;//world background
             
-    double startX;
-    double startY;
-    
+    double startX;// start location from X
+    double startY;//start location from Y
+
+    //food coords
     int foodX = -1;
     int foodY = -1;
     
-    //эволюционирующие показатели
-    int maxSize;
-    int size;
+    int maxSize;//animal max size
+    int size;//animal size now
     int size1;
     int maxHp;
     int hp;
@@ -48,15 +48,15 @@ public class Animal extends RealObject
     
     double respiratorySystem;
     
-    double canClimb;
+    double canClimb;// -> boolean
     
     double hibernationCof;
     boolean hibernation;
     
-    double liveBirth;
+    double liveBirth;// -> boolean
     
-    int ageForGrow;
-    int myAge;
+    int ageForGrow;//in this age animal parameters is max
+    int myAge;//current age
     
     double flyingSpeed;
     double flyCof;
@@ -82,7 +82,7 @@ public class Animal extends RealObject
     
     double moveCof;
     
-    int age;
+    int maxAge;
     
     int fertility;
     
@@ -101,7 +101,7 @@ public class Animal extends RealObject
 
     int maxSatiety;
     int satiety;
-    double foodNeed;
+    double starve;
     int eat;
     
     double digSpeed;
@@ -348,11 +348,11 @@ public class Animal extends RealObject
         }
         
         if(dna.get(14)>=0){
-            age=dna.get(14).intValue();
+            maxAge =dna.get(14).intValue();
         }
         else{
-            age=70;
-            dna.set(14, (double)age);
+            maxAge =70;
+            dna.set(14, (double) maxAge);
         }
         
         if(dna.get(15)>0){
@@ -436,7 +436,7 @@ public class Animal extends RealObject
         location=1;
         maxHp =size;
         hp = maxHp;
-        tim=0;
+        tim=0;//rename
         damage=(int)(size* predation);
         if(damage<=1 && predation >=0.3){
             damage=1;
@@ -620,7 +620,7 @@ public class Animal extends RealObject
     int digTimer;
     
     public void dig(){
-        if(getObjectsInRange(radius,Hole.class).size()==0 && digTimer ==0 && foodNeed < 0.5 && waterNeed < 0.5 && location!=0 && location!=2 && digSpeed >=1){
+        if(getObjectsInRange(radius,Hole.class).size()==0 && digTimer ==0 && starve < 0.5 && waterNeed < 0.5 && location!=0 && location!=2 && digSpeed >=1){
             digTimer =(int)(Math.pow((maxSize+2)*2,2)/(size*size* digSpeed));
         }
         if(timer==0 && digTimer >0){
@@ -663,7 +663,7 @@ public class Animal extends RealObject
         
         if(!hibernation){
             attack();
-            if(location!=0 && myAge >= ageForGrow && foodNeed < 0.1 && waterNeed < 0.1){
+            if(location!=0 && myAge >= ageForGrow && starve < 0.1 && waterNeed < 0.1){
                 replicase();
             }
             drink();
@@ -693,7 +693,7 @@ public class Animal extends RealObject
             hibernation = false;
         }
 
-        if(timer % 10 == 0 && foodNeed < 0.3 && waterNeed < 0.3 && hp < maxHp && Math.abs(creatureTemp - needTemp) <= 10){
+        if(timer % 10 == 0 && starve < 0.3 && waterNeed < 0.3 && hp < maxHp && Math.abs(creatureTemp - needTemp) <= 10){
             hp++;
         }
     }
@@ -838,14 +838,14 @@ public class Animal extends RealObject
     double attraction;
     private int myPreferences() {
         attraction = 0.0;
-        if(tim > period && ageForGrow < myAge && foodNeed < 0.1 && waterNeed < 0.1) {
+        if(tim > period && ageForGrow < myAge && starve < 0.1 && waterNeed < 0.1) {
             attraction = (double)(tim - period) / period;
         }
 
-        if(waterNeed > foodNeed && waterNeed > attraction){
+        if(waterNeed > starve && waterNeed > attraction){
             return 1;
         }
-        else if(foodNeed >= attraction){
+        else if(starve >= attraction){
             return 2;
         }
         else{
@@ -1017,7 +1017,7 @@ public class Animal extends RealObject
                 foodY = food.getY();
             }
 
-            if(enemyAnimal !=null && enemyAnimal.predation > 0.3 && enemyAnimal.predation > predation && foodNeed < 0.3 ||
+            if(enemyAnimal !=null && enemyAnimal.predation > 0.3 && enemyAnimal.predation > predation && starve < 0.3 ||
                     enemyAnimal !=null && enemyAnimal.predation > 0.3 && enemyAnimal.predation > predation && minFoodDist > minDistToEnemy){
                 if(getObjectsInRange(radius,Hole.class).size() > 0 && getObjectsInRange(radius,Hole.class).get(0).size < enemyAnimal.size){
                     turnTowards(getObjectsInRange(radius,Hole.class).get(0).getX(), getObjectsInRange(radius,Hole.class).get(0).getY());
@@ -1151,7 +1151,7 @@ public class Animal extends RealObject
             touchingPl.satiety -= Math.min(eat, maxSatiety - satiety);
             satiety += Math.min((int) (eat * (1 - predation)), maxSatiety - satiety);
 
-            if(foodNeed > 0.1){
+            if(isHungry()){
                 stopMoveForward=1;
             }
         }
@@ -1160,18 +1160,19 @@ public class Animal extends RealObject
             touchingFood.satiety -= Math.min(eat, maxSatiety - satiety);
             satiety += Math.min(eat, maxSatiety - satiety);
 
-            if(foodNeed > 0.1){
+            if(isHungry()){
                 stopMoveForward=1;
             }
         }
-        
-        if(satiety > maxSatiety){
-            satiety = maxSatiety;
-        }
+
         if(satiety > 0){
-            foodNeed = 1.0 - ((double)satiety / maxSatiety);
+            starve = 1.0 - ((double)satiety / maxSatiety);
         }
         
+    }
+
+    public boolean isHungry(){
+        return starve > 0.1;
     }
     
     public void attack(){
@@ -1267,7 +1268,7 @@ public class Animal extends RealObject
         }
 
         if(action==0 && stopMoveForward==0 && !inHole || inHole && !turned && action==0 && stopMoveForward==0){
-            if(location!=3 && flyingSpeed >=speed && flyingSpeed >= waterSpeed && foodNeed < 0.7 && waterNeed < 0.7 && stopFly==0 && ageForGrow ==0 && !inHole|| location==0){
+            if(location!=3 && flyingSpeed >=speed && flyingSpeed >= waterSpeed && starve < 0.7 && waterNeed < 0.7 && stopFly==0 && ageForGrow ==0 && !inHole|| location==0){
                 doubleMove(flyingSpeed *size);
                 satiety = satiety -(int) (Math.pow(flyingSpeed, 2) * size);
                 water = water -(int) (Math.pow(flyingSpeed, 2) * size);
@@ -1397,7 +1398,7 @@ public class Animal extends RealObject
             if(respiratorySystem<=0.5 && location==1 || extraction !=null && extraction.location==3 && location==1 || touchingPl !=null && predation <0.7 && satiety < maxSatiety && location==1 && touchingPl.location==3){
                 dive();
             }
-            if(touchingFood !=null && predation >0.3 && foodNeed > 0.1 && location==3 || extraction !=null && extraction.location==1 && location==3 || touchingPl !=null && predation <0.7 && foodNeed > 0.3 && location==3 && touchingPl.location==1){
+            if(touchingFood !=null && predation >0.3 && starve > 0.1 && location==3 || extraction !=null && extraction.location==1 && location==3 || touchingPl !=null && predation <0.7 && starve > 0.3 && location==3 && touchingPl.location==1){
                 up();
             }
         }
@@ -1433,15 +1434,11 @@ public class Animal extends RealObject
     }
     
     public void fly(){
-        if(foodNeed >= 0.7 && fly==1 || waterNeed >= 0.7 && fly==1){
-            fly=0;
-            stopFly=1;
-        }
         if(tim> period && location==0 && satiety >(maxSatiety /3)*2 && water >(maxWater /3)*2 && touchingAn !=null && touchingAn.tim> touchingAn.period && touchingAn.teamNum==teamNum){
             fly=0;
             stopFly=1;
         }
-        if(touchingPl !=null && predation <0.7 && foodNeed > 0.3 && location==0){
+        if(touchingPl !=null && predation <0.7 && location==0){
             fly=0;
             stopFly=1;
         }
@@ -1450,7 +1447,7 @@ public class Animal extends RealObject
             stopFly=1;
         }
         if(touchingAn !=null && predation >0.3 && touchingAn.teamNum!=teamNum){
-            if(foodNeed > 0.3 && touchingAn.location==1){
+            if(starve > 0.3 && touchingAn.location==1){
                 fly=0;
                 stopFly=1;
             }
@@ -1481,7 +1478,7 @@ public class Animal extends RealObject
         if(satiety <=0){
             hp--;
         }
-        if(myAge >age){
+        if(myAge > maxAge){
             hp =0;
         }
         if(water <=0){
