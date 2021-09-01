@@ -538,7 +538,7 @@ public class Plant extends RealObject
     public void photosynthesis(){
         fEnergy = (int) (size * size * 5 * cof * (1 - predation));
         if(location != 2){
-            for(Plant p : getObjectsInRange(size / 2 + (int) (rootLength * 50), Plant.class)){
+            for(Plant p : getObjectsInRange(size / 2 + Math.max(20, (int) (rootLength * 50)), Plant.class)){
                 p.satiety -= (int) Math.pow(size, 3);
             }
         }
