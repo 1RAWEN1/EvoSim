@@ -15,13 +15,11 @@ public class Plant extends RealObject
     ArrayList<Double> dna;
     ArrayList<Double> dna2 = new ArrayList<>();
     int location=1;
-    int moveBack;
     int action;
     int stopMoveForward;
     int r1;
     int r;
     int turnToR1;
-    int rivalry;
     int timer;
     int x;
     int y;
@@ -39,8 +37,7 @@ public class Plant extends RealObject
     
     int ageFodGrow;
     int myAge;
-    
-    int maxWater1;
+
     int maxWater;
     int drink;
     int water;
@@ -71,10 +68,10 @@ public class Plant extends RealObject
     int distToChild;
     
     int radius;
+    int radius1;
     
     double cof;
     int satietyValueForBar;
-    int maxSatiety1;
     int maxSatiety;
     int satiety;
     int fEnergy;
@@ -98,6 +95,8 @@ public class Plant extends RealObject
     Plant plant;
     Egg egg;
     DieAnimal food;
+
+    private final int foodCof = 8000;
     
     public Plant(ArrayList<Double> dna1, int food1, int water1, boolean inHole){
         this.inHole=inHole;
@@ -109,23 +108,26 @@ public class Plant extends RealObject
         
         for(int i = 0; i< dna.size(); i++){
             double d= dna.get(i);
-            if(d>=1){
-                if(Greenfoot.getRandomNumber(3)+1==1){
-                    d+=d*MyWorld.cofOfEvolution;
+            if(d != -1) {
+                if (d > 1) {
+                    if (Greenfoot.getRandomNumber(3) + 1 == 1) {
+                        d += d * MyWorld.cofOfEvolution * Math.random();
+                    } else if (Greenfoot.getRandomNumber(2) + 1 == 1) {
+                        d -= d * MyWorld.cofOfEvolution * Math.random();
+                    }
+                } else {
+                    if (Greenfoot.getRandomNumber(3) + 1 == 1) {
+                        d += MyWorld.cofOfEvolution * Math.random();
+                    } else if (Greenfoot.getRandomNumber(2) + 1 == 1) {
+                        d -= MyWorld.cofOfEvolution * Math.random();
+                    }
                 }
-                else if(Greenfoot.getRandomNumber(2)+1==1){
-                    d-=d*MyWorld.cofOfEvolution;
+
+                if (d < 0) {
+                    d = 0;
                 }
+                dna.set(i, d);
             }
-            else if(d<1){
-                if(Greenfoot.getRandomNumber(3)+1==1){
-                    d+=MyWorld.cofOfEvolution;
-                }
-                else if(Greenfoot.getRandomNumber(2)+1==1){
-                    d-=MyWorld.cofOfEvolution;
-                }
-            }
-            dna.set(i, d);
         }
         
         if(dna.get(0)>=0){
@@ -141,32 +143,20 @@ public class Plant extends RealObject
         else if(moveCof <0){
             moveCof =0;
         }
-        
+
         if(dna.get(1)>=0){
             ageFodGrow = dna.get(1).intValue();
         }
         else{
-            ageFodGrow =10;
+            ageFodGrow = 10;
             dna.set(1, (double) ageFodGrow);
-        }
-        
-        if(dna.get(2)>=0){
-            maxWater1 = dna.get(2).intValue();
-            maxWater = maxWater1 /2;
-            water = maxWater;
-        }
-        else{
-            maxWater1 =80000;
-            maxWater = maxWater1 /2;
-            water =water1;
-            dna.set(2, (double) maxWater);
         }
         
         if(dna.get(3)>=0){
             period = dna.get(3).intValue();
         }
         else{
-            period =10;
+            period = 5;
             dna.set(3, (double) period);
         }
         
@@ -219,10 +209,20 @@ public class Plant extends RealObject
         else{
             maxSize =4;
             size =(int)(maxSize *0.1);
-            if(size <=0){
-                size =1;
+            if(size <= 0){
+                size = 1;
             }
             dna.set(7, (double) maxSize);
+        }
+
+        if(dna.get(2)>=0){
+            maxWater = dna.get(2).intValue();
+            water = water1;
+        }
+        else{
+            maxWater = maxSize * foodCof;
+            water = maxWater;
+            dna.set(2, (double) maxWater);
         }
         
         if(dna.get(8)>=0){
@@ -240,23 +240,23 @@ public class Plant extends RealObject
             }
         }
         else{
-            distToChild =20;
+            distToChild =50;
             dna.set(9, (double) distToChild);
         }
         
         if(dna.get(10)>=0){
-            radius= dna.get(10).intValue();
+            radius1= dna.get(10).intValue();
         }
         else{
-            radius=100;
-            dna.set(10, (double)radius);
+            radius1=100;
+            dna.set(10, (double)radius1);
         }
         
         if(dna.get(11)>=0){
-            cof= dna.get(11);
+            cof = dna.get(11);
         }
         else{
-            cof=4;
+            cof = 3;
             dna.set(11, cof);
         }
         
@@ -297,13 +297,11 @@ public class Plant extends RealObject
         }
         
         if(dna.get(15)>=0){
-            maxSatiety1 = dna.get(15).intValue();
-            maxSatiety = maxSatiety1 /2;
-            satiety =food1;
+            maxSatiety = dna.get(15).intValue();
+            satiety = food1;
         }
         else{
-            maxSatiety1 = maxSize *50000;
-            maxSatiety = maxSatiety1 / 2;
+            maxSatiety = maxSize * foodCof;
             satiety = maxSatiety;
             dna.set(15, (double) maxSatiety);
         }
@@ -325,6 +323,7 @@ public class Plant extends RealObject
             damage=1;
         }
         tim=0;
+        radius = radius1 / maxSize;
         updateImage();
         MyWorld.plants++;
     }
@@ -333,14 +332,11 @@ public class Plant extends RealObject
         size = maxSize;
         transparent=255;
         if(ageFodGrow > myAge){
-            size =(int)(maxSize *((double)(myAge)/ ageFodGrow));
-            maxSatiety =(int)((((double)(myAge)/(ageFodGrow *2))+0.5)* maxSatiety1);
-            maxWater =(int)((((double)(myAge)/(ageFodGrow *2))+0.5)* maxWater1);
+            size =(int)(maxSize *((double) myAge/ ageFodGrow));
         }
-        if(ageFodGrow >= myAge){
-            maxSatiety = maxSatiety1;
-            maxWater = maxWater1;
-        }
+
+        radius = (int) (((double) radius1 / maxSize) * size);
+
         size1= size;
         if(location==2){
             size1=(int)(size *1.5);
@@ -371,9 +367,8 @@ public class Plant extends RealObject
         maxHp = size;
         area =50* size /20;
         damage=(int)(size * predation);
-        maxSatiety = size *17000;
-        eat= size *700;
-        drink=700* size;
+        eat= size *2000;
+        drink=2000* size;
     }
     
     Water w;
@@ -466,8 +461,8 @@ public class Plant extends RealObject
             turnTo();
             move();
             touchWater();
+            moveBack();
         }
-        moveBack();
         
         x=getX();
         y=getY();
@@ -477,13 +472,10 @@ public class Plant extends RealObject
             surroundingTemp -=10;
         }
         hibernation();
-        if(timer>=50){
+        if(timer>=MyWorld.year){
             myAge++;
             tim++;
             timer=0;
-            if(satietyValueForBar >=7 && waterValueForBar >=7 && hp < maxHp && creatureTemp >= needTemp -10 && creatureTemp <= needTemp +10){
-                hp++;
-            }
         }
         
         fEnergy =0;
@@ -497,7 +489,7 @@ public class Plant extends RealObject
         }
         
         temp();
-        if(myAge >= ageFodGrow && satietyValueForBar >=7 && waterValueForBar >=7 && !hibernation){
+        if(MyWorld.plants < 200 && myAge >= ageFodGrow && fertility * maxSatiety / 2 < satiety && fertility * maxWater / 2 < water && !hibernation){
             replicase();
         }
         if(!hibernation){
@@ -511,10 +503,16 @@ public class Plant extends RealObject
     
     public void hibernation(){
         creatureTemp = (int) (needTemp * heatCof + (surroundingTemp * (1 - heatCof)));
-        if(satiety > 0 && satiety <= maxSatiety){
+        if(satiety > maxSatiety){
+            satiety = maxSatiety;
+        }
+        if(satiety > 0){
             satietyValueForBar = satiety / (maxSatiety / 10);
         }
-        if(water > 0 && water <= maxWater){
+        if(water > maxWater){
+            water = maxWater;
+        }
+        if(water > 0){
             waterValueForBar = water / (maxWater / 10);
         }
         if(creatureTemp < needTemp - 10 || creatureTemp > needTemp + 10){
@@ -530,18 +528,26 @@ public class Plant extends RealObject
             hibernation = false;
         }
         water = water - fEnergy;
+
+
+        if(timer % 10 == 0 && satietyValueForBar >=7 && waterValueForBar >=7 && hp < maxHp && Math.abs(creatureTemp - needTemp) <= 10){
+            hp++;
+        }
     }
     
     public void photosynthesis(){
-        fEnergy = (int) (size * size * 5 * cof);
-        MyWorld.res -= size;
-        if(plant != null && location != 2){
-            rivalry = 0;
-            for(Plant p : getIntersectingObjects(Plant.class)){
-                rivalry = rivalry + (int) Math.pow(p.size, 3);
+        fEnergy = (int) (size * size * 5 * cof * (1 - predation));
+        if(location != 2){
+            for(Plant p : getObjectsInRange(size / 2 + (int) (rootLength * 50), Plant.class)){
+                p.satiety -= (int) Math.pow(size, 3);
             }
-            fEnergy = fEnergy - rivalry;
         }
+
+        /*if(location != 2){
+            for(Plant p : getIntersectingObjects(Plant.class)){
+                satiety -= (int) Math.pow(p.size, 3);
+            }
+        }*/
         water -= fEnergy;
     }
     
@@ -554,7 +560,10 @@ public class Plant extends RealObject
         if(getObjectsInRange(radius, Plant.class).size()>0){
             pl=getObjectsInRange(radius, Plant.class).get(0);
         }
-        if(pl!=null && inHole == pl.inHole && tim > period && pl.location == location && pl.tim > pl.period && Math.abs(pl.predation - predation) <= 0.1){
+        double randRot = Math.toRadians(Greenfoot.getRandomNumber(360));
+        int dist = Greenfoot.getRandomNumber(distToChild);
+
+        if(pl!=null && inHole == pl.inHole && tim > period && pl.location == location && pl.tim > pl.period && Math.abs(pl.predation - predation) <= MyWorld.classificationOfSpecies){
             for(int i = 0; i < fertility; i++){
                 dna2.clear();
                 for(int i1 = 0; i1 < dna.size(); i1++){
@@ -565,38 +574,10 @@ public class Plant extends RealObject
                         dna2.add(pl.dna.get(i1));
                     }
                 }
-                Plant child = new Plant(dna2, maxSize * maxSize * maxSize *1000, maxSize * maxSize * maxSize *1000, inHole);
+                Plant child = new Plant(dna2, maxSatiety / 2, maxWater / 2, inHole);
 
-                childX =((x+pl.getX())/2)+Greenfoot.getRandomNumber(distToChild)- distToChild /2;
-                childY =((y+pl.getY())/2)+Greenfoot.getRandomNumber(distToChild)- distToChild /2;
-                if(inHole){
-                    inHole();
-                    if(hr!=null && Math.sqrt(Math.pow(hr.getX()- childX,2)+Math.pow(hr.getY()- childY,2)) > (double) hr.size / 2){
-                        setLocation(hr.getX(),hr.getY());
-                        turnTowards(childX, childY);
-                        rotToChild =getRotation();
-                        childX =hr.getX()+(int)(Math.cos(Math.toRadians(rotToChild))*((hr.size/2)-1));
-                        childY =hr.getY()+(int)(Math.sin(Math.toRadians(rotToChild))*((hr.size/2)-1));
-                    }
-                }
-                try{
-                    getWorld().addObject(child, childX, childY);
-                }catch(Exception e){
-                    getWorld().addObject(child, x+Greenfoot.getRandomNumber(distToChild)- distToChild /2, y+Greenfoot.getRandomNumber(distToChild)- distToChild /2);
-                }
-                satiety = satiety - maxSize * maxSize * maxSize *1000;
-                water = water - maxSize * maxSize * maxSize *1000;
-                tim=0;
-            }
-        }
-        else if(tim> period *2){
-            for(int i = 0; i< fertility; i++){
-                dna2.clear();
-                dna2.addAll(dna);
-                Plant child = new Plant(dna2, maxSize * maxSize * maxSize *1000, maxSize * maxSize * maxSize *1000, inHole);
-
-                childX = x + Greenfoot.getRandomNumber(distToChild) - distToChild / 2;
-                childY = y + Greenfoot.getRandomNumber(distToChild) - distToChild / 2;
+                childX = ((x + pl.getX()) / 2) + (int) (Math.cos(randRot) * dist);
+                childY = ((y + pl.getY()) / 2) + (int) (Math.sin(randRot) * dist);
                 if(inHole){
                     inHole();
                     if(hr!=null && Math.sqrt(Math.pow(hr.getX()- childX,2)+Math.pow(hr.getY()- childY,2)) > (double) hr.size / 2){
@@ -608,8 +589,32 @@ public class Plant extends RealObject
                     }
                 }
                 getWorld().addObject(child, childX, childY);
-                satiety = satiety - maxSize * maxSize * maxSize *1000;
-                water = water - maxSize * maxSize * maxSize *1000;
+                satiety = satiety - maxSatiety / 2;
+                water = water - maxWater / 2;
+                tim=0;
+            }
+        }
+        else if(tim> period *2){
+            for(int i = 0; i< fertility; i++){
+                dna2.clear();
+                dna2.addAll(dna);
+                Plant child = new Plant(dna2, maxSatiety / 2, maxWater / 2, inHole);
+
+                childX = x + (int) (Math.cos(randRot) * dist);
+                childY = y + (int) (Math.sin(randRot) * dist);
+                if(inHole){
+                    inHole();
+                    if(hr!=null && Math.sqrt(Math.pow(hr.getX()- childX,2)+Math.pow(hr.getY()- childY,2)) > (double) hr.size / 2){
+                        setLocation(hr.getX(),hr.getY());
+                        turnTowards(childX, childY);
+                        rotToChild =getRotation();
+                        childX =hr.getX()+(int)(Math.cos(Math.toRadians(rotToChild))*((hr.size/2)-1));
+                        childY =hr.getY()+(int)(Math.sin(Math.toRadians(rotToChild))*((hr.size/2)-1));
+                    }
+                }
+                getWorld().addObject(child, childX, childY);
+                satiety = satiety - maxSatiety / 2;
+                water = water - maxWater / 2;
                 tim=0;
             }
         }
@@ -660,10 +665,10 @@ public class Plant extends RealObject
         else if(predation <=0.3 && animal!=null && animal.predation <0.7){
             turnTowards(animal.x, animal.y);
             if(r1>=180){
-                r1=getRotation()-(180-Greenfoot.getRandomNumber(30));
+                r1=getRotation() - 180;
             }
             else{
-                r1=getRotation()+(180-Greenfoot.getRandomNumber(30));
+                r1=getRotation() + 180;
             }
             turnToR1 =1;
         }
@@ -679,7 +684,7 @@ public class Plant extends RealObject
     public void drink(){
         canDrink();
         if(canDrink && water < maxWater && location!=2 || water < maxWater && location==3){
-            water = water +drink;
+            water = water + drink;
         }
     }
     
@@ -707,14 +712,14 @@ public class Plant extends RealObject
         if(animal != null && predation > 0.3 && satietyValueForBar < 7){
             extraction = animal;
             if(extraction.location == location){
-                extraction.hp -= ((damage+poison) * (1 - extraction.protection));
+                extraction.hp -= Math.max((damage + poison) - (int) (extraction.size * extraction.protection), 0);
                 extraction.hunterPlant = this;
             }
         }
         
         if(food!=null && predation > 0.3 && satiety < maxSatiety && location==1){
-            satiety += eat;
-            food.satiety -= eat;
+            food.satiety -= Math.min(eat, maxSatiety - satiety);
+            satiety += Math.min(eat, maxSatiety - satiety);
             if(satietyValueForBar < 9){
                 stopMoveForward = 1;
             }
@@ -732,18 +737,6 @@ public class Plant extends RealObject
     public void move(){
         startX =dx;
         startY =dy;
-        if(moveBack >0 && action ==0){
-            if(!touchWater){
-                doubleMove(-speed);
-            }
-            else{
-                doubleMove(-waterSpeed);
-            }
-            if(moveBack >0){
-                moveBack = moveBack -1;
-            }
-            action =1;
-        }
         if(!touchWater && !inHole|| location==1){
             rotSpeed =(int)(speed* size *15);
         }
@@ -756,7 +749,7 @@ public class Plant extends RealObject
                 if(r1-r>180){
                     r=r-(rotSpeed *2);
                 }
-                satiety -= rotSpeed;
+                satiety -= rotSpeed * size;
                 turned =1;
             }
             if(turnToR1 ==1 && r1<r){
@@ -764,24 +757,29 @@ public class Plant extends RealObject
                 if(r-r1>180){
                     r=r+(rotSpeed *2);
                 }
-                satiety -= rotSpeed;
+                satiety -= rotSpeed * size;
                 turned =1;
             }
-            if(r-(rotSpeed -1)<=r1 || r1<r+(rotSpeed -1)){
-                r=r1;
-                turnToR1 =0;
+
+            r %= 360;
+            if(r<0){
+                r += 360;
+            }
+            if(Math.abs(r1 - r) < rotSpeed){
+                r = r1;
+                turnToR1 = 0;
             }
         }
         if(action ==0 && stopMoveForward ==0 && !inHole || inHole && turned ==0 && action ==0 && stopMoveForward ==0){
             if(!touchWater && !inHole || location==1){
                 doubleMove(speed* size);
-                satiety -=(int)(speed* maxSize);
-                water -=(int)(speed* maxSize);
+                satiety -=(int)(Math.pow(speed, 2) * size);
+                water -=(int)(Math.pow(speed, 2) * size);
             }
             else if(touchWater && !inHole || location==3){
                 doubleMove(waterSpeed * size);
-                satiety -=(int)(waterSpeed * maxSize);
-                water -=(int)(waterSpeed * maxSize);
+                satiety -=(int)(Math.pow(waterSpeed, 2) * size);
+                water -=(int)(Math.pow(waterSpeed, 2) * size);
             }
         }
         r %= 360;

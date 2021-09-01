@@ -42,20 +42,20 @@ public class Water extends RealObject
             surroundingTemp =(int)(((double)(getX())/getWorld().getWidth()*MyWorld.temp + (double)(getY())/getWorld().getHeight()*MyWorld.temp)/2);
             cof=(double)(surroundingTemp)/ temp;
             if(cof<1){
-                if(cof==0){
-                    cof=0.1;
-                }
-                size=Greenfoot.getRandomNumber((int)(getWorld().getWidth()*cof));
+                cof /= 2;
+                cof = Math.max(cof, 0.5);
+                size = (int)(1 / (surroundingTemp * 0.0001)) + Greenfoot.getRandomNumber((int)(getWorld().getWidth()*cof));
             }
             else if(cof>=1){
-                size=Greenfoot.getRandomNumber((int)(getWorld().getWidth()/cof));
+                cof *= 2;
+                size = (int)(1 / (surroundingTemp * 0.0001)) + Greenfoot.getRandomNumber((int)(getWorld().getWidth()/cof));
             }
             if(size<1){
                 size=1;
             }
             image = new GreenfootImage(size, size);
             if(cof<1){
-                green =(int)(200*(1-cof));
+                green =(int)(250*(1-cof));
                 transparency =50;
                 image.setColor(new Color( 0, green, 255, transparency));
             }
@@ -96,13 +96,13 @@ public class Water extends RealObject
                 getWorld().addObject(new Plant(par2,0, 0, false), getX() + (int)(dist*Math.cos(Math.toRadians(rot))), getY() + (int)(dist*Math.sin(Math.toRadians(rot))));
             }
         }
-        else if(MyWorld.plants<8 && surroundingTemp >26 && MyWorld.plMode == 2 && Greenfoot.getRandomNumber(100)==1){
+        else if(MyWorld.plants<15 && surroundingTemp >26 && MyWorld.plMode == 2 && Greenfoot.getRandomNumber(50)==1){
             rot=Greenfoot.getRandomNumber(360);
             dist=Greenfoot.getRandomNumber(size/2);
             getWorld().addObject(new Plant(par2,0, 0, false), getX() + (int)(dist*Math.cos(Math.toRadians(rot))), getY() + (int)(dist*Math.sin(Math.toRadians(rot))));
         }
 
-        if(isTouching(Plant.class) && MyWorld.plMode ==2 && surroundingTemp >26 && MyWorld.pl.myAn<8 && Greenfoot.getRandomNumber(100)==1){
+        if(isTouching(Plant.class) && MyWorld.plMode ==2 && surroundingTemp >26 && MyWorld.pl.myAn<20 && Greenfoot.getRandomNumber(100)==1){
             rot=Greenfoot.getRandomNumber(360);
             dist=Greenfoot.getRandomNumber(size/2);
             getWorld().addObject(new Animal(par,MyWorld.pl,0,false, 0, 0), getX() + (int)(dist*Math.cos(Math.toRadians(rot))), getY() + (int)(dist*Math.sin(Math.toRadians(rot))));
@@ -110,7 +110,7 @@ public class Water extends RealObject
 
         if(timer==10){
             surroundingTemp =(int)((double)(getX())/getWorld().getWidth()*MyWorld.temp);
-            size-=(int)(size* surroundingTemp *0.0001);
+            size-=(int)(size * surroundingTemp * 0.0001);
             if(size<1){
                 size=1;
             }

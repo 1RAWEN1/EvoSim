@@ -1,7 +1,7 @@
 #BlueJ class context
 comment0.target=Player
 comment0.text=\r\n\ Write\ a\ description\ of\ class\ Player\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
-comment1.params=botorno1
+comment1.params=botOrNo1
 comment1.target=Player(int)
 comment10.params=
 comment10.target=void\ save()

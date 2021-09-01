@@ -65,8 +65,8 @@ public class Fon extends Actor
             image.drawImage(drawBar(100,20,MyWorld.plants,50,Color.WHITE,Color.GREEN,"растения"),0,70);
         }
         else{
-            image.drawImage(drawBar(100,20,MyWorld.pl.myAn,100,Color.WHITE,new Color(0,255,255,255),"животные"),0,10);
-            image.drawImage(drawBar(100,20,MyWorld.plants,100,Color.WHITE,Color.GREEN,"растения"),0,40);
+            image.drawImage(drawBar(100,20,MyWorld.pl.myAn,200,Color.WHITE,new Color(0,255,255,255),"животные"),0,10);
+            image.drawImage(drawBar(100,20,MyWorld.plants,200,Color.WHITE,Color.GREEN,"растения"),0,40);
         }
 
         if(MyWorld.pl.can==0){
@@ -134,7 +134,7 @@ public class Fon extends Actor
         }
         if(MyWorld.plMode ==0){
             image.drawImage(drawBar(100,20,MyWorld.pl.water2,MyWorld.pl.mw,new Color(153,217,234),new Color(0,126,232),"вода"),0, 130);
-            image.drawImage(drawBar(100,20,MyWorld.pl.sit1,MyWorld.pl.msit,new Color(255,242,0),new Color(255,127,39),"еда"),0, 160);
+            image.drawImage(drawBar(100,20,MyWorld.pl.sit1,MyWorld.pl.maxSatiety,new Color(255,242,0),new Color(255,127,39),"еда"),0, 160);
             image.drawImage(drawBar(100,20,MyWorld.pl.xp,MyWorld.pl.mxp,new Color(181,230,29),new Color(34,177,76),"здоровье"),0, 190);
             image.drawImage(drawBar(100,20,MyWorld.pl.air,MyWorld.pl.mair,Color.WHITE,new Color(205,205,205),"О2"), 0,215);
         }

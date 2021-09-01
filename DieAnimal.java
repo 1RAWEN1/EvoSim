@@ -32,7 +32,7 @@ public class DieAnimal extends RealObject
         if(start==0){
             start=1;
         }
-        satiety -= 100;
+        satiety -= maxSatiety / 10000;
         updateImage();
         remove();
     } 

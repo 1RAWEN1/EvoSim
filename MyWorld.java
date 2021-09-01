@@ -16,12 +16,12 @@ public class MyWorld extends World
     ArrayList<Double> dna = new ArrayList<>();
     ArrayList<Double> dna1 = new ArrayList<>();
 
-    public static int res=200;
+    public static final double classificationOfSpecies = 0.1;
     public static final int dnaSizeOfAnimal = 23;
     public static final int dnaSizeOfPlant = 16;
     public static int an;
     public static int plants;
-    public static final double cofOfEvolution = 0.2;
+    public static final double cofOfEvolution = 0.1;
     public static final int temp=60;
 
     public static Player pl;
@@ -30,6 +30,7 @@ public class MyWorld extends World
     public static Fon fon1;
     public static int teams;
     static int plMode;
+    static final int year = 50;
     static GreenfootImage image=new GreenfootImage(1200, 700);
     
     
@@ -48,7 +49,6 @@ public class MyWorld extends World
         teams=0;
         an=0;
         plants=0;
-        res=200;
         observedAnimal =null;
         Fon.w=4800;
         bot =null;
@@ -61,7 +61,7 @@ public class MyWorld extends World
     GreenfootImage sand=new GreenfootImage("sand.png");
     int numOfWater;
     public void prepare(){
-        setPaintOrder(Fon.class);
+        setPaintOrder(Fon.class, Animal.class, Player.class, Egg.class, DieAnimal.class, Plant.class, Hole.class, HoleRoom.class, Water.class);
 
         numOfWater = Greenfoot.getRandomNumber(2)+1;
         for(int i = 0; i< numOfWater; i++){
@@ -88,6 +88,7 @@ public class MyWorld extends World
         addObject(fm, 600, 350);
         fon1=new Fon(null);
         addObject(fon1, 600, 350);
+        Greenfoot.setSpeed(100);
     }
     Actor subject;
     
@@ -235,11 +236,6 @@ public class MyWorld extends World
 
     public void act(){
         getFPS();
-
-        res+=100;
-        if(res>200){
-            res=200;
-        }
 
         updateFon();
     }

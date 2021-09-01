@@ -36,7 +36,7 @@ public class Player extends RealObject
         
         size=3;
         
-        sogr=0.5;
+        heatCof =0.5;
         radius=200;
         speed=1;
         teamNum=MyWorld.teams;
@@ -44,9 +44,9 @@ public class Player extends RealObject
         if(MyWorld.plMode >0){
             speed=10;
         }
-        updateImage(size,255);
+        updateImage(size);
     }
-    public void updateImage(int size1, int t4){
+    public void updateImage(int size1){
         image = new GreenfootImage(size1, size1);
         setImage(image);
     }
@@ -89,7 +89,7 @@ public class Player extends RealObject
             }
             else{
                 temp1();
-                plmove();
+                plMovement();
             }
             if(Greenfoot.isKeyDown(Lobby.buttons.get(1)) && elixir>=7 && pushQ ==0 && can==0 || btoOrNo ==0 && elixir>=7 && Greenfoot.getRandomNumber(10)==0 ||  btoOrNo ==0 && elixir==10){
                 elixir-=7;
@@ -109,7 +109,7 @@ public class Player extends RealObject
                     selectionOfSuper =3;
                 }
                 if(Greenfoot.isKeyDown(Lobby.buttons.get(1)) && selectionOfSuper !=0){
-                    mysuper(selectionOfSuper);
+                    mySuper(selectionOfSuper);
                     if(selectionOfSuper ==1 && Lobby.slide==3){
                         Lobby.slide++;
                     }
@@ -124,22 +124,22 @@ public class Player extends RealObject
             }
             else{
                 temp1();
-                botturnTo();
-                botmove();
+                botThink();
+                botMove();
             }
             if(newSelection ==0 && can==1){
-                mysuper(1);
+                mySuper(1);
             }
         }
     }
 
     int selection;
     
-    int epush;
+    int pushE;
     
     double val=0.5;
     public void newSelect(){
-        if(Greenfoot.isKeyDown(Lobby.buttons.get(0)) && elixir>=5 && newSelection ==0 && btoOrNo ==1 && epush==0 || btoOrNo ==0 && elixir>=5 && Greenfoot.getRandomNumber(100)==0){
+        if(Greenfoot.isKeyDown(Lobby.buttons.get(0)) && elixir>=5 && newSelection ==0 && btoOrNo ==1 && pushE ==0 || btoOrNo ==0 && elixir>=5 && Greenfoot.getRandomNumber(100)==0){
             elixir-=5;
             for(int i=0;i<6;i+=2){
                 parameters[i]=Greenfoot.getRandomNumber(22);
@@ -155,7 +155,7 @@ public class Player extends RealObject
             }
         }
         if(!Greenfoot.isKeyDown(Lobby.buttons.get(0))){
-            epush=0;
+            pushE =0;
         }
         if(btoOrNo ==1){
             if(Greenfoot.isKeyDown(Lobby.buttons.get(2))){
@@ -188,7 +188,7 @@ public class Player extends RealObject
                     Lobby.slide++;
                 }
                 newSelection =0;
-                epush=1;
+                pushE =1;
             }
         }
     }
@@ -239,13 +239,12 @@ public class Player extends RealObject
     }
     Plant pl;
     int can;
-    public void mysuper(int sel){
+    public void mySuper(int sel){
         can=0;
         if(sel==1){
             for(int i=0;i<3;i++){
                 pl=new Plant(plantDna,0, 0, false);
                 pl.myAge =pl.ageFodGrow;
-                pl.satiety =pl.maxSatiety1;
                 getWorld().addObject(pl, getX() + Greenfoot.getRandomNumber(50)-50/2, getY() + Greenfoot.getRandomNumber(50)-50/2);
             }
         }
@@ -262,7 +261,7 @@ public class Player extends RealObject
             updateAnimals1(Greenfoot.getRandomNumber(MyWorld.dnaSizeOfAnimal),Greenfoot.getRandomNumber(2));
         }
     }
-    double sogr2;
+    double heatCof2;
     int i;
     public void temp1(){
         ts=(int)(((double)(getX())/getWorld().getWidth())*MyWorld.temp);
@@ -272,18 +271,17 @@ public class Player extends RealObject
         }
         i=getObjectsInRange(radius,Animal.class).size();
         if(i>0){
-            sogr2=getObjectsInRange(radius,Animal.class).get(0).heatCof;
+            heatCof2 =getObjectsInRange(radius,Animal.class).get(0).heatCof;
         }
-        else if(i==0){
-            sogr2=sogr;
+        else{
+            heatCof2 = heatCof;
         }
-        tg=(int)((needt*sogr2+(ts*(1-sogr2))));
+        tg=(int)((needTemp * heatCof2 +(ts*(1- heatCof2))));
     }
     public void replicase(){
         if(Greenfoot.isKeyDown("Space") && btoOrNo ==1 || btoOrNo ==0){
             if(MyWorld.plMode <2){
                 for(int i=0; i<4; i++){
-                    //int age1, int plod1, int speed1, int radius1, int size1, double sogr1, double xich1, int tg1, int msit1
                     Animal an=new Animal(dna, this, teamNum, inHole, 0, 0);
                     getWorld().addObject(an, getX(), getY());
                 }
@@ -313,10 +311,10 @@ public class Player extends RealObject
             os.writeObject(ser);
             
             os.close();
-        }catch(Exception e){System.out.println(e);}
+        }catch(Exception e){}
     }
     
-    public void plmove(){
+    public void plMovement(){
         if(Greenfoot.isKeyDown("S")){
             setLocation(getX(), getY()+speed);
         }
@@ -330,68 +328,62 @@ public class Player extends RealObject
             setLocation(getX(), getY()-speed);
         }
     }
-    int movetox;
-    int movetoy;
-    public void botturnTo(){
-        if(tg<needt-10 || tg>needt+10){
-            movetox=getWorld().getWidth()/2;
-            movetoy=getWorld().getHeight()/2;
+    int moveToX;
+    int moveToY;
+    public void botThink(){
+        if(tg< needTemp -10 || tg> needTemp +10){
+            moveToX =getWorld().getWidth()/2;
+            moveToY =getWorld().getHeight()/2;
         }
         else if(getObjectsInRange(radius, Plant.class).size()>0){
-            movetox=getObjectsInRange(radius, Plant.class).get(0).getX();
-            movetoy=getObjectsInRange(radius, Plant.class).get(0).getY();
+            moveToX =getObjectsInRange(radius, Plant.class).get(0).getX();
+            moveToY =getObjectsInRange(radius, Plant.class).get(0).getY();
         }
         else{
             randomMove1();
         }
     }
     public void randomMove1(){
-        if(getX()<movetox+10 && getX()>movetox-10 && getY()<movetoy+10 && getY()>movetoy-10){
-            movetox=Greenfoot.getRandomNumber(getWorld().getWidth());
-            movetoy=Greenfoot.getRandomNumber(getWorld().getHeight());
+        if(getX()< moveToX +10 && getX()> moveToX -10 && getY()< moveToY +10 && getY()> moveToY -10){
+            moveToX =Greenfoot.getRandomNumber(getWorld().getWidth());
+            moveToY =Greenfoot.getRandomNumber(getWorld().getHeight());
         }
     }
-    public void botmove(){
-        if(movetoy<getY()){
+    public void botMove(){
+        if(moveToY <getY()){
             setLocation(getX(), getY()-speed);
         }
-        if(movetoy>getY()){
+        if(moveToY >getY()){
             setLocation(getX(), getY()+speed);
         }
-        if(movetox>getX()){
+        if(moveToX >getX()){
             setLocation(getX()+speed, getY());
         }
-        if(movetox<getX()){
+        if(moveToX <getX()){
             setLocation(getX()-speed, getY());
         }
     }
     
     boolean canSee;
     int location=1;
-    int stopf;
-    int m;
-    Actor water;
-    Actor sea;
-    //double lifecof;
+    int stopFly;
     int r;
     int x;
     int y;
     int r1;
-    int moven;
-    int stopp;
+    int moveBack;
+    int stopMoveForward;
     int dei;
-    int turntor1;
+    int turnToR1;
     double timer;
-    int start;
     GreenfootImage image;
-    GreenfootImage fon;
             
-    int rstart;
-    int foodx;
-    int foody;
+    int startRot;
+    int foodX;
+    int foodY;
     
     //эволюционирующие показатели
-    int size=3;
+    int size;
     int size3;
     int mxp=100;
     int xp=mxp;
@@ -399,46 +391,43 @@ public class Player extends RealObject
     int mair=3000;
     int air=mair;
     
-    double sysdix=0.7;
+    double respiratorySystem =0.7;
     
-    double canclimb;
+    double climbSkill;
     
-    int pspeed;
-    double flycof;
+    int flySpeed;
+    double flyCof;
     int fly;
-    
-    double poicof;
-    int poisondam;
-    
-    double maskcof;
+
+    int poisonDam;
     
     int mw=150000;
     int wt3;
     int drink;
     int water2=mw;
     
-    int wspeed=1;
+    int waterSpeed =1;
     
-    int speed=1;
+    int speed;
     
-    int radius=200;
+    int radius;
     
-    double sogr=0.5;
+    double heatCof;
     int tg;
     int ts;
-    int needt=36;
+    int needTemp =36;
     
-    double xich=0.5;
+    double predation =0.5;
     int damage=1;
     
-    int msit=150000;
-    int sit1=msit;
+    int maxSatiety =150000;
+    int sit1= maxSatiety;
     int sit2;
     int eat;
     
     //на меня охотятся
-    Plant xichpl;
-    Animal xichan;
+    Plant hunterPlant;
+    Animal hunter;
     
     Animal tAn;
     Plant tPl;
@@ -459,8 +448,8 @@ public class Player extends RealObject
         size3=size;
         
         if(location==0){
-            size3=(int)(size3*flycof);
-            t4=(int)(255*(1.0/flycof));
+            size3=(int)(size3* flyCof);
+            t4=(int)(255*(1.0/ flyCof));
             if(t4>255){
                 t4=255;
             }
@@ -540,8 +529,8 @@ public class Player extends RealObject
         if(touchHole && ist==0 && h.loc==location){
             
             if(!inHole && h.size>size && btoOrNo ==1 ||
-            !inHole && h.size>size && sysdix<=0.5 && h.loc==3 && btoOrNo ==0 ||
-            !inHole && h.size>size && sysdix>0.5 && h.loc==1 && btoOrNo ==0){
+            !inHole && h.size>size && respiratorySystem <=0.5 && h.loc==3 && btoOrNo ==0 ||
+            !inHole && h.size>size && respiratorySystem >0.5 && h.loc==1 && btoOrNo ==0){
                 inHole=true;
             }
             else if(inHole){
@@ -594,7 +583,7 @@ public class Player extends RealObject
         }
         if(timer>=50){
             timer=0;
-            if(sit2>=7 && wt3>=7 && xp<mxp && tg>=needt-10 && tg<=needt+10){
+            if(sit2>=7 && wt3>=7 && xp<mxp && tg>= needTemp -10 && tg<= needTemp +10){
                 xp++;
             }
         }
@@ -605,7 +594,7 @@ public class Player extends RealObject
         attack();
         drink();
         eat();
-        brith();
+        breathe();
         dive();
         
         climb();
@@ -633,29 +622,11 @@ public class Player extends RealObject
         }
         if(timer>=50){
             timer=0;
-            if(sit2>=7 && wt3>=7 && xp<mxp && tg>=needt-10 && tg<=needt+10){
+            if(sit2>=7 && wt3>=7 && xp<mxp && tg>= needTemp -10 && tg<= needTemp +10){
                 xp++;
             }
         }
         updateImage();
-        if(sit1<0){
-            sit1=0;
-        }
-        if(water2<0){
-            water2=0;
-        }
-        if(sit1>msit){
-            sit1=msit;
-        }
-        if(water2>mw){
-            water2=mw;
-        }
-        if(sit1>0 && sit1<=msit){
-            sit2=sit1/(msit/10);
-        }
-        if(water2>0 && water2<=mw){
-            wt3=water2/(mw/10);
-        }
         tPl=(Plant)getOneIntersectingObject(Plant.class);
         tAn=(Animal)getOneIntersectingObject(Animal.class);
         tEgg=(Egg)getOneIntersectingObject(Egg.class);
@@ -666,7 +637,7 @@ public class Player extends RealObject
         attack();
         drink();
         eat();
-        brith();
+        breathe();
         diveForPl();
         
         climb();
@@ -675,9 +646,9 @@ public class Player extends RealObject
     }
     
     public void temp(){
-        tg=(int)((needt*sogr+(ts*(1-sogr))));
-        sit1=sit1-(int)(Math.abs(ts-needt)*sogr*image.getWidth());
-        water2=water2-(int)(Math.abs(ts-needt)*sogr*image.getWidth());
+        tg=(int)((needTemp * heatCof +(ts*(1- heatCof))));
+        sit1=sit1-(int)(Math.abs(ts- needTemp)* heatCof *image.getWidth());
+        water2=water2-(int)(Math.abs(ts- needTemp)* heatCof *image.getWidth());
     }
     
     DieAnimal food;
@@ -726,70 +697,70 @@ public class Player extends RealObject
         }
         
         if(PlInR!=null){
-            foodx=PlInR.getX();
-            foody=PlInR.getY();
+            foodX =PlInR.getX();
+            foodY =PlInR.getY();
         }
-        if(isAtEdge() || needt-7>tg || needt+7<tg){
-            rstart=getRotation();
-            if(needt-7>tg){
+        if(isAtEdge() || needTemp -7>tg || needTemp +7<tg){
+            startRot =getRotation();
+            if(needTemp -7>tg){
                 r1=0;
             }
-            else if(needt+7<tg){
+            else if(needTemp +7<tg){
                 r1=180;
             }
             else{
                 turnTowards(getWorld().getWidth()/2, getWorld().getHeight()/2);
                 r1=getRotation();
             }
-            setRotation(rstart);
-            turntor1=1;
+            setRotation(startRot);
+            turnToR1 =1;
         }
         else if(getObjectsInRange(radius, Water.class).size()>0 && wt3<7){
             r=getRotation();
             turnTowards(getObjectsInRange(radius, Water.class).get(0).getX(), getObjectsInRange(radius, Water.class).get(0).getY());
             r1=getRotation();
             setRotation(r);
-            turntor1=1;
+            turnToR1 =1;
         }
-        else if(xich<0.7 && PlInR!=null && sit2<7){
+        else if(predation <0.7 && PlInR!=null && sit2<7){
             r=getRotation();
             turnTowards(PlInR.getX(), PlInR.getY());
             r1=getRotation();
             setRotation(r);
-            turntor1=1;
+            turnToR1 =1;
         }
-        else if(xich<0.7 && sit2<7 && foodx!=0 && foody!=0){
+        else if(predation <0.7 && sit2<7 && foodX !=0 && foodY !=0){
             r=getRotation();
-            turnTowards(foodx, foody);
+            turnTowards(foodX, foodY);
             r1=getRotation();
             setRotation(r);
-            turntor1=1;
+            turnToR1 =1;
         }
-        else if(xich>0.3 && food!=null && sit2<7){
+        else if(predation >0.3 && food!=null && sit2<7){
             r=getRotation();
             turnTowards(food.getX(), food.getY());
             r1=getRotation();
             setRotation(r);
-            turntor1=1;
+            turnToR1 =1;
         }
-        else if(xich>0.3 && EggInR!=null && sit2<7 && EggInR.teamNum!=teamNum){
+        else if(predation >0.3 && EggInR!=null && sit2<7 && EggInR.teamNum!=teamNum){
             r=getRotation();
             turnTowards(EggInR.getX(), EggInR.getY());
             r1=getRotation();
             setRotation(r);
-            turntor1=1;
+            turnToR1 =1;
         }
-        else if(SopInR!=null && xich<=0.3 && SopInR.predation >0.3){
+        else if(SopInR!=null && predation <=0.3 && SopInR.predation >0.3){
             r=getRotation();
             turnTowards(SopInR.x, SopInR.y);
             if(r1>=180){
                 r1=getRotation()-(180-Greenfoot.getRandomNumber(90));
             }
-            else if(r1<180){
+            else{
                 r1=getRotation()+(180-Greenfoot.getRandomNumber(90));
             }
             setRotation(r);
-            turntor1=1;
+            turnToR1 =1;
         }
         else{
             randomMove();
@@ -797,23 +768,23 @@ public class Player extends RealObject
     }
     public void randomMove(){
         r1=Greenfoot.getRandomNumber(360);
-        turntor1=1;
+        turnToR1 =1;
     }
     
-    public void brith(){
-        if(sysdix<=0.5 && location!=3 && air>0){
+    public void breathe(){
+        if(respiratorySystem <=0.5 && location!=3 && air>0){
             air=air-(size*size*size);
         }
-        else if(sysdix<=0.5 && air<mair && location==3){
+        else if(respiratorySystem <=0.5 && air<mair && location==3){
             air+=(size*size*size);
             if(air>mair){
                 air=mair;
             }
         }
-        if(sysdix>0.5 && location==3 && air>0){
+        if(respiratorySystem >0.5 && location==3 && air>0){
             air=air-(size*size*size);
         }
-        else if(sysdix>0.5 && location!=3 && air<mair){
+        else if(respiratorySystem >0.5 && location!=3 && air<mair){
             air+=(size*size*size);
             if(air>mair){
                 air=mair;
@@ -825,232 +796,231 @@ public class Player extends RealObject
         if(location==3 && water2<mw || touchWater && water2<mw && location==1){
             water2=water2+drink;
             if(wt3<9){
-                stopp=1;
+                stopMoveForward =1;
             }
         }
         
         if(water2>mw){
             water2=mw;
         }
-        if(water2>0 && water2<=mw){
+        if(water2>0){
             wt3=water2/(mw/10);
         }
     }
     
     public void eat(){
-        if(getX()>foodx-10 && getX()<foodx+10 && getY()>foody-10 && getY()<foody+10 && getObjectsInRange(radius, Plant.class).size()==0){
-            foodx=0;
-            foody=0;
+        if(getX()> foodX -10 && getX()< foodX +10 && getY()> foodY -10 && getY()< foodY +10 && getObjectsInRange(radius, Plant.class).size()==0){
+            foodX =0;
+            foodY =0;
         }
-        if(tPl!=null && xich<0.7 && sit1<msit && location==2 || tPl!=null && xich<0.7 && sit1<msit && location==tPl.location){
-            sit1=sit1+(int)(eat*(1-xich));
+        if(tPl!=null && predation <0.7 && sit1< maxSatiety && location==2 || tPl!=null && predation <0.7 && sit1< maxSatiety && location==tPl.location){
+            sit1=sit1+(int)(eat*(1- predation));
             tPl.satiety -=eat;
             xp-=tPl.poison;
             if(sit2<9){
-                stopp=1;
+                stopMoveForward =1;
             }
         }
         
-        if(tFood!=null && xich>0.3 && sit1<msit && location==1){
+        if(tFood!=null && predation >0.3 && sit1< maxSatiety && location==1){
             sit1=sit1+eat;
             tFood.satiety -=eat;
             if(sit2<9){
-                stopp=1;
+                stopMoveForward =1;
             }
         }
         
-        if(sit1>msit){
-            sit1=msit;
+        if(sit1> maxSatiety){
+            sit1= maxSatiety;
         }
-        if(sit1>0 && sit1<=msit){
-            sit2=sit1/(msit/10);
+        if(sit1>0){
+            sit2=sit1/(maxSatiety /10);
         }
         
     }
     
     public void attack(){
-        if(xich>0.3 && tEgg!=null && tEgg.teamNum!=teamNum){
-            if(sit1<msit && tEgg.image.getWidth()<=image.getWidth() && location==tEgg.location){
+        if(predation >0.3 && tEgg!=null && tEgg.teamNum!=teamNum){
+            if(sit1< maxSatiety && tEgg.image.getWidth()<=image.getWidth() && location==tEgg.location){
                 sit1=sit1+(tEgg.image.getWidth()*35000);
                 getWorld().removeObject(tEgg);
                 tEgg=null;
             }
-            else if(tEgg!=null && sit1<msit && tEgg.image.getWidth()<=image.getWidth() && location==1 && tEgg.location==3){
+            else if(tEgg!=null && sit1< maxSatiety && tEgg.image.getWidth()<=image.getWidth() && location==1 && tEgg.location==3){
                 dive1();
             }
-            else if(tEgg!=null && sit1<msit && tEgg.image.getWidth()<=image.getWidth() && location==3 && tEgg.location==1){
+            else if(tEgg!=null && sit1< maxSatiety && tEgg.image.getWidth()<=image.getWidth() && location==3 && tEgg.location==1){
                 up();
             }
         }
         else{
-            defance();
+            defense();
         }
     }
     
-    public void defance(){
-        if(xp<mxp && xichan!=null && location==xichan.location){
-            xichan.hp -=(damage+poisondam);
+    public void defense(){
+        if(xp<mxp && hunter !=null && location== hunter.location){
+            hunter.hp -=(damage+ poisonDam);
         }
-        if(xp<mxp && xichpl!=null && location==xichpl.location){
-            xichpl.hp -=(damage+poisondam);
+        if(xp<mxp && hunterPlant !=null && location== hunterPlant.location){
+            hunterPlant.hp -=(damage+ poisonDam);
         }
-        xichan=null;
-        xichpl=null;
+        hunter =null;
+        hunterPlant =null;
     }
     
-    int rotspeed;
+    int rotSpeed;
     public void move(){
-        if(moven>0 && dei==0){
-            if(location!=3 && pspeed>=speed && pspeed>=wspeed && sit2>5 && wt3>5 && stopf==0 || location==0){
-                move(-pspeed);
-                sit1=sit1-(pspeed*size);
-                water2=water2-(pspeed*size);
+        if(moveBack >0 && dei==0){
+            if(location!=3 && flySpeed >=speed && flySpeed >= waterSpeed && sit2>5 && wt3>5 && stopFly ==0 || location==0){
+                move(-flySpeed);
+                sit1=sit1-(flySpeed *size);
+                water2=water2-(flySpeed *size);
                 fly=1;
             }
             else if(!touchWater){
                 move(-speed);
             }
-            else if(touchWater){
-                move(-wspeed);
+            else{
+                move(-waterSpeed);
             }
-            if(moven>0){
-                moven=moven-1;
-            }
-            dei=1;
-        }
-        if(fly==1){
-            rotspeed=pspeed*15;
-        }
-        else if(!touchWater){
-            rotspeed=speed*15;
-        }
-        else if(touchWater){
-            rotspeed=wspeed*15;
-        }
-        if(r-(rotspeed-1)>r1|| r1>r+(rotspeed-1)){
-            if(turntor1==1 && r1>r){
-                r=r+rotspeed;
-                if(r1-r>180){
-                    r=r-(rotspeed*2);
-                }
-                setRotation(r);
-                sit1=sit1-rotspeed;
-                r=getRotation();
-            }
-            if(turntor1==1 && r1<r){
-                r=r-rotspeed;
-                if(r-r1>180){
-                  r=r+(rotspeed*2);  
-                }
-                setRotation(r);
-                sit1=sit1-rotspeed;
-                r=getRotation();
-            }
-            if(r-(rotspeed-1)<=r1 || r1<=r+(rotspeed-1)){
-                r=r1;
-                turntor1=0;
-            }
-        }
-        if(dei==0 && stopp==0){
-            if(location!=3 && pspeed>=speed && pspeed>=wspeed && sit2>5 && wt3>5 && stopf==0 || location==0){
-                move(pspeed);
-                sit1=sit1-(pspeed*size);
-                water2=water2-(pspeed*size);
-                fly=1;
-            }
-            else if(!touchWater){
-                move(speed);
-            }
-            else if(touchWater){
-                move(wspeed);
-            }
-            dei=1;
-        }
-        stopp=0;
-        stopf=0;
-        dei=0;
-        inHole();
-    }
-    
-    public void move1(){
-        if(moven>0 && dei==0){
-            if(location!=3 && pspeed>=speed && pspeed>=wspeed && sit2>5 && wt3>5 && stopf==0 || location==0){
-                move(-pspeed);
-                sit1=sit1-(pspeed*size);
-                water2=water2-(pspeed*size);
-                fly=1;
-            }
-            else if(!touchWater){
-                move(-speed);
-            }
-            else if(touchWater){
-                move(-wspeed);
-            }
-            if(moven>0){
-                moven=moven-1;
+            if(moveBack >0){
+                moveBack = moveBack -1;
             }
             dei=1;
         }
         if(fly==1){
-            rotspeed=pspeed*15;
+            rotSpeed = flySpeed *15;
         }
         else if(!touchWater){
-            rotspeed=speed*15;
+            rotSpeed =speed*15;
         }
-        else if(touchWater){
-            rotspeed=wspeed*15;
+        else{
+            rotSpeed = waterSpeed *15;
         }
-        r=getRotation();
-        turnTowards(MyWorld.fm.x,MyWorld.fm.y);
-        r1=getRotation();
-        setRotation(r);
-        if(r-(rotspeed-1)>r1|| r1>r+(rotspeed-1)){
-            if(r1>r){
-                r=r+rotspeed;
+        if(r-(rotSpeed -1)>r1|| r1>r+(rotSpeed -1)){
+            if(turnToR1 ==1 && r1>r){
+                r=r+ rotSpeed;
                 if(r1-r>180){
-                    r=r-(rotspeed*2);
+                    r=r-(rotSpeed *2);
                 }
                 setRotation(r);
-                sit1=sit1-rotspeed;
+                sit1=sit1- rotSpeed;
                 r=getRotation();
             }
-            if(r1<r){
-                r=r-rotspeed;
+            if(turnToR1 ==1 && r1<r){
+                r=r- rotSpeed;
                 if(r-r1>180){
-                  r=r+(rotspeed*2);  
+                  r=r+(rotSpeed *2);
                 }
                 setRotation(r);
-                sit1=sit1-rotspeed;
+                sit1=sit1- rotSpeed;
                 r=getRotation();
             }
-            if(r-(rotspeed-1)<r1 || r1<=r+(rotspeed-1)){
+            if(r-(rotSpeed -1)<=r1 || r1<=r+(rotSpeed -1)){
                 r=r1;
+                turnToR1 =0;
             }
         }
-        if(Math.sqrt(Math.pow(getX()-MyWorld.fm.x,2)+Math.pow(getY()-MyWorld.fm.y,2))>30 && stopp==0){
-            if(location!=3 && pspeed>=speed && pspeed>=wspeed && sit2>5 && wt3>5 && stopf==0 || location==0){
-                move(pspeed);
-                sit1=sit1-(pspeed*size);
-                water2=water2-(pspeed*size);
+        if(dei==0 && stopMoveForward ==0){
+            if(location!=3 && flySpeed >=speed && flySpeed >= waterSpeed && sit2>5 && wt3>5 && stopFly ==0 || location==0){
+                move(flySpeed);
+                sit1=sit1-(flySpeed *size);
+                water2=water2-(flySpeed *size);
                 fly=1;
             }
             else if(!touchWater){
                 move(speed);
             }
             else{
-                move(wspeed);
+                move(waterSpeed);
             }
         }
-        stopp=0;
+        stopMoveForward =0;
+        stopFly =0;
+        dei=0;
+        inHole();
+    }
+    
+    public void move1(){
+        if(moveBack >0 && dei==0){
+            if(location!=3 && flySpeed >=speed && flySpeed >= waterSpeed && sit2>5 && wt3>5 && stopFly ==0 || location==0){
+                move(-flySpeed);
+                sit1=sit1-(flySpeed *size);
+                water2=water2-(flySpeed *size);
+                fly=1;
+            }
+            else if(!touchWater){
+                move(-speed);
+            }
+            else{
+                move(-waterSpeed);
+            }
+            if(moveBack >0){
+                moveBack = moveBack -1;
+            }
+            dei=1;
+        }
+        if(fly==1){
+            rotSpeed = flySpeed *15;
+        }
+        else if(!touchWater){
+            rotSpeed =speed*15;
+        }
+        else{
+            rotSpeed = waterSpeed *15;
+        }
+        r=getRotation();
+        turnTowards(MyWorld.fm.x,MyWorld.fm.y);
+        r1=getRotation();
+        setRotation(r);
+        if(r-(rotSpeed -1)>r1|| r1>r+(rotSpeed -1)){
+            if(r1>r){
+                r=r+ rotSpeed;
+                if(r1-r>180){
+                    r=r-(rotSpeed *2);
+                }
+                setRotation(r);
+                sit1=sit1- rotSpeed;
+                r=getRotation();
+            }
+            if(r1<r){
+                r=r- rotSpeed;
+                if(r-r1>180){
+                  r=r+(rotSpeed *2);
+                }
+                setRotation(r);
+                sit1=sit1- rotSpeed;
+                r=getRotation();
+            }
+            if(r-(rotSpeed -1)<r1 || r1<=r+(rotSpeed -1)){
+                r=r1;
+            }
+        }
+        if(Math.sqrt(Math.pow(getX()-MyWorld.fm.x,2)+Math.pow(getY()-MyWorld.fm.y,2))>30 && stopMoveForward ==0){
+            if(location!=3 && flySpeed >=speed && flySpeed >= waterSpeed && sit2>5 && wt3>5 && stopFly ==0 || location==0){
+                move(flySpeed);
+                sit1=sit1-(flySpeed *size);
+                water2=water2-(flySpeed *size);
+                fly=1;
+            }
+            else if(!touchWater){
+                move(speed);
+            }
+            else{
+                move(waterSpeed);
+            }
+        }
+        stopMoveForward =0;
         inHole();
     }
     public void moveBack(){
-        if(touchWater && fly==0 && wspeed==0 && !inHole || inHole && !touchHR && location==1){
+        if(touchWater && fly==0 && waterSpeed ==0 && !inHole || inHole && !touchHR && location==1){
             drink();
             move(-speed);
         }
         else if(!touchWater && fly==0 && !inHole && speed==0 || inHole && !touchHR && location==3){
-            move(-wspeed);
+            move(-waterSpeed);
         }
         
         tPl=(Plant)getOneIntersectingObject(Plant.class);
@@ -1075,7 +1045,7 @@ public class Player extends RealObject
     public void dive1(){
         if(touchWater && location==1){
             location=3;
-            if(air<=0 && sysdix<=0.5){
+            if(air<=0 && respiratorySystem <=0.5){
                 air=1;
             }
         }
@@ -1083,7 +1053,7 @@ public class Player extends RealObject
     public void up(){
         if(location==3 && !inHole){
             location=1;
-            if(air<=0 && sysdix>0.5){
+            if(air<=0 && respiratorySystem >0.5){
                 air=1;
             }
         }
@@ -1091,10 +1061,10 @@ public class Player extends RealObject
     
     public void dive(){
         touchWater();
-        if(sysdix<=0.5 && location==1 || tPl!=null && xich<0.7 && sit1<msit && location==1 && tPl.location==3){
+        if(respiratorySystem <=0.5 && location==1 || tPl!=null && predation <0.7 && sit1< maxSatiety && location==1 && tPl.location==3){
             dive1();
         }
-        if(tFood!=null && xich>0.3 && sit1<msit && location==3 || !touchWater && location==3 || air<=1 && location==3 && sysdix>0.5 || tPl!=null && xich<0.7 && sit2<7 && location==3 && tPl.location==1){
+        if(tFood!=null && predation >0.3 && sit1< maxSatiety && location==3 || !touchWater && location==3 || air<=1 && location==3 && respiratorySystem >0.5 || tPl!=null && predation <0.7 && sit2<7 && location==3 && tPl.location==1){
             up();
         }
     }
@@ -1104,14 +1074,14 @@ public class Player extends RealObject
     int mp;
     public void diveForPl(){
         mi=Greenfoot.getMouseInfo();
-        if(sysdix<=0.5 && location==1
+        if(respiratorySystem <=0.5 && location==1
         || Lobby.buttons.get(7).equals("лкм") && mi!=null && Greenfoot.mousePressed(null) && mi.getButton()==3 && dive==0 && mp==0
         || Greenfoot.isKeyDown(Lobby.buttons.get(7)) && dive==0 && mp==0){
             dive1();
             dive=1;
             mp=1;
         }
-        if(air<=0 && location==3 && sysdix>0.5 || !touchWater && location==3
+        if(air<=0 && location==3 && respiratorySystem >0.5 || !touchWater && location==3
         || Lobby.buttons.get(7).equals("лкм") && mi!=null && Greenfoot.mousePressed(null) && mi.getButton()==3 && dive==1 && mp==0
         || Greenfoot.isKeyDown(Lobby.buttons.get(7)) && dive==0 && mp==0){
             up();
@@ -1124,8 +1094,8 @@ public class Player extends RealObject
     }
     
     public void climb(){
-        if(canclimb>0.5 && location==1){
-            if(tPl!=null && tPl.location==1 && tPl.maxSize >size && location==1){
+        if(climbSkill >0.5 && location==1){
+            if(tPl!=null && tPl.location==1 && tPl.maxSize >size){
                 location=2;
             }
         }
@@ -1137,33 +1107,33 @@ public class Player extends RealObject
     public void FlyOrNo(){
         if(sit2<=5 && fly==1 || wt3<=5 && fly==1){
             fly=0;
-            stopf=1;
+            stopFly =1;
         }
-        if(tPl!=null && xich<0.7 && sit2<7 && location==0){
+        if(tPl!=null && predation <0.7 && sit2<7 && location==0){
             fly=0;
-            stopf=1;
+            stopFly =1;
         }
-        if(tAn!=null && xich>0.3 && tAn.teamNum!=teamNum){
+        if(tAn!=null && predation >0.3 && tAn.teamNum!=teamNum){
             if(sit2<7 && tAn.location==1){
                 fly=0;
-                stopf=1;
+                stopFly =1;
             }
         }
-        if(flycof>1 && fly==0){
-            flycof-=0.05;
+        if(flyCof >1 && fly==0){
+            flyCof -=0.05;
         }
         if(fly==1){
-            if(flycof>=1 && flycof<2){
-                flycof+=0.05;
+            if(flyCof >=1 && flyCof <2){
+                flyCof +=0.05;
             }
-            else if(flycof<1){
-                flycof=1;
+            else if(flyCof <1){
+                flyCof =1;
             }
-            if(flycof>2){
-                flycof=2;
+            if(flyCof >2){
+                flyCof =2;
             }
         }
-        if(fly==0 && flycof==1 && location==0){
+        if(fly==0 && flyCof ==1 && location==0){
             location=1;
         }
         else if(fly==1){
@@ -1181,7 +1151,7 @@ public class Player extends RealObject
         if(air<=0){
             xp--;
         }
-        if(needt-10>tg || needt+10<tg){
+        if(needTemp -10>tg || needTemp +10<tg){
             xp--;
         }
         if(xp<=0){
@@ -1191,24 +1161,24 @@ public class Player extends RealObject
         } 
     }
     public ArrayList<Water> getWList(){
-        return (ArrayList<Water>)getObjectsInRange(MyWorld.fon1.w, Water.class);
+        return (ArrayList<Water>)getObjectsInRange(Fon.w, Water.class);
     }
     public ArrayList<WaterRadius> getWRList(){
-        return (ArrayList<WaterRadius>)getObjectsInRange(MyWorld.fon1.w, WaterRadius.class);
+        return (ArrayList<WaterRadius>)getObjectsInRange(Fon.w, WaterRadius.class);
     }
     public ArrayList<Animal> getAList(){
-        return (ArrayList<Animal>)getObjectsInRange(MyWorld.fon1.w, Animal.class);
+        return (ArrayList<Animal>)getObjectsInRange(Fon.w, Animal.class);
     }
     public ArrayList<Plant> getPList(){
-        return (ArrayList<Plant>)getObjectsInRange(MyWorld.fon1.w, Plant.class);
+        return (ArrayList<Plant>)getObjectsInRange(Fon.w, Plant.class);
     }
     public ArrayList<DieAnimal> getDAList(){
-        return (ArrayList<DieAnimal>)getObjectsInRange(MyWorld.fon1.w, DieAnimal.class);
+        return (ArrayList<DieAnimal>)getObjectsInRange(Fon.w, DieAnimal.class);
     }
     public ArrayList<Hole> getHList(){
-        return (ArrayList<Hole>)getObjectsInRange(MyWorld.fon1.w, Hole.class);
+        return (ArrayList<Hole>)getObjectsInRange(Fon.w, Hole.class);
     }
     public ArrayList<HoleRoom> getHRList(){
-        return (ArrayList<HoleRoom>)getObjectsInRange(MyWorld.fon1.w, HoleRoom.class);
+        return (ArrayList<HoleRoom>)getObjectsInRange(Fon.w, HoleRoom.class);
     }
 }
