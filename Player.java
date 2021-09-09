@@ -51,7 +51,9 @@ public class Player extends RealObject
         setImage(image);
     }
     int btoOrNo;
+    int omnivorous;
     int myAn;
+    int predators;
     
     int timer1;
     
@@ -752,7 +754,7 @@ public class Player extends RealObject
         }
         else if(SopInR!=null && predation <=0.3 && SopInR.predation >0.3){
             r=getRotation();
-            turnTowards(SopInR.x, SopInR.y);
+            turnTowards(SopInR.getX(), SopInR.getY());
             if(r1>=180){
                 r1=getRotation()-(180-Greenfoot.getRandomNumber(90));
             }
