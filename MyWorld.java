@@ -214,27 +214,42 @@ public class MyWorld extends World
                 an1=pl.getAList().get(i);
                 eye=new GreenfootImage("eye.png");
                 int eyeSize;
-                eyeSize=(int)(an1.size*0.85*Fon.cof);
+                eyeSize=(int)(an1.animalSize *0.85*Fon.cof);
                 if(eyeSize<1){
                     eyeSize=1;
                 }
                 eye.scale(eyeSize,eyeSize);
-                eye.rotate(an1.r);
+                eye.rotate(an1.animalRotation);
                 int t;
-                if(an1.t4>(int)(255*an1.maskCof)){
-                    t=an1.t4;
+                if(an1.transparent >(int)(255*an1.maskCof)){
+                    t=an1.transparent;
                 }
                 else{
                     t=(int)(255*(1-an1.maskCof));
                 }
                 eye.setTransparency(t);
-                im.drawImage(eye, (an1.size%2)*(int)((Fon.cof/2)+0.5)+(int)(0.5+(an1.getX()-pl.getX()+(int)(600/Fon.cof))*Fon.cof)-eye.getWidth()/2, (an1.size%2)*(int)((Fon.cof/2)+0.5)+(int)(0.5+(an1.getY()-pl.getY()+(int)(350/Fon.cof))*Fon.cof)-eye.getHeight()/2);
+                im.drawImage(eye, (an1.animalSize %2)*(int)((Fon.cof/2)+0.5)+(int)(0.5+(an1.getX()-pl.getX()+(int)(600/Fon.cof))*Fon.cof)-eye.getWidth()/2, (an1.animalSize %2)*(int)((Fon.cof/2)+0.5)+(int)(0.5+(an1.getY()-pl.getY()+(int)(350/Fon.cof))*Fon.cof)-eye.getHeight()/2);
             }
         }
         fon1.setImage1(im,image);
     }
 
+    int chartTimer;
     public void act(){
+        chartTimer ++;
+        if(chartTimer % 500 == 0){
+            fon1.chart.addValue(true , 1, chartTimer);
+            fon1.chart.addValue(false , 1, plants);
+
+            fon1.chart.addValue(false , 2, Math.min(200, pl.myAn - pl.omnivorous));
+            fon1.chart.addValue(true , 2, chartTimer);
+
+            fon1.chart.addValue(false , 3, pl.omnivorous);
+            fon1.chart.addValue(true , 3, chartTimer);
+
+            fon1.chart.addValue(false , 4, pl.predators);
+            fon1.chart.addValue(true , 4, chartTimer);
+        }
         getFPS();
 
         updateFon();

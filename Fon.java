@@ -27,6 +27,8 @@ public class Fon extends Actor
     
     GreenfootImage think=new GreenfootImage("think.png");
     int winTimer;
+
+    Chart chart = new Chart(4, 1200, 200);
     public Fon(GreenfootImage im1){
         setImage(im1);
     }
@@ -65,7 +67,7 @@ public class Fon extends Actor
             image.drawImage(drawBar(100,20,MyWorld.plants,50,Color.WHITE,Color.GREEN,"растения"),0,70);
         }
         else{
-            image.drawImage(drawBar(100,20,MyWorld.pl.myAn,200,Color.WHITE,new Color(0,255,255,255),"животные"),0,10);
+            image.drawImage(drawBar(100,20,MyWorld.pl.myAn + MyWorld.pl.predators,200,Color.WHITE,new Color(0,255,255,255),"животные"),0,10);
             image.drawImage(drawBar(100,20,MyWorld.plants,200,Color.WHITE,Color.GREEN,"растения"),0,40);
         }
 
@@ -144,16 +146,16 @@ public class Fon extends Actor
             image.drawImage(drawBar(100,20,MyWorld.observedAnimal.satiety,MyWorld.observedAnimal.maxSatiety,new Color(255,242,0),new Color(255,127,39),"еда"),1100, 40);
             image.drawImage(drawBar(100,20,MyWorld.observedAnimal.hp,MyWorld.observedAnimal.maxHp,new Color(181,230,29),new Color(34,177,76),"здоровье"),1100, 70);
             image.drawImage(drawBar(100,20,MyWorld.observedAnimal.air,MyWorld.observedAnimal.maxAir,Color.WHITE,new Color(205,205,205),"О2"), 1100,100);
-            unLab.setValue("Temp:"+MyWorld.observedAnimal.creatureTemp);
-            if(MyWorld.observedAnimal.creatureTemp >36){
-                red=Math.abs(MyWorld.observedAnimal.creatureTemp -36)*20;
+            unLab.setValue("Temp:"+MyWorld.observedAnimal.animalTemp);
+            if(MyWorld.observedAnimal.animalTemp >36){
+                red=Math.abs(MyWorld.observedAnimal.animalTemp -36)*20;
                 if(red>255){
                     red=255;
                 }
                 unLab.setFillColor(new Color(red, 255-red/2,0,255));
             }
             else{
-                blue=Math.abs(MyWorld.observedAnimal.creatureTemp -36)*20;
+                blue=Math.abs(MyWorld.observedAnimal.animalTemp -36)*20;
                 if(blue>255){
                     blue=255;
                 }
@@ -251,6 +253,9 @@ public class Fon extends Actor
             unLab.setValue(Lobby.scenario.get(Lobby.slide));
             image.drawImage(unLab.updateImage2(),600-unLab.updateImage2().getWidth()/2,100);
         }
+
+        chart.updateImage();
+        image.drawImage(chart.getImage(), 0, 500);
         setImage(image);
     }
     public void act() 
