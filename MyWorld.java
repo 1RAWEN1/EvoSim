@@ -239,15 +239,15 @@ public class MyWorld extends World
         chartTimer ++;
         if(chartTimer % 500 == 0){
             fon1.chart.addValue(true , 1, chartTimer);
-            fon1.chart.addValue(false , 1, plants);
+            fon1.chart.addValue(false , 1, Math.min(200, plants));
 
             fon1.chart.addValue(false , 2, Math.min(200, pl.myAn - pl.omnivorous));
             fon1.chart.addValue(true , 2, chartTimer);
 
-            fon1.chart.addValue(false , 3, pl.omnivorous);
+            fon1.chart.addValue(false , 3, Math.min(200, pl.omnivorous));
             fon1.chart.addValue(true , 3, chartTimer);
 
-            fon1.chart.addValue(false , 4, pl.predators);
+            fon1.chart.addValue(false , 4, Math.min(200, pl.predators));
             fon1.chart.addValue(true , 4, chartTimer);
         }
         getFPS();

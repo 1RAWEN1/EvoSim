@@ -538,7 +538,7 @@ public class Plant extends RealObject
     public void photosynthesis(){
         fEnergy = (int) (size * size * 5 * cof * (1 - predation));
         if(location != 2){
-            for(Plant p : getObjectsInRange(size / 2 + Math.max(20, (int) (rootLength * 50)), Plant.class)){
+            for(Plant p : getObjectsInRange(size / 2 + Math.max(10, (int) (rootLength * 50)), Plant.class)){
                 p.satiety -= (int) Math.pow(size, 3);
             }
         }
@@ -653,7 +653,7 @@ public class Plant extends RealObject
             turnToR1 =1;
         }
         else if(predation >0.3 && animal!=null && satietyValueForBar <7){
-            turnTowards(animal.x, animal.y);
+            turnTowards(animal.getX(), animal.getY());
             r1=getRotation();
             turnToR1 =1;
         }
@@ -663,7 +663,7 @@ public class Plant extends RealObject
             turnToR1 =1;
         }
         else if(predation <=0.3 && animal!=null && animal.predation <0.7){
-            turnTowards(animal.x, animal.y);
+            turnTowards(animal.getX(), animal.getY());
             if(r1>=180){
                 r1=getRotation() - 180;
             }
@@ -712,7 +712,7 @@ public class Plant extends RealObject
         if(animal != null && predation > 0.3 && satietyValueForBar < 7){
             extraction = animal;
             if(extraction.location == location){
-                extraction.hp -= Math.max((damage + poison) - (int) (extraction.size * extraction.protection), 0);
+                extraction.hp -= Math.max((damage + poison) - (int) (extraction.animalSize * extraction.protection), 0);
                 extraction.hunterPlant = this;
             }
         }
@@ -771,15 +771,15 @@ public class Plant extends RealObject
             }
         }
         if(action ==0 && stopMoveForward ==0 && !inHole || inHole && turned ==0 && action ==0 && stopMoveForward ==0){
-            if(!touchWater && !inHole || location==1){
-                doubleMove(speed* size);
-                satiety -=(int)(Math.pow(speed, 2) * size);
-                water -=(int)(Math.pow(speed, 2) * size);
-            }
-            else if(touchWater && !inHole || location==3){
+            if(touchWater && !inHole && location == 1 || location==3){
                 doubleMove(waterSpeed * size);
                 satiety -=(int)(Math.pow(waterSpeed, 2) * size);
                 water -=(int)(Math.pow(waterSpeed, 2) * size);
+            }
+            else{
+                doubleMove(speed* size);
+                satiety -=(int)(Math.pow(speed, 2) * size);
+                water -=(int)(Math.pow(speed, 2) * size);
             }
         }
         r %= 360;
