@@ -13,7 +13,7 @@ public class AnimalWorld extends World
      * Constructor for objects of class AnimalWorld.
      * 
      */
-    static int par;
+    static int selectedParameter;
     
     public AnimalWorld()
     {    
@@ -31,7 +31,7 @@ public class AnimalWorld extends World
     {
         DecorAnimal myAnimal = new DecorAnimal(400);
         addObject(myAnimal,250,350);
-        lab=new Label(Lobby.strVal.get(0),30);
+        lab=new Label(Lobby.descriptionOfParameters.get(0),30);
         addObject(lab,800,300);
         Arrow arrow = new Arrow(true);
         addObject(arrow,800,230);
@@ -40,6 +40,6 @@ public class AnimalWorld extends World
     }
     
     public void act(){
-        lab.setValue(Lobby.strVal.get(par));
+        lab.setValue(Lobby.descriptionOfParameters.get(selectedParameter));
     }
 }

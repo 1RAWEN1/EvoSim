@@ -1,8 +1,8 @@
 #BlueJ class context
 comment0.target=Egg
 comment0.text=\r\n\ Write\ a\ description\ of\ class\ Egg\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
-comment1.params=par1\ onground\ pl\ tn\ inHole\ movecof\ evolve
-comment1.target=Egg(java.util.ArrayList,\ int,\ Player,\ int,\ boolean,\ double,\ boolean)
+comment1.params=dna1\ location\ pl\ tn\ inHole\ moveCof
+comment1.target=Egg(java.util.ArrayList,\ int,\ Player,\ int,\ boolean,\ double)
 comment2.params=s\ t
 comment2.target=void\ updateImage(int,\ int)
 comment3.params=

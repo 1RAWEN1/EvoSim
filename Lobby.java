@@ -11,15 +11,15 @@ import java.io.*;
 public class Lobby extends World
 {
 
-    static ArrayList<String> b=new ArrayList<String>();
-    public static ArrayList<String> strVal=new ArrayList<String>();
+    static ArrayList<String> buttons =new ArrayList<>();
+    public static ArrayList<String> descriptionOfParameters =new ArrayList<>();
     static boolean pressStart=false;
-    static ArrayList<String> scenario=new ArrayList<String>();
+    static ArrayList<String> scenario=new ArrayList<>();
     /**
      * Constructor for objects of class Lobby.
      * 
      */
-    int lindex;
+    int lIndex;
     
     static int slide=0;
     static boolean train=true;
@@ -29,41 +29,41 @@ public class Lobby extends World
         super(1200, 700, 1); 
         pressStart=false;
         Help.mInArea=false;
-        if(strVal.size()==0){
-            strVal.add("Запас воздуха\nвлияет на время, которое животное может пробыть без кислорода");
-            strVal.add("Система дыхания\nлегкие или жабры?");
-            strVal.add("Умение лазать\nживотное сможет бегать по деревьям");
-            strVal.add("Анабиоз\nв непригодной температуре сможет дольше быть в состоянии сна");
-            strVal.add("Живорождение\nживотное будет рождаться сразу или в яйце?");
-            strVal.add("Возраст для взросления\nвозраст, при котором показатели животного достигают максимума");
-            strVal.add("Скорость полета\nскорость в воздухе");
-            strVal.add("Урон от яда\nдополнительный урон");
-            strVal.add("Маскировка\nживотное будет сложнее заметить");
-            strVal.add("Запас воды\nживотное сможет дольше обходится без жидкости");
-            strVal.add("Время между размножениями\nживотные будут быстрее увеличивать численность");
-            strVal.add("Защита\nживотное будет получать меньше урона");
-            strVal.add("Скорость в воде\nскорость плавания");
-            strVal.add("Личинка\nживотные смогут появлятся на большом расстоянии от родителей");
-            strVal.add("Максимальный возраст\nвремя жизни");
-            strVal.add("Потомки\nколичество рожденных животных за один сезон");
-            strVal.add("Скорость\nскорость на земле");
-            strVal.add("Радиус обзора\nрасстояние видиния животного");
-            strVal.add("Размер\nразмер животного");
-            strVal.add("Мех\nживотное сможет выдерживать большую разницу температур");
-            strVal.add("Хищник\nрастительно-, все- ядное или хищник?");
-            strVal.add("Запас жира\nживотное сможет дольше обходится без еды");
-            strVal.add("Скорость копания\nсможет быстрее копать норки");
+        if(descriptionOfParameters.size()==0){
+            descriptionOfParameters.add("Запас воздуха\nвлияет на время, которое животное может пробыть без кислорода");
+            descriptionOfParameters.add("Система дыхания\nлегкие или жабры?");
+            descriptionOfParameters.add("Умение лазать\nживотное сможет бегать по деревьям");
+            descriptionOfParameters.add("Анабиоз\nв непригодной температуре сможет дольше быть в состоянии сна");
+            descriptionOfParameters.add("Живорождение\nживотное будет рождаться сразу или в яйце?");
+            descriptionOfParameters.add("Возраст для взросления\nвозраст, при котором показатели животного достигают максимума");
+            descriptionOfParameters.add("Скорость полета\nскорость в воздухе");
+            descriptionOfParameters.add("Урон от яда\nдополнительный урон");
+            descriptionOfParameters.add("Маскировка\nживотное будет сложнее заметить");
+            descriptionOfParameters.add("Запас воды\nживотное сможет дольше обходится без жидкости");
+            descriptionOfParameters.add("Время между размножениями\nживотные будут быстрее увеличивать численность");
+            descriptionOfParameters.add("Защита\nживотное будет получать меньше урона");
+            descriptionOfParameters.add("Скорость в воде\nскорость плавания");
+            descriptionOfParameters.add("Личинка\nживотные смогут появлятся на большом расстоянии от родителей");
+            descriptionOfParameters.add("Максимальный возраст\nвремя жизни");
+            descriptionOfParameters.add("Потомки\nколичество рожденных животных за один сезон");
+            descriptionOfParameters.add("Скорость\nскорость на земле");
+            descriptionOfParameters.add("Радиус обзора\nрасстояние видиния животного");
+            descriptionOfParameters.add("Размер\nразмер животного");
+            descriptionOfParameters.add("Мех\nживотное сможет выдерживать большую разницу температур");
+            descriptionOfParameters.add("Хищник\nрастительно-, все- ядное или хищник?");
+            descriptionOfParameters.add("Запас жира\nживотное сможет дольше обходится без еды");
+            descriptionOfParameters.add("Скорость копания\nсможет быстрее копать норки");
         }
         
-        if(b.size()==0){
-            b.add("E");
-            b.add("Q");
-            b.add("1");
-            b.add("2");
-            b.add("3");
-            b.add("=");
-            b.add("-");
-            b.add("лкм");
+        if(buttons.size()==0){
+            buttons.add("E");
+            buttons.add("Q");
+            buttons.add("1");
+            buttons.add("2");
+            buttons.add("3");
+            buttons.add("=");
+            buttons.add("-");
+            buttons.add("лкм");
         }
         
         if(scenario.size()==0){
@@ -78,13 +78,13 @@ public class Lobby extends World
             scenario.add("Для победы необходимо, чтобы именно твои животные первыми достигли численности 30. Удачи!");
             for(int i=0;i<scenario.size();i++){
                 String s=scenario.get(i);
-                lindex=getWidth()/15;
+                lIndex =getWidth()/15;
                 for(int i1=0;i1<s.length();i1++){
-                    if(i1>=lindex && s.charAt(i1)==' '){
+                    if(i1>= lIndex && s.charAt(i1)==' '){
                         String s1=s.substring(0,i1);
-                        String s2=s.substring(i1,s.length());
+                        String s2=s.substring(i1);
                         s=s1+"\n"+s2;
-                        lindex+=getWidth()/15;
+                        lIndex +=getWidth()/15;
                         scenario.set(i,s);
                     }
                 }

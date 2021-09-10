@@ -38,7 +38,7 @@ public class HoleRoom extends RealObject
     public void updateImage(){
         im=new GreenfootImage(size,size);
         im.clear();
-        if(MyWorld.plmode==0){
+        if(MyWorld.plMode ==0){
             im.setColor(new Color(132,102,47,255));
             im.fillOval(0,0,size-1,size-1);
         }

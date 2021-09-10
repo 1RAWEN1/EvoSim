@@ -41,7 +41,7 @@ public class Counter extends Actor
     
     public Counter(int num)
     {
-        this(Lobby.b.get(num),num);
+        this(Lobby.buttons.get(num),num);
     }
 
     /**
@@ -91,7 +91,7 @@ public class Counter extends Actor
             String k=Greenfoot.getKey();
             //MouseInfo mi=Greenfoot.getMouseInfo();
             if(k!=null){
-                Lobby.b.set(num,k);
+                Lobby.buttons.set(num,k);
                 mpress=false;
             }
             /*else if(Greenfoot.mousePressed(null) && mi.getButton()==1){
@@ -106,8 +106,8 @@ public class Counter extends Actor
             }*/
         }
         
-        if(Lobby.b.get(num)!=null){
-            setPrefix(Lobby.b.get(num));
+        if(Lobby.buttons.get(num)!=null){
+            setPrefix(Lobby.buttons.get(num));
         }
         else{
             setPrefix("");

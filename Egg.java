@@ -16,37 +16,32 @@ public class Egg extends RealObject
     int teamNum;
     Player myPl;
     int start;
-    double xich;
+    double predation;
     GreenfootImage image;
-    int size3;
-    int per;
+    int size;
+    int period;
     int tim;
     int timer;
-    int onground;
-    double livebirth;
-    double movecof;
-    boolean evolve;
-    ArrayList <Double> par=new ArrayList<Double>();
-    //ArrayList<Double> neyroneMass=new ArrayList<Double>();
-    //ArrayList<Double> f=new ArrayList<Double>();
-    public Egg(ArrayList<Double> par1, int onground, Player pl, int tn, boolean inHole, double movecof, boolean evolve){
-        //neyroneMass=(ArrayList<Double>) ns.clone();
-        //f=(ArrayList<Double>) f1.clone();
-        this.evolve=evolve;
-        this.movecof=movecof;
+    int location;
+    double liveBirth;
+    double moveCof;
+    ArrayList <Double> dna;
+    public Egg(ArrayList<Double> dna1, int location, Player pl, int tn, boolean inHole, double moveCof){
+        this.moveCof =moveCof;
+        this.inHole = inHole;
         teamNum=tn;
         myPl=pl;
-        this.onground=onground;
+        this.location=location;
         setRotation(Greenfoot.getRandomNumber(360));
-        par=(ArrayList<Double>) par1.clone();
-        livebirth=par1.get(4);
-        xich=par.get(20);
-        per=(int)(par.get(10)*1);
-        size3=(int)(par.get(18)*0.1);
-        if(size3<=0){
-            size3=1;
+        dna = new ArrayList<>(dna1);
+        liveBirth = dna.get(4);
+        predation = dna.get(20);
+        period = (int)(dna.get(10)*1);
+        size = (int)(dna.get(18)*0.1);
+        if(size < 1){
+            size = 1;
         }
-        updateImage(size3, 255);
+        updateImage(size, 255);
     }
     public void updateImage(int s, int t){
         image = new GreenfootImage(s, s);
@@ -57,14 +52,14 @@ public class Egg extends RealObject
     public void act() 
     {
         if(start==0){
-            if(isTouching(Plant.class) && onground==2){
-                updateImage((int)(size3*1.5), 255);
+            if(isTouching(Plant.class) && location==2){
+                updateImage((int)(size *1.5), 255);
             }
-            else if(onground==1){
-                updateImage(size3, 255);
+            else if(location==3 || inHole){
+                updateImage(size, 100);
             }
-            else if(onground==3){
-                updateImage(size3, 100);
+            else if(location==1){
+                updateImage(size, 255);
             }
             start=1;
         }
@@ -73,8 +68,9 @@ public class Egg extends RealObject
             timer=0;
             tim++;
         }
-        if(tim>=per){
-            Animal an=new Animal(par, myPl, teamNum, inHole, evolve);
+        if(tim>= period){
+            Animal an=new Animal(dna, myPl, teamNum, inHole
+                    , (int) (Math.pow(size, 3) * liveBirth), (int) (Math.pow(size, 3) * liveBirth));
             getWorld().addObject(an, getX(), getY());
             getWorld().removeObject(this);
         }// Add your action code here.

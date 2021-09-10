@@ -161,14 +161,14 @@ public class Label extends Actor
     
     public void act(){
         if(value.equals("По умолчанию") && Greenfoot.mousePressed(this)){
-            Lobby.b.set(0,"E");
-            Lobby.b.set(1,"Q");
-            Lobby.b.set(2,"1");
-            Lobby.b.set(3,"2");
-            Lobby.b.set(4,"3");
-            Lobby.b.set(5,"=");
-            Lobby.b.set(6,"-");
-            Lobby.b.set(7,"лкм");
+            Lobby.buttons.set(0,"E");
+            Lobby.buttons.set(1,"Q");
+            Lobby.buttons.set(2,"1");
+            Lobby.buttons.set(3,"2");
+            Lobby.buttons.set(4,"3");
+            Lobby.buttons.set(5,"=");
+            Lobby.buttons.set(6,"-");
+            Lobby.buttons.set(7,"лкм");
         }
     }
 }

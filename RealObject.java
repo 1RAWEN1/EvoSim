@@ -14,7 +14,7 @@ public class RealObject extends Actor
      */
     public void drawImage(){
         if(Math.sqrt(Math.pow(getX()-MyWorld.pl.getX(),2)+Math.pow(getY()-MyWorld.pl.getY(),2))
-        <(MyWorld.fon1.cof*700/4)+(getImage().getWidth()*1.2/2)){
+        <(Fon.cof*700/4)+(getImage().getWidth()*1.2/2)){
             MyWorld.fon.drawImage(getImage(), getX()-getImage().getWidth()/2, getY()-getImage().getHeight()/2);
         }
     }

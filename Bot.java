@@ -39,7 +39,7 @@ public class Bot extends RealObject
     double sogr2;
     public Bot(){
         par=new ArrayList<Double>();
-        for(int i=0;i<MyWorld.parsizean;i++){
+        for(int i=0;i<MyWorld.dnaSizeOfAnimal;i++){
             par.add(-1.0);
         }
         setRotation(Greenfoot.getRandomNumber(360));
@@ -258,7 +258,7 @@ public class Bot extends RealObject
     public void temp(){
         i=getObjectsInRange(radius,Animal.class).size();
         if(i>0){
-            sogr2=getObjectsInRange(radius,Animal.class).get(Greenfoot.getRandomNumber(i)).sogr;
+            sogr2=getObjectsInRange(radius,Animal.class).get(Greenfoot.getRandomNumber(i)).heatCof;
         }
         else if(i==0){
             sogr2=sogr;

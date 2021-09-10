@@ -23,7 +23,7 @@ public class MBut extends Actor
             if(status){
                 setImage("on.png");
             }
-            else if(!status){
+            else{
                 setImage("off.png");
             }
         }// Add your action code here.

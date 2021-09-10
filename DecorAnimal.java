@@ -19,10 +19,10 @@ public class DecorAnimal extends Actor
     int r;
     
     int r1;
-    int rotspeed=15;
-    int xbarier;
-    public DecorAnimal(int xbarier){
-        this.xbarier=xbarier;
+    int rotSpeed =15;
+    int xBarrier;
+    public DecorAnimal(int xBarrier){
+        this.xBarrier = xBarrier;
         updateImage();
     }
     public void updateImage(){
@@ -38,25 +38,25 @@ public class DecorAnimal extends Actor
     public void act() 
     {
         randomMove();
-        if(isAtEdge() || getX()>xbarier){
-            turnTowards(xbarier/2,getWorld().getHeight()/2);
+        if(isAtEdge() || getX()> xBarrier){
+            turnTowards(xBarrier /2,getWorld().getHeight()/2);
             r1=getRotation();
             setRotation(0);
         }
-        if(r-(rotspeed-1)>r1|| r1>r+(rotspeed-1)){
+        if(r-(rotSpeed -1)>r1|| r1>r+(rotSpeed -1)){
             if(r1>r){
-                r=r+rotspeed;
+                r=r+ rotSpeed;
                 if(r1-r>180){
-                    r=r-(rotspeed*2);
+                    r=r-(rotSpeed *2);
                 }
             }
             if(r1<r){
-                r=r-rotspeed;
+                r=r- rotSpeed;
                 if(r-r1>180){
-                    r=r+(rotspeed*2);  
+                    r=r+(rotSpeed *2);  
                 }
             }
-            if(r-(rotspeed-1)<=r1 || r1<r+(rotspeed-1)){
+            if(r-(rotSpeed -1)<=r1 || r1<r+(rotSpeed -1)){
                 r=r1;
             }
         }
