@@ -42,18 +42,19 @@ public class Water extends RealObject
             surroundingTemp =(int)(((double)(getX())/getWorld().getWidth()*MyWorld.temp + (double)(getY())/getWorld().getHeight()*MyWorld.temp)/2);
             cof=(double)(surroundingTemp)/ temp;
             if(cof<1){
-                cof /= 2;
-                cof = Math.max(cof, 0.5);
+                cof /= 4;
+                cof = Math.min(cof, 0.5);
                 size = (int)(1 / (surroundingTemp * 0.0001)) + Greenfoot.getRandomNumber((int)(getWorld().getWidth()*cof));
             }
             else if(cof>=1){
-                cof *= 2;
+                cof *= 4;
                 size = (int)(1 / (surroundingTemp * 0.0001)) + Greenfoot.getRandomNumber((int)(getWorld().getWidth()/cof));
             }
             if(size<1){
                 size=1;
             }
             image = new GreenfootImage(size, size);
+            cof=(double)(surroundingTemp)/ temp;
             if(cof<1){
                 green =(int)(250*(1-cof));
                 transparency =50;

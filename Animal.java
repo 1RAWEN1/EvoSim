@@ -129,7 +129,7 @@ public class Animal extends RealObject
 
     private final int foodCof = 7000;
     
-    public Animal(ArrayList<Double> dna, Player pl, int tn, boolean inHole, int food, int water){
+    public Animal(ArrayList<Double> dna1, Player pl, int tn, boolean inHole, int food, int water){
         this.inHole=inHole;
         if(this.inHole){
             ist=1;
@@ -138,7 +138,8 @@ public class Animal extends RealObject
         rotationToTarget = animalRotation;
         teamNum=tn;
         myPlayer =pl;
-        this.dna = new ArrayList<>(dna);
+        this.dna = new ArrayList<>(dna1);
+
         mutate();
 
         //create method initAnimalSize
@@ -681,9 +682,11 @@ public class Animal extends RealObject
         temp();
         
         if(!hibernation){
-            if(respiratorySystem<=0.5 && location==1){
+            if(respiratorySystem<=0.5 && location==1 && diveIn){
                 dive();
             }
+            diveIn = true;
+
             attack();
             if(isGrowUp() && starve < 0.1 && thirst < 0.1){
                 replicase();
@@ -1094,17 +1097,18 @@ public class Animal extends RealObject
             turnTowards(plant.getX(), plant.getY());
             rotationToTarget = getRotation();
             canTurn = true;
-        }
-        else if (canEatMeat() && enemyAnimal != null && MyWorld.plMode < 2 || enemyAnimal != null && canEatMeat() && MyWorld.plMode == 2 && minDistToExtraction > minDistToEnemy && isGrowUp() ||
-                enemyAnimal != null && canEatMeat() && MyWorld.plMode == 2 && food == null) {
-            turnTowards(enemyAnimal.getX(), enemyAnimal.getY());
-            rotationToTarget = getRotation();
-            canTurn = true;
-        } else if (canEatMeat() && food != null) {
+        }else if (canEatMeat() && food != null) {
             turnTowards(food.getX(), food.getY());
             rotationToTarget = getRotation();
             canTurn = true;
-        } else if (canEatMeat() && egg != null && egg.teamNum != teamNum) {
+        }
+        // && minDistToExtraction > minDistToEnemy && isGrowUp() ||
+        //                enemyAnimal != null && canEatMeat() && MyWorld.plMode == 2 && food == null
+        else if (canEatMeat() && enemyAnimal != null && MyWorld.plMode < 2 || enemyAnimal != null && canEatMeat() && MyWorld.plMode == 2) {
+            turnTowards(enemyAnimal.getX(), enemyAnimal.getY());
+            rotationToTarget = getRotation();
+            canTurn = true;
+        }  else if (canEatMeat() && egg != null && egg.teamNum != teamNum) {
             turnTowards(egg.getX(), egg.getY());
             rotationToTarget = getRotation();
             canTurn = true;
@@ -1206,16 +1210,6 @@ public class Animal extends RealObject
             }
         }
         if(touchingPl !=null && canEatPlant() && satiety < maxSatiety && location==2 || touchingPl !=null && canEatPlant() && satiety < maxSatiety && touchingPl.satiety > touchingPl.maxSatiety * (1 - ((double) animalSize / touchingPl.size))){
-            if(location == 3 && touchingPl.location == 1){
-                up();
-            }
-            else if(location == 1 && touchingPl.location == 3){
-                dive();
-            }
-            else if(location == 0){
-                stopFlying();
-            }
-
             if(location == 2 || location == touchingPl.location) {
                 touchingPl.satiety -= Math.min(eat, maxSatiety - satiety);
                 satiety += Math.min((int) (eat * (1 - predation)), maxSatiety - satiety);
@@ -1224,23 +1218,31 @@ public class Animal extends RealObject
                     isStopMoveForward = true;
                 }
             }
-        }
-        
-        if(touchingFood !=null && canEatMeat() && satiety < maxSatiety){
-            if(location == 3){
+            else if(location == 3 && touchingPl.location == 1){
                 up();
+            }
+            else if(location == 1 && touchingPl.location == 3){
+                dive();
             }
             else if(location == 0){
                 stopFlying();
             }
-
+        }
+        
+        if(touchingFood !=null && canEatMeat() && satiety < maxSatiety){
             if(location == 1) {
                 touchingFood.satiety -= Math.min(eat, maxSatiety - satiety);
                 satiety += Math.min((eat * predation), maxSatiety - satiety);
 
-                if (isHungry()) {
+                if (satiety < maxSatiety) {
                     isStopMoveForward = true;
                 }
+            }
+            else if(location == 3){
+                up();
+            }
+            else if(location == 0){
+                stopFlying();
             }
         }
 
@@ -1274,7 +1276,7 @@ public class Animal extends RealObject
                 pl.hunter =this;
             }
         }
-        else if(canEatMeat() && touchingAn !=null && touchingAn.teamNum!=teamNum){
+        else if(canEatMeat() && touchingAn !=null && touchingAn.predation < predation && touchingAn.teamNum!=teamNum){
             extraction = touchingAn;
             if(touchingAn.location==location){
                 extraction.hp -= Math.max((damage + poison) - (int) (extraction.animalSize * extraction.protection), 0);
@@ -1490,10 +1492,12 @@ public class Animal extends RealObject
     }
     public void up(){
         if(location==3 && !inHole){
+            diveIn = false;
             location=1;
         }
     }
-    
+
+    boolean diveIn = true;
     public void swim(){
         if((double)air / maxAir < 0.3 && touchWater && location == 0){
             stopFlying();
