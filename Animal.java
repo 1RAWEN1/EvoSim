@@ -1214,7 +1214,7 @@ public class Animal extends RealObject
                 touchingPl.satiety -= Math.min(eat, maxSatiety - satiety);
                 satiety += Math.min((int) (eat * (1 - predation)), maxSatiety - satiety);
 
-                if (isHungry()) {
+                if (satiety < maxSatiety) {
                     isStopMoveForward = true;
                 }
             }
@@ -1231,12 +1231,10 @@ public class Animal extends RealObject
         
         if(touchingFood !=null && canEatMeat() && satiety < maxSatiety){
             if(location == 1) {
+                isStopMoveForward = true;
+
                 touchingFood.satiety -= Math.min(eat, maxSatiety - satiety);
                 satiety += Math.min((eat * predation), maxSatiety - satiety);
-
-                if (satiety < maxSatiety) {
-                    isStopMoveForward = true;
-                }
             }
             else if(location == 3){
                 up();
@@ -1493,6 +1491,7 @@ public class Animal extends RealObject
     public void up(){
         if(location==3 && !inHole){
             diveIn = false;
+
             location=1;
         }
     }
@@ -1538,11 +1537,11 @@ public class Animal extends RealObject
     }
     
     public void fly(){
+        if(hibernation && location == 0){
+            stopFlying();
+        }
         if(isStopFly){
             fly = false;
-        }
-        else if(hibernation && location == 0){
-            stopFlying();
         }
 
         if(flyCof >1 && !fly){
@@ -1555,15 +1554,13 @@ public class Animal extends RealObject
             else if(flyCof <1){
                 flyCof =1;
             }
-            if(flyCof >2){
+            else if(flyCof >2){
                 flyCof =2;
             }
+            location=0;
         }
         if(!fly && flyCof ==1 && location==0){
             location=1;
-        }
-        else if(fly){
-            location=0;
         }
     }
     
