@@ -132,7 +132,7 @@ public class Animal extends RealObject
     public Animal(ArrayList<Double> dna1, Player pl, int tn, boolean inHole, int food, int water){
         this.inHole=inHole;
         if(this.inHole){
-            ist=1;
+            isTouchingHole = true;
         }
         animalRotation =Greenfoot.getRandomNumber(360);
         rotationToTarget = animalRotation;
@@ -491,46 +491,7 @@ public class Animal extends RealObject
         transparent =100;
     }
 
-    int transparent;
-    double blueColorCof;
-    public void updateImage(){
-        transparent = 255;
-        animalSize = maxAnimalSize;
-        if(!isGrowUp()){
-            calcAnimalSize();
-
-            calcAnimalViewRadius();
-        }
-
-        imageSize = animalSize;
-        if(location == 0){
-            animateFlyingAnimal();
-        }
-        else if(location==2){
-            animateClimbingAnimal();
-        }
-        else if(location==3 || inHole){
-            animateSwimmingAnimal();
-        }  
-        
-        if(animalSize <=0){
-            animalSize =1;
-        }
-        if(imageSize <=0){
-            imageSize =1;
-        }
-        image = new GreenfootImage(animalSize, animalSize);
-        poisonCof =(double)poison/ animalSize;
-        if(poisonCof >1){
-            poisonCof =1;
-        }
-        
-        blueColorCof = poisonCof;
-        if(poisonCof < predation){
-            blueColorCof = predation;
-        }
-
-        //set animal color
+    private void setAnimalColor(){
         if(!hibernation){
             if(MyWorld.plMode <2 || MyWorld.observedAnimal !=null && MyWorld.plMode ==2){
                 if(MyWorld.observedAnimal !=null && MyWorld.plMode ==2){
@@ -570,16 +531,63 @@ public class Animal extends RealObject
         else{
             image.setColor(new Color(153, 217, 234, 255));
         }
+
+        createImage();
+    }
+
+    private void createImage(){
         image.fill();
         fon.setTransparency((int)(255*(maskCof)));
         image.drawImage(fon,0,0);
         image.setTransparency(transparent);
         image.scale(imageSize, imageSize);
+    }
+
+    int transparent;
+    double blueColorCof;
+    public void updateImage(){
+        transparent = 255;
+        animalSize = maxAnimalSize;
+        if(!isGrowUp()){
+            calcAnimalSize();
+
+            calcAnimalViewRadius();
+        }
+
+        imageSize = animalSize;
+        if(location == 0){
+            animateFlyingAnimal();
+        }
+        else if(location==2){
+            animateClimbingAnimal();
+        }
+        else if(location==3 || inHole){
+            animateSwimmingAnimal();
+        }  
+        
+        if(animalSize <=0){
+            animalSize =1;
+        }
+        if(imageSize <=0){
+            imageSize =1;
+        }
+        image = new GreenfootImage(animalSize, animalSize);
+        poisonCof =(double)poison/ animalSize;
+        if(poisonCof >1){
+            poisonCof =1;
+        }
+        
+        blueColorCof = poisonCof;
+        if(poisonCof < predation){
+            blueColorCof = predation;
+        }
+
+        setAnimalColor();
         setImage(image);
     }
     
-    Water w;
-    int dist;
+    Water w;//touching water object
+    int dist;//distance to water
 
     private int waterX = -1;//loc water x
     private int waterY = -1;//loc water y
@@ -601,11 +609,11 @@ public class Animal extends RealObject
     }
     
     boolean touchHole;
-    Hole h;
+    Hole h;//touching hole
     
     boolean inHole;
     
-    int ist;
+    boolean isTouchingHole;
     
     public void touchHole(){
         touchHole=false;
@@ -618,18 +626,18 @@ public class Animal extends RealObject
             }
         }
         
-        if(touchHole && ist==0 && h.loc==location){
+        if(touchHole && !isTouchingHole && h.loc==location){
             if(!inHole && h.size> maxAnimalSize && respiratorySystem<=0.5 && h.loc==3 || !inHole && h.size> maxAnimalSize && respiratorySystem>0.5 && h.loc==1){
                 inHole=true;
             }
             else if(inHole){
                 inHole=false;
             }
-            ist=1;
+            isTouchingHole = true;
         }
         
         if(!touchHole){
-            ist=0;
+            isTouchingHole = false;
         }
     }
     
