@@ -433,7 +433,7 @@ public class Animal extends RealObject
         }
     }
 
-    public void mutate(){
+    private void mutate(){
         for(int i=0;i<dna.size();i++){
             double d=dna.get(i);
             if(d != -1) {
@@ -459,7 +459,7 @@ public class Animal extends RealObject
         }
     }
 
-    public void calcAnimalSize(){
+    private void calcAnimalSize(){
         animalSize =(int) (maxAnimalSize *((double) myAge / ageForGrow));
 
         maxHp = animalSize;
@@ -471,9 +471,26 @@ public class Animal extends RealObject
         drink= animalSize *2000;
     }
 
-    public void calcAnimalViewRadius(){
+    private void calcAnimalViewRadius(){
         maxRadiusView = (int) (((double) radiusView / maxAnimalSize) * animalSize);
     }
+
+    private void animateFlyingAnimal(){
+        imageSize = (int) (animalSize * flyCof);
+        transparent = (int) (255 * (1.0 / flyCof));
+        if(transparent >255){
+            transparent =255;
+        }
+    }
+
+    private void animateClimbingAnimal(){
+        imageSize =(int)(animalSize *1.5);
+    }
+
+    private void animateSwimmingAnimal(){
+        transparent =100;
+    }
+
     int transparent;
     double blueColorCof;
     public void updateImage(){
@@ -487,23 +504,13 @@ public class Animal extends RealObject
 
         imageSize = animalSize;
         if(location == 0){
-
-            //animate flying animal
-            imageSize = (int) (animalSize * flyCof);
-            transparent = (int) (255 * (1.0 / flyCof));
-            if(transparent >255){
-                transparent =255;
-            }
+            animateFlyingAnimal();
         }
         else if(location==2){
-
-            //animate climbing animal
-            imageSize =(int)(animalSize *1.5);
+            animateClimbingAnimal();
         }
         else if(location==3 || inHole){
-
-            //animate swimming animal
-            transparent =100;
+            animateSwimmingAnimal();
         }  
         
         if(animalSize <=0){
