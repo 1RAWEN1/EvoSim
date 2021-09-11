@@ -458,14 +458,26 @@ public class Animal extends RealObject
             }
         }
     }
+
+    public void calcAnimalSize(){
+        animalSize =(int) (maxAnimalSize *((double) myAge / ageForGrow));
+
+        maxHp = animalSize;
+        damage=(int)(animalSize * predation);
+        if(damage<=0 && canEatMeat()){
+            damage=1;
+        }
+        eat= animalSize *2000;
+        drink= animalSize *2000;
+    }
     int transparent;
     double blueColorCof;
     public void updateImage(){
         transparent = 255;
         animalSize = maxAnimalSize;
         if(!isGrowUp()){
-            //calc animal size
-            animalSize =(int) (maxAnimalSize *((double) myAge / ageForGrow));
+            calcAnimalSize();
+
         }
         //calc animal view radius
         maxRadiusView = (int) (((double) radiusView / maxAnimalSize) * animalSize);
@@ -554,14 +566,6 @@ public class Animal extends RealObject
         image.setTransparency(transparent);
         image.scale(imageSize, imageSize);
         setImage(image);
-        
-        maxHp = animalSize;
-        damage=(int)(animalSize * predation);
-        if(damage<=0 && canEatMeat()){
-            damage=1;
-        }
-        eat= animalSize *2000;
-        drink= animalSize *2000;
     }
     
     Water w;
