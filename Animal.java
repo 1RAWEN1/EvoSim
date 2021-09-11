@@ -470,6 +470,10 @@ public class Animal extends RealObject
         eat= animalSize *2000;
         drink= animalSize *2000;
     }
+
+    public void calcAnimalViewRadius(){
+        maxRadiusView = (int) (((double) radiusView / maxAnimalSize) * animalSize);
+    }
     int transparent;
     double blueColorCof;
     public void updateImage(){
@@ -478,9 +482,8 @@ public class Animal extends RealObject
         if(!isGrowUp()){
             calcAnimalSize();
 
+            calcAnimalViewRadius();
         }
-        //calc animal view radius
-        maxRadiusView = (int) (((double) radiusView / maxAnimalSize) * animalSize);
 
         imageSize = animalSize;
         if(location == 0){
