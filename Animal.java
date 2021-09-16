@@ -890,13 +890,7 @@ public class Animal extends RealObject
         }
     }
 
-    public int getSurroundTemp() {
-        surroundTemp = (int) (((double) getX() / getWorld().getWidth()) * MyWorld.temp);
-        if(touchWater || location == 3){
-            surroundTemp -= 10;
-        }
-        return surroundTemp;
-    }
+
 
     double attraction;
     private int myPreferences() {
