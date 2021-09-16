@@ -97,13 +97,13 @@ public class Water extends RealObject
                 getWorld().addObject(new Plant(par2,0, 0, false), getX() + (int)(dist*Math.cos(Math.toRadians(rot))), getY() + (int)(dist*Math.sin(Math.toRadians(rot))));
             }
         }
-        else if(MyWorld.plants<15 && surroundingTemp >26 && MyWorld.plMode == 2 && Greenfoot.getRandomNumber(50)==1){
+        else if(MyWorld.plants<2 && surroundingTemp >26 && MyWorld.plMode == 2 && Greenfoot.getRandomNumber(50)==1){
             rot=Greenfoot.getRandomNumber(360);
             dist=Greenfoot.getRandomNumber(size/2);
             getWorld().addObject(new Plant(par2,0, 0, false), getX() + (int)(dist*Math.cos(Math.toRadians(rot))), getY() + (int)(dist*Math.sin(Math.toRadians(rot))));
         }
 
-        if(isTouching(Plant.class) && MyWorld.plMode ==2 && surroundingTemp >26 && MyWorld.pl.myAn<15 && Greenfoot.getRandomNumber(100)==1){
+        if(isTouching(Plant.class) && MyWorld.plMode ==2 && surroundingTemp >26 && MyWorld.pl.myAn<2 && Greenfoot.getRandomNumber(100)==1){
             rot=Greenfoot.getRandomNumber(360);
             dist=Greenfoot.getRandomNumber(size/2);
             par.set(20, 0.0);
