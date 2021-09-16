@@ -538,8 +538,10 @@ public class Animal extends RealObject
     private void createImage(){
         image.fill();
         fon.setTransparency((int)(255*(maskCof)));
-        image.drawImage(fon,0,0);
-        image.setTransparency(transparent);
+        if(MyWorld.observedAnimal ==null && MyWorld.plMode ==2) {
+            image.drawImage(fon, 0, 0);
+            image.setTransparency(transparent);
+        }
         image.scale(imageSize, imageSize);
     }
 
@@ -901,6 +903,8 @@ public class Animal extends RealObject
     double attraction;
     private int myPreferences() {
         attraction = 0.0;
+
+
         if(reproductiveTimer > period && isGrowUp() && starve < 0.2 && thirst < 0.2) {
             attraction = (double)(reproductiveTimer - period) / period;
         }
@@ -1209,10 +1213,15 @@ public class Animal extends RealObject
     }
     
     public void drink(){
-        if(location==3 && water < maxWater || touchWater && water < maxWater && location==1){
-            water = water +drink;
-            if(thirst > 0.1){
-                isStopMoveForward =true;
+        if(water < maxWater){
+            if(location == 3 || location == 1 && touchWater) {
+                water = water + drink;
+                if (thirst > 0.1) {
+                    isStopMoveForward = true;
+                }
+            }
+            else if (touchWater && location == 0){
+                stopFlying();
             }
         }
         
