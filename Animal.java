@@ -63,6 +63,7 @@ public class Animal extends RealObject
     int poison;
     
     double maskCof;
+    double maxMaskCof;
 
     int maxWater;
     double thirst;
@@ -254,18 +255,19 @@ public class Animal extends RealObject
         }
         
         if(dna.get(8)>=0){
-            maskCof =dna.get(8);
+            maxMaskCof =dna.get(8);
         }
         else{
-            maskCof =0.0;
-            dna.set(8, maskCof);
+            maxMaskCof =0.0;
+            dna.set(8, maxMaskCof);
         }
-        if(maskCof >1){
-            maskCof =1;
+        if(maxMaskCof >1){
+            maxMaskCof =1;
         }
-        else if(maskCof <0){
-            maskCof =0;
+        else if(maxMaskCof <0){
+            maxMaskCof =0;
         }
+        maskCof = maxMaskCof;
         
         if(dna.get(9)>=0){
             maxWater =dna.get(9).intValue();
@@ -904,12 +906,11 @@ public class Animal extends RealObject
     private int myPreferences() {
         attraction = 0.0;
 
-
         if(reproductiveTimer > period && isGrowUp() && starve < 0.2 && thirst < 0.2) {
             attraction = (double)(reproductiveTimer - period) / period;
         }
 
-        if(thirst > starve && thirst > attraction){
+        if(thirst >= starve && thirst >= attraction){
             return 1;
         }
         else if(starve >= attraction){
@@ -1220,7 +1221,7 @@ public class Animal extends RealObject
                     isStopMoveForward = true;
                 }
             }
-            else if (touchWater && location == 0){
+            else if (touchWater && location == 0 && thirst > starve){
                 stopFlying();
             }
         }
@@ -1358,24 +1359,48 @@ public class Animal extends RealObject
     }
     
     int rotationSpeed;
-    boolean turned;
+    boolean isTurn = false;
+    boolean isMove = false;
+
+    double movementSpeed;
     public void move(){
         startX = dx;
         startY = dy;
-        if(fly){
-            rotationSpeed =(int)(flyingSpeed * animalSize * 15);
-        }
-        else if(!touchWater && !inHole || location==1){
-            rotationSpeed =(int)(speed* animalSize *15);
-        }
-        else if(touchWater && !inHole || location==3){
-            rotationSpeed =(int)(waterSpeed * animalSize *15);
-        }
-        if(animalRotation != rotationToTarget && canTurn){
 
+        if(!isStopMoveForward && !inHole || inHole && !isTurn && !isStopMoveForward){
+            if(location!=3 && flyingSpeed >=speed && flyingSpeed >= waterSpeed && starve < 0.7 && thirst < 0.7 && !isStopFly && isGrowUp() && !inHole || location==0 && !isStopFly){
+                movementSpeed = flyingSpeed * (1 - protection);
+
+                doubleMove(movementSpeed * animalSize);
+                satiety = satiety -(int) (Math.pow(movementSpeed, 2) * animalSize);
+                water = water -(int) (Math.pow(movementSpeed, 2) * animalSize);
+                fly=true;
+            }
+            else if(touchWater && !inHole && location == 1 || location==3){
+                movementSpeed = waterSpeed * (1 - protection);
+
+                doubleMove(movementSpeed * animalSize);
+                satiety = satiety -(int) (Math.pow(movementSpeed, 2) * animalSize);
+                water = water -(int) (Math.pow(movementSpeed, 2) * animalSize);
+            }
+            else{
+                movementSpeed = speed * (1 - protection);
+
+                doubleMove(movementSpeed * animalSize);
+                satiety = satiety -(int) (Math.pow(movementSpeed, 2) * animalSize);
+                water = water -(int) (Math.pow(movementSpeed, 2) * animalSize);
+            }
+
+            isMove = true;
+        }
+
+        rotationSpeed =(int)(movementSpeed * animalSize * 15);
+
+        if(animalRotation != rotationToTarget && canTurn){
             if(Math.abs(rotationToTarget - animalRotation) < rotationSpeed){
                 animalRotation = rotationToTarget;
                 canTurn = false;
+                isTurn = false;
             }
             else {
                 if (rotationToTarget > animalRotation) {
@@ -1385,7 +1410,7 @@ public class Animal extends RealObject
                         animalRotation += rotationSpeed;
                     }
                     satiety = satiety - rotationSpeed * animalSize;
-                    turned = true;
+                    isTurn = true;
                 }
                 if (rotationToTarget < animalRotation) {
                     if (animalRotation - rotationToTarget > 180) {
@@ -1394,42 +1419,30 @@ public class Animal extends RealObject
                         animalRotation -= rotationSpeed;
                     }
                     satiety = satiety - rotationSpeed * animalSize;
-                    turned = true;
+                    isTurn = true;
                 }
             }
-            
+
             animalRotation %= 360;
             if(animalRotation <0){
                 animalRotation += 360;
             }
         }
 
-        if(!isStopMoveForward && !inHole || inHole && !turned && !isStopMoveForward){
-            if(location!=3 && flyingSpeed >=speed && flyingSpeed >= waterSpeed && starve < 0.7 && thirst < 0.7 && !isStopFly && isGrowUp() && !inHole || location==0 && !isStopFly){
-                doubleMove(flyingSpeed * animalSize);
-                satiety = satiety -(int) (Math.pow(flyingSpeed, 2) * animalSize);
-                water = water -(int) (Math.pow(flyingSpeed, 2) * animalSize);
-                fly=true;
-            }
-            else if(touchWater && !inHole && location == 1 || location==3){
-                doubleMove(waterSpeed * animalSize);
-                satiety -=(int)(Math.pow(waterSpeed, 2) * animalSize);
-                water -=(int)(Math.pow(waterSpeed, 2) * animalSize);
-            }
-            else{
-                doubleMove(speed* animalSize);
-                satiety -= (int) (Math.pow(speed, 2) * animalSize);
-                water -= (int) (Math.pow(speed, 2) * animalSize);
-            }
-        }
-
         setRotation(0);
 
-        turned = false;
+        calcMask();
+
+        isMove = false;
+        isTurn = false;
         isStopMoveForward =false;
         isStopFly =false;
 
         inHole();
+    }
+
+    private void calcMask(){
+        maskCof = maxMaskCof * (1.0 - (isTurn ? 0.25 : 0) - (isMove ? 0.5 : 0));
     }
     
     double dx;
