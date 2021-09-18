@@ -67,7 +67,7 @@ public class Fon extends Actor
             image.drawImage(drawBar(100,20,MyWorld.plants,50,Color.WHITE,Color.GREEN,"растения"),0,70);
         }
         else{
-            image.drawImage(drawBar(100,20,MyWorld.pl.myAn + MyWorld.pl.predators,200,Color.WHITE,new Color(0,255,255,255),"животные"),0,10);
+            image.drawImage(drawBar(100,20,MyWorld.pl.myAn + MyWorld.pl.omnivorous + MyWorld.pl.predators,200,Color.WHITE,new Color(0,255,255,255),"животные"),0,10);
             image.drawImage(drawBar(100,20,MyWorld.plants,200,Color.WHITE,Color.GREEN,"растения"),0,40);
         }
 

@@ -241,7 +241,7 @@ public class MyWorld extends World
             fon1.chart.addValue(true , 1, chartTimer);
             fon1.chart.addValue(false , 1, Math.min(200, plants));
 
-            fon1.chart.addValue(false , 2, Math.min(200, pl.myAn - pl.omnivorous));
+            fon1.chart.addValue(false , 2, Math.min(200, pl.myAn));
             fon1.chart.addValue(true , 2, chartTimer);
 
             fon1.chart.addValue(false , 3, Math.min(200, pl.omnivorous));

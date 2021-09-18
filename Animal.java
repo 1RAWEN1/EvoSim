@@ -542,8 +542,8 @@ public class Animal extends RealObject
         fon.setTransparency((int)(255*(maskCof)));
         if(MyWorld.observedAnimal ==null && MyWorld.plMode ==2) {
             image.drawImage(fon, 0, 0);
-            image.setTransparency(transparent);
         }
+        image.setTransparency(transparent);
         image.scale(imageSize, imageSize);
     }
 
@@ -1369,7 +1369,7 @@ public class Animal extends RealObject
 
         if(!isStopMoveForward && !inHole || inHole && !isTurn && !isStopMoveForward){
             if(location!=3 && flyingSpeed >=speed && flyingSpeed >= waterSpeed && starve < 0.7 && thirst < 0.7 && !isStopFly && isGrowUp() && !inHole || location==0 && !isStopFly){
-                movementSpeed = flyingSpeed * (1 - protection);
+                movementSpeed = flyingSpeed;
 
                 doubleMove(movementSpeed * animalSize);
                 satiety = satiety -(int) (Math.pow(movementSpeed, 2) * animalSize);
@@ -1377,14 +1377,14 @@ public class Animal extends RealObject
                 fly=true;
             }
             else if(touchWater && !inHole && location == 1 || location==3){
-                movementSpeed = waterSpeed * (1 - protection);
+                movementSpeed = waterSpeed;
 
                 doubleMove(movementSpeed * animalSize);
                 satiety = satiety -(int) (Math.pow(movementSpeed, 2) * animalSize);
                 water = water -(int) (Math.pow(movementSpeed, 2) * animalSize);
             }
             else{
-                movementSpeed = speed * (1 - protection);
+                movementSpeed = speed;
 
                 doubleMove(movementSpeed * animalSize);
                 satiety = satiety -(int) (Math.pow(movementSpeed, 2) * animalSize);
