@@ -420,11 +420,11 @@ public class Animal extends RealObject
         maxRadiusView = radiusView / maxAnimalSize;
         updateImage();
         if(MyWorld.plMode == 2) {
-            if (canEatPlant()) {
+            if (canEatPlant() && canEatMeat()) {
+                myPlayer.omnivorous++;
+            }
+            else if(canEatPlant()){
                 myPlayer.myAn++;
-                if(canEatMeat()) {
-                    myPlayer.omnivorous++;
-                }
             }
             else{
                 myPlayer.predators++;
@@ -1442,7 +1442,7 @@ public class Animal extends RealObject
     }
 
     private void calcMask(){
-        maskCof = maxMaskCof * (1.0 - (isTurn ? 0.25 : 0) - (isMove ? 0.5 : 0));
+        maskCof = maxMaskCof * (1.0 - (isTurn ? 0.1 : 0) - (isMove ? 0.2 : 0));
     }
     
     double dx;
@@ -1634,11 +1634,11 @@ public class Animal extends RealObject
             }
 
             if(MyWorld.plMode == 2) {
-                if (canEatPlant()) {
+                if (canEatPlant() && canEatMeat()) {
+                    myPlayer.omnivorous--;
+                }
+                else if(canEatPlant()){
                     myPlayer.myAn--;
-                    if(canEatMeat()) {
-                        myPlayer.omnivorous--;
-                    }
                 }
                 else{
                     myPlayer.predators--;
