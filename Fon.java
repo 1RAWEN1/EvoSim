@@ -174,7 +174,7 @@ public class Fon extends Actor
             unLab.setFillColor(Color.BLACK);
             image.drawImage(unLab.updateImage(), 1150,210);
             image.drawImage(mask,1110,240);
-            unLab.setValue(""+(int)(MyWorld.observedAnimal.maskCof *100));
+            unLab.setValue(""+(int)(MyWorld.observedAnimal.maxMaskCof *100));
             unLab.setFillColor(Color.BLACK);
             image.drawImage(unLab.updateImage(), 1150,240);
             if(MyWorld.observedAnimal.predation <=0.3){

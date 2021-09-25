@@ -96,7 +96,7 @@ public class Plant extends RealObject
     Egg egg;
     DieAnimal food;
 
-    private final int foodCof = 10000;
+    private final int foodCof = 12000;
     
     public Plant(ArrayList<Double> dna1, int food1, int water1, boolean inHole){
         this.inHole=inHole;
