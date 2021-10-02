@@ -78,7 +78,7 @@ public class Animal extends RealObject
     
     double waterSpeed;
     
-    double moveCof;
+    double poisonProtection;
     
     int maxAge;
     
@@ -128,7 +128,7 @@ public class Animal extends RealObject
     
     int distToChild;
 
-    private final int foodCof = 12000;
+    private final int foodCof = 10000;
     
     public Animal(ArrayList<Double> dna1, Player pl, int tn, boolean inHole, int food, int water){
         this.inHole=inHole;
@@ -310,17 +310,14 @@ public class Animal extends RealObject
         }
         
         if(dna.get(13)>=0){
-            moveCof =dna.get(13);
+            poisonProtection =dna.get(13);
         }
         else{
-            moveCof =0.0;
-            dna.set(13, moveCof);
+            poisonProtection =0.0;
+            dna.set(13, poisonProtection);
         }
-        if(moveCof >1.0){
-            moveCof =1.0;
-        }
-        else if(moveCof <0){
-            moveCof =0;
+        if(poisonProtection >1.0){
+            poisonProtection =1.0;
         }
         
         if(dna.get(14)>=0){
@@ -372,7 +369,7 @@ public class Animal extends RealObject
         if(dna.get(20)>=0){
             predation =dna.get(20);
 
-            if(myPlayer.predators < 2 && Greenfoot.getRandomNumber(20)==1 && canEatPlant()){
+            if(myPlayer.predators < 2 && Greenfoot.getRandomNumber(40)==1 && canEatPlant()){
                 predation =  1.0;
                 dna.set(20, predation);
 
@@ -728,9 +725,9 @@ public class Animal extends RealObject
         }
         
         breathe();
-        swim();
         climb();
         fly();
+        swim();
         die();
     }
 
@@ -753,7 +750,7 @@ public class Animal extends RealObject
             hibernation = false;
         }
 
-        if(timer % 10 == 0 && starve < 0.3 && thirst < 0.3 && isFullHp() && Math.abs(animalTemp - needTemp) <= 10){
+        if(timer % 10 == 0 && starve < 0.5 && thirst < 0.5 && isFullHp() && Math.abs(animalTemp - needTemp) <= 10){
             hp++;
         }
     }
@@ -797,7 +794,7 @@ public class Animal extends RealObject
                         getWorld().addObject(child, childX, childY);
                     }
                     else{
-                        Egg child = new Egg(dna2, location, myPlayer, teamNum, inHole, moveCof);
+                        Egg child = new Egg(dna2, location, myPlayer, teamNum, inHole);
                         getWorld().addObject(child, childX, childY);
                     }
 
@@ -831,7 +828,7 @@ public class Animal extends RealObject
                                     , childFood, childWater);
                             getWorld().addObject(child, getX(), getY());
                         } else {
-                            Egg child = new Egg(dna2, location, myPlayer, teamNum, inHole, moveCof);
+                            Egg child = new Egg(dna2, location, myPlayer, teamNum, inHole);
                             getWorld().addObject(child, getX(), getY());
                         }
                         satiety = satiety - childFood;
@@ -859,7 +856,7 @@ public class Animal extends RealObject
                         getWorld().addObject(child, getX(), getY());
                     }
                     else{
-                        Egg child=new Egg(dna2, location, myPlayer, teamNum,inHole, moveCof);
+                        Egg child=new Egg(dna2, location, myPlayer, teamNum,inHole);
                         getWorld().addObject(child, getX(), getY());
                     }
                     satiety = satiety - childFood;
@@ -1053,7 +1050,9 @@ public class Animal extends RealObject
             rotationToTarget = getRotation();
             canTurn = true;
         }
-        else if(enemyAnimal !=null && enemyAnimal.canEatMeat() && enemyAnimal.predation > predation){
+        if(enemyAnimal !=null && !enemyAnimal.canEatPlant() && enemyAnimal.predation > predation && starve < 0.5 ||
+                enemyAnimal !=null && !enemyAnimal.canEatPlant() && enemyAnimal.predation > predation && minFoodDist > minDistToEnemy / 2 ||
+                enemyAnimal !=null && enemyAnimal.predation > predation && enemyAnimal.canEatMeat() && enemyAnimal.canEatPlant() && plant == null){
             if(getObjectsInRange(maxRadiusView,Hole.class).size() > 0 && getObjectsInRange(maxRadiusView,Hole.class).get(0).size < enemyAnimal.animalSize){
                 turnTowards(getObjectsInRange(maxRadiusView,Hole.class).get(0).getX(), getObjectsInRange(maxRadiusView,Hole.class).get(0).getY());
                 rotationToTarget =getRotation();
@@ -1080,7 +1079,7 @@ public class Animal extends RealObject
             for (Plant plant : getObjectsInRange(maxRadiusView, Plant.class)) {
                 if (plant.inHole == inHole) {
                     distToObject = Math.pow(plant.getX() - getX(), 2) + Math.pow(plant.getY() - getY(), 2);
-                    if (location == plant.location && plant.damage + plant.poison <= (int) (protection * animalSize) && distToObject < minFoodDist && plant.satietyValueForBar > 3) {
+                    if (location == plant.location && plant.damage + (plant.poison * poisonProtection) - (int) (protection * animalSize) <= 0 && distToObject < minFoodDist && plant.satietyValueForBar > 3) {
                         this.plant = plant;
 
                         minFoodDist = distToObject;
@@ -1106,10 +1105,9 @@ public class Animal extends RealObject
             foodX = food.getX();
             foodY = food.getY();
         }
-
-        if(enemyAnimal !=null && enemyAnimal.canEatMeat() && enemyAnimal.predation > predation && starve < 0.2 ||
-                enemyAnimal !=null && !enemyAnimal.canEatPlant() && enemyAnimal.predation > predation && minFoodDist > minDistToEnemy / 2 ||
-                enemyAnimal !=null && enemyAnimal.predation > predation && enemyAnimal.canEatMeat() && enemyAnimal.canEatPlant() && plant == null){
+        //enemyAnimal !=null && enemyAnimal.predation > predation && enemyAnimal.canEatMeat() && enemyAnimal.canEatPlant() && plant == null
+        if(enemyAnimal !=null && enemyAnimal.canEatMeat() && enemyAnimal.predation > predation && starve < 0.5 ||
+                enemyAnimal !=null && enemyAnimal.canEatMeat() && enemyAnimal.predation > predation && minFoodDist > minDistToEnemy / 2){
             if(getObjectsInRange(maxRadiusView,Hole.class).size() > 0 && getObjectsInRange(maxRadiusView,Hole.class).get(0).size < enemyAnimal.animalSize){
                 turnTowards(getObjectsInRange(maxRadiusView,Hole.class).get(0).getX(), getObjectsInRange(maxRadiusView,Hole.class).get(0).getY());
                 rotationToTarget =getRotation();
@@ -1161,7 +1159,9 @@ public class Animal extends RealObject
     }
 
     public void searchForTeammate(){
-        if(enemyAnimal !=null && enemyAnimal.canEatMeat() && enemyAnimal.predation > predation){
+        if(enemyAnimal !=null && !enemyAnimal.canEatPlant() && enemyAnimal.predation > predation && starve < 0.5 ||
+                enemyAnimal !=null && !enemyAnimal.canEatPlant() && enemyAnimal.predation > predation && minFoodDist > minDistToEnemy / 2 ||
+                enemyAnimal !=null && enemyAnimal.predation > predation && enemyAnimal.canEatMeat() && enemyAnimal.canEatPlant() && plant == null){
             if(getObjectsInRange(maxRadiusView,Hole.class).size() > 0 && getObjectsInRange(maxRadiusView,Hole.class).get(0).size < enemyAnimal.animalSize){
                 turnTowards(getObjectsInRange(maxRadiusView,Hole.class).get(0).getX(), getObjectsInRange(maxRadiusView,Hole.class).get(0).getY());
                 rotationToTarget =getRotation();
@@ -1321,10 +1321,11 @@ public class Animal extends RealObject
                 pl.hunter =this;
             }
         }
-        else if(canEatMeat() && touchingAn !=null && predation > touchingAn.predation && touchingAn.teamNum!=teamNum){
+        else if(!canEatPlant() && touchingAn !=null && predation > touchingAn.predation && touchingAn.teamNum!=teamNum
+        || canEatMeat() && canEatPlant() && touchingAn !=null && touchingAn.teamNum!=teamNum && plant == null){
             extraction = touchingAn;
-            if(touchingAn.location==location){
-                extraction.hp -= Math.max((damage + poison) - (int) (extraction.animalSize * extraction.protection), 0);
+            if(extraction.location==location){
+                extraction.hp -= (int) (poison * extraction.poisonProtection) + Math.max(damage - (int) (extraction.animalSize * extraction.protection), 0);
 
                 extraction.hunterAnimal =this;
             }
@@ -1337,9 +1338,9 @@ public class Animal extends RealObject
             else if(location == 0){
                 stopFlying();
             }
-
+            MyWorld mw = (MyWorld)getWorld();
             if (!canEatPlant()) {
-                System.out.println(extraction.myAge + " " + movementSpeed + " " + extraction.movementSpeed);
+                System.out.println(extraction.myAge + " " + (movementSpeed * animalSize) + " " + (extraction.movementSpeed * extraction.animalSize) + " " + maxSatiety + " " + (mw.chartTimer / 500));
             }
         }
         else if(canEatMeat() && touchingEgg !=null && touchingEgg.teamNum!=teamNum && satiety < maxSatiety && touchingEgg.size <= animalSize){
@@ -1365,7 +1366,7 @@ public class Animal extends RealObject
     
     public void defense(){
         if(isFullHp() && hunterAnimal !=null && location== hunterAnimal.location){
-            hunterAnimal.hp -= Math.max((damage + poison) - (int) (hunterAnimal.animalSize * hunterAnimal.protection), 0);
+            hunterAnimal.hp -= (int) (poison * hunterAnimal.poisonProtection) + Math.max(damage - (int) (hunterAnimal.animalSize * hunterAnimal.protection), 0);
         }
         if(isFullHp() && hunterPlant !=null && location == hunterPlant.location){
             hunterPlant.hp -= (damage + poison);
@@ -1565,7 +1566,7 @@ public class Animal extends RealObject
             stopFlying();
         }
 
-        if(air<=0 && location==3 && respiratorySystem>0.5){
+        if(air<=0 && location==3 && respiratorySystem > 0.5){
             up();
         }
         if(air<=0 && location != 3 && respiratorySystem <= 0.5){

@@ -249,6 +249,12 @@ public class MyWorld extends World
             fon1.chart.addValue(false , 4, Math.min(200, pl.predators));
             fon1.chart.addValue(true , 4, chartTimer);
         }
+
+        if(Greenfoot.mousePressed(null)){
+            MouseInfo mi = Greenfoot.getMouseInfo();
+            double x = (double) mi.getX() / getWidth();
+            System.out.println((int) ((x * (chartTimer / 500)) + 0.5));
+        }
         getFPS();
 
         updateFon();

@@ -26,8 +26,7 @@ public class Egg extends RealObject
     double liveBirth;
     double moveCof;
     ArrayList <Double> dna;
-    public Egg(ArrayList<Double> dna1, int location, Player pl, int tn, boolean inHole, double moveCof){
-        this.moveCof =moveCof;
+    public Egg(ArrayList<Double> dna1, int location, Player pl, int tn, boolean inHole){
         this.inHole = inHole;
         teamNum=tn;
         myPl=pl;
