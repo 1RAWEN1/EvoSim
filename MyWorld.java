@@ -64,10 +64,10 @@ public class MyWorld extends World
         setPaintOrder(Fon.class, Animal.class, Player.class, Egg.class, DieAnimal.class, Plant.class, Hole.class, HoleRoom.class, Water.class);
 
         numOfWater = Greenfoot.getRandomNumber(2)+1;
-        for(int i = 0; i< numOfWater; i++){
+        /*for(int i = 0; i< numOfWater; i++){
             Water water=new Water();
             addObject(water, Greenfoot.getRandomNumber(getWidth()), Greenfoot.getRandomNumber(getHeight())); 
-        }
+        }*/
         addObject(new Water(), getWidth()/2, getHeight()/2); 
         for(int i=0;i<10+Greenfoot.getRandomNumber(10)-5;i++){
             Hole h=new Hole(Greenfoot.getRandomNumber(9)+1,1);
@@ -78,6 +78,11 @@ public class MyWorld extends World
         }
         for(int i=0;i<MyWorld.dnaSizeOfPlant;i++){
             dna1.add((double) (-1));
+        }
+        for(int i = 0;i < 2; i++){
+            addObject(new Plant(dna1, 0, 0, false),
+                    (getWidth() / 2) + Greenfoot.getRandomNumber(50) - 25,
+                    (getHeight() / 2) + Greenfoot.getRandomNumber(50) - 25);
         }
         pl=new Player(1);
         addObject(pl, 600, 600);
@@ -220,13 +225,7 @@ public class MyWorld extends World
                 }
                 eye.scale(eyeSize,eyeSize);
                 eye.rotate(an1.animalRotation);
-                int t;
-                if(an1.transparent >(int)(255*an1.maskCof)){
-                    t=an1.transparent;
-                }
-                else{
-                    t=(int)(255*(1-an1.maskCof));
-                }
+                int t = Math.min(an1.transparent, (int)(255*(1-an1.maskCof)));
                 eye.setTransparency(t);
                 im.drawImage(eye, (an1.animalSize %2)*(int)((Fon.cof/2)+0.5)+(int)(0.5+(an1.getX()-pl.getX()+(int)(600/Fon.cof))*Fon.cof)-eye.getWidth()/2, (an1.animalSize %2)*(int)((Fon.cof/2)+0.5)+(int)(0.5+(an1.getY()-pl.getY()+(int)(350/Fon.cof))*Fon.cof)-eye.getHeight()/2);
             }
@@ -241,7 +240,7 @@ public class MyWorld extends World
             fon1.chart.addValue(true , 1, chartTimer);
             fon1.chart.addValue(false , 1, Math.min(200, plants));
 
-            fon1.chart.addValue(false , 2, Math.min(200, pl.myAn - pl.omnivorous));
+            fon1.chart.addValue(false , 2, Math.min(200, pl.myAn));
             fon1.chart.addValue(true , 2, chartTimer);
 
             fon1.chart.addValue(false , 3, Math.min(200, pl.omnivorous));
@@ -249,6 +248,12 @@ public class MyWorld extends World
 
             fon1.chart.addValue(false , 4, Math.min(200, pl.predators));
             fon1.chart.addValue(true , 4, chartTimer);
+        }
+
+        if(Greenfoot.mousePressed(null)){
+            MouseInfo mi = Greenfoot.getMouseInfo();
+            double x = (double) mi.getX() / getWidth();
+            System.out.println((int) ((x * (chartTimer / 500)) + 0.5));
         }
         getFPS();
 

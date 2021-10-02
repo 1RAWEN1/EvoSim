@@ -96,7 +96,7 @@ public class Plant extends RealObject
     Egg egg;
     DieAnimal food;
 
-    private final int foodCof = 8000;
+    private final int foodCof = 10000;
     
     public Plant(ArrayList<Double> dna1, int food1, int water1, boolean inHole){
         this.inHole=inHole;
@@ -156,7 +156,7 @@ public class Plant extends RealObject
             period = dna.get(3).intValue();
         }
         else{
-            period = 5;
+            period = 4;
             dna.set(3, (double) period);
         }
         
@@ -256,7 +256,7 @@ public class Plant extends RealObject
             cof = dna.get(11);
         }
         else{
-            cof = 3;
+            cof = 3.5;
             dna.set(11, cof);
         }
         
@@ -538,7 +538,7 @@ public class Plant extends RealObject
     public void photosynthesis(){
         fEnergy = (int) (size * size * 5 * cof * (1 - predation));
         if(location != 2){
-            for(Plant p : getObjectsInRange(size / 2 + Math.max(10, (int) (rootLength * 50)), Plant.class)){
+            for(Plant p : getObjectsInRange(size / 2 + Math.max(10, (int) (rootLength * size * 5)), Plant.class)){
                 p.satiety -= (int) Math.pow(size, 3);
             }
         }
@@ -709,10 +709,10 @@ public class Plant extends RealObject
         
         extraction =null;
         extraction1 =null;
-        if(animal != null && predation > 0.3 && satietyValueForBar < 7){
+        if(animal != null && predation > 0.3){
             extraction = animal;
             if(extraction.location == location){
-                extraction.hp -= Math.max((damage + poison) - (int) (extraction.animalSize * extraction.protection), 0);
+                extraction.hp -= (int) (poison * extraction.poisonProtection) + Math.max(damage - (int) (extraction.animalSize * extraction.protection), 0);
                 extraction.hunterPlant = this;
             }
         }

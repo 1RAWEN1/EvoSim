@@ -67,7 +67,7 @@ public class Fon extends Actor
             image.drawImage(drawBar(100,20,MyWorld.plants,50,Color.WHITE,Color.GREEN,"растения"),0,70);
         }
         else{
-            image.drawImage(drawBar(100,20,MyWorld.pl.myAn + MyWorld.pl.predators,200,Color.WHITE,new Color(0,255,255,255),"животные"),0,10);
+            image.drawImage(drawBar(100,20,MyWorld.pl.myAn + MyWorld.pl.omnivorous + MyWorld.pl.predators,200,Color.WHITE,new Color(0,255,255,255),"животные"),0,10);
             image.drawImage(drawBar(100,20,MyWorld.plants,200,Color.WHITE,Color.GREEN,"растения"),0,40);
         }
 
@@ -174,7 +174,7 @@ public class Fon extends Actor
             unLab.setFillColor(Color.BLACK);
             image.drawImage(unLab.updateImage(), 1150,210);
             image.drawImage(mask,1110,240);
-            unLab.setValue(""+(int)(MyWorld.observedAnimal.maskCof *100));
+            unLab.setValue(""+(int)(MyWorld.observedAnimal.maxMaskCof *100));
             unLab.setFillColor(Color.BLACK);
             image.drawImage(unLab.updateImage(), 1150,240);
             if(MyWorld.observedAnimal.predation <=0.3){
