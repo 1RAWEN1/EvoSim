@@ -62,7 +62,7 @@ public class Hole extends RealObject
         for(int i=0;i<getIntersectingObjects(Water.class).size();i++){
             w=getIntersectingObjects(Water.class).get(i);
             dist=(int)Math.sqrt(Math.pow(getX()-w.getX(),2)+Math.pow(getY()-w.getY(),2));
-            if(dist<=(w.size/2)-(size/2)){
+            if(dist<=(w.size/2)-(size/2) || w.ocean){
                 touchWater=true;
                 break;
             }

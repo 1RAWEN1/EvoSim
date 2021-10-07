@@ -64,11 +64,11 @@ public class MyWorld extends World
         setPaintOrder(Fon.class, Animal.class, Player.class, Egg.class, DieAnimal.class, Plant.class, Hole.class, HoleRoom.class, Water.class);
 
         numOfWater = Greenfoot.getRandomNumber(2)+1;
-        /*for(int i = 0; i< numOfWater; i++){
-            Water water=new Water();
+        for(int i = 0; i< numOfWater; i++){
+            Water water=new Water(false);
             addObject(water, Greenfoot.getRandomNumber(getWidth()), Greenfoot.getRandomNumber(getHeight())); 
-        }*/
-        addObject(new Water(), getWidth()/2, getHeight()/2); 
+        }
+        addObject(new Water(true), getWidth()/2, getHeight()/4);
         for(int i=0;i<10+Greenfoot.getRandomNumber(10)-5;i++){
             Hole h=new Hole(Greenfoot.getRandomNumber(9)+1,1);
             addObject(h, Greenfoot.getRandomNumber(getWidth()), Greenfoot.getRandomNumber(getHeight()));
@@ -82,7 +82,7 @@ public class MyWorld extends World
         for(int i = 0;i < 2; i++){
             addObject(new Plant(dna1, 0, 0, false),
                     (getWidth() / 2) + Greenfoot.getRandomNumber(50) - 25,
-                    (getHeight() / 2) + Greenfoot.getRandomNumber(50) - 25);
+                    (getHeight() / 4) + Greenfoot.getRandomNumber(50) - 25);
         }
         pl=new Player(1);
         addObject(pl, 600, 600);
@@ -234,7 +234,21 @@ public class MyWorld extends World
     }
 
     int chartTimer;
+    boolean isPushG = false;
+    static boolean isDrawImage = false;
     public void act(){
+        if(Greenfoot.isKeyDown("G") && !isPushG && !isDrawImage){
+            isPushG = true;
+            isDrawImage = true;
+        }
+        else if(Greenfoot.isKeyDown("G") && !isPushG && isDrawImage){
+            isPushG = true;
+            isDrawImage = false;
+        }
+        else if(!Greenfoot.isKeyDown("G") && isPushG){
+            isPushG = false;
+        }
+
         chartTimer ++;
         if(chartTimer % 500 == 0){
             fon1.chart.addValue(true , 1, chartTimer);
@@ -250,11 +264,11 @@ public class MyWorld extends World
             fon1.chart.addValue(true , 4, chartTimer);
         }
 
-        if(Greenfoot.mousePressed(null)){
+        /*if(Greenfoot.mousePressed(null)){
             MouseInfo mi = Greenfoot.getMouseInfo();
             double x = (double) mi.getX() / getWidth();
             System.out.println((int) ((x * (chartTimer / 500)) + 0.5));
-        }
+        }*/
         getFPS();
 
         updateFon();

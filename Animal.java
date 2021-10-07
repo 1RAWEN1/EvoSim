@@ -365,7 +365,17 @@ public class Animal extends RealObject
         else if(heatCof <0){
             heatCof =0;
         }
-        
+
+        if(dna.get(21)>0){
+            maxSatiety =dna.get(21).intValue();
+            satiety =food;
+        }
+        else{
+            maxSatiety = maxAnimalSize *foodCof;
+            satiety = maxSatiety;
+            dna.set(21, (double) maxSatiety);
+        }
+
         if(dna.get(20)>=0){
             predation =dna.get(20);
 
@@ -373,8 +383,11 @@ public class Animal extends RealObject
                 predation =  1.0;
                 dna.set(20, predation);
 
-                //waterSpeed *= 0.66;
-                //dna.set(12, waterSpeed);
+                //maxSatiety = (maxSatiety * 2) / 3;
+                //dna.set(21, (double) maxSatiety);
+
+                waterSpeed *= 1.2;
+                dna.set(12, waterSpeed);
 
                 /*if(speed > 0){
                     speed += 0.05;
@@ -391,16 +404,6 @@ public class Animal extends RealObject
         }
         else if(predation <0){
             predation =0;
-        }
-        
-        if(dna.get(21)>0){
-            maxSatiety =dna.get(21).intValue();
-            satiety =food;
-        }
-        else{
-            maxSatiety = maxAnimalSize *foodCof;
-            satiety = maxSatiety;
-            dna.set(21, (double) maxSatiety);
         }
         
         if(dna.get(22)>0){
@@ -466,10 +469,13 @@ public class Animal extends RealObject
     private void calcAnimalSize(){
         animalSize =(int) (maxAnimalSize *((double) myAge / ageForGrow));
 
+        if(animalSize <= 0){
+            animalSize = 1;
+        }
         maxHp = animalSize;
         damage=(int)(animalSize * predation);
-        if(damage<=0 && canEatMeat()){
-            damage=1;
+        if(damage <= 0 && canEatMeat()){
+            damage = 1;
         }
         eat= animalSize *2000;
         drink= animalSize *2000;
@@ -571,12 +577,6 @@ public class Animal extends RealObject
             animateSwimmingAnimal();
         }  
         
-        if(animalSize <=0){
-            animalSize =1;
-        }
-        if(imageSize <=0){
-            imageSize =1;
-        }
         image = new GreenfootImage(animalSize, animalSize);
         poisonCof =(double)poison/ animalSize;
         if(poisonCof >1){
@@ -603,7 +603,7 @@ public class Animal extends RealObject
             for(int i=0;i<getIntersectingObjects(Water.class).size();i++){
                 w=getIntersectingObjects(Water.class).get(i);
                 dist=(int)Math.sqrt(Math.pow(getX()-w.getX(),2)+Math.pow(getY()-w.getY(),2));
-                if(dist<=(w.size/2)-(animalSize /2)){
+                if(dist<=(w.size/2)-(animalSize /2) || w.ocean){
                     waterX = w.getX();
                     waterY = w.getY();
 
@@ -750,7 +750,7 @@ public class Animal extends RealObject
             hibernation = false;
         }
 
-        if(timer % 10 == 0 && starve < 0.5 && thirst < 0.5 && isFullHp() && Math.abs(animalTemp - needTemp) <= 10){
+        if(timer % 10 == 0 && starve < 0.7 && thirst < 0.7 && isFullHp() && Math.abs(animalTemp - needTemp) <= 10){
             hp++;
         }
     }
@@ -1022,7 +1022,7 @@ public class Animal extends RealObject
                         teammateAnimal = animalInRange;
                     }
                 }
-                else if(animalInRange.teamNum != teamNum && distToObject < minDistToEnemy && animalInRange.predation > predation ||
+                else if(animalInRange.teamNum != teamNum && distToObject < minDistToEnemy && animalInRange.damage > damage ||
                         animalInRange.teamNum != teamNum && distToObject < minDistToEnemy && canEatMeat()) {
                     if (Math.pow(getX() - animalInRange.getX(), 2) + Math.pow(getY() - animalInRange.getY(), 2) < Math.pow(maxRadiusView - (int) (animalInRange.maskCof * maxRadiusView), 2)) {
                         minDistToEnemy = distToObject;
@@ -1050,9 +1050,9 @@ public class Animal extends RealObject
             rotationToTarget = getRotation();
             canTurn = true;
         }
-        if(enemyAnimal !=null && !enemyAnimal.canEatPlant() && enemyAnimal.predation > predation && starve < 0.5 ||
-                enemyAnimal !=null && !enemyAnimal.canEatPlant() && enemyAnimal.predation > predation && minFoodDist > minDistToEnemy / 2 ||
-                enemyAnimal !=null && enemyAnimal.predation > predation && enemyAnimal.canEatMeat() && enemyAnimal.canEatPlant() && plant == null){
+        if(enemyAnimal !=null && !enemyAnimal.canEatPlant() && enemyAnimal.damage > damage && starve < 0.5 ||
+                enemyAnimal !=null && !enemyAnimal.canEatPlant() && enemyAnimal.damage > damage && minFoodDist > minDistToEnemy / 2 ||
+                enemyAnimal !=null && enemyAnimal.damage > damage && enemyAnimal.canEatMeat() && enemyAnimal.canEatPlant() && plant == null){
             if(getObjectsInRange(maxRadiusView,Hole.class).size() > 0 && getObjectsInRange(maxRadiusView,Hole.class).get(0).size < enemyAnimal.animalSize){
                 turnTowards(getObjectsInRange(maxRadiusView,Hole.class).get(0).getX(), getObjectsInRange(maxRadiusView,Hole.class).get(0).getY());
                 rotationToTarget =getRotation();
@@ -1079,7 +1079,8 @@ public class Animal extends RealObject
             for (Plant plant : getObjectsInRange(maxRadiusView, Plant.class)) {
                 if (plant.inHole == inHole) {
                     distToObject = Math.pow(plant.getX() - getX(), 2) + Math.pow(plant.getY() - getY(), 2);
-                    if (location == plant.location && plant.damage + (plant.poison * poisonProtection) - (int) (protection * animalSize) <= 0 && distToObject < minFoodDist && plant.satietyValueForBar > 3) {
+                    if (this.plant == null && location == plant.location && (plant.poison * poisonProtection) <= 0 && plant.damage - (int) (protection * animalSize) <=0 && distToObject < minFoodDist && plant.satietyValueForBar > 3 ||
+                            this.plant != null && location == plant.location && (plant.poison * poisonProtection) <= 0 && plant.damage - (int) (protection * animalSize) <=0 && distToObject / plant.satietyValueForBar < minFoodDist / this.plant.satietyValueForBar && plant.satietyValueForBar > 3) {
                         this.plant = plant;
 
                         minFoodDist = distToObject;
@@ -1087,7 +1088,7 @@ public class Animal extends RealObject
                 }
             }
         }
-        if(canEatMeat() && !inHole){
+        else if(canEatMeat() && !inHole){
             for (DieAnimal food : getObjectsInRange(maxRadiusView, DieAnimal.class)) {
                 distToObject = Math.pow(food.getX() - getX(), 2) + Math.pow(food.getY() - getY(), 2);
                 if (distToObject < minDistToExtraction) {
@@ -1106,8 +1107,9 @@ public class Animal extends RealObject
             foodY = food.getY();
         }
         //enemyAnimal !=null && enemyAnimal.predation > predation && enemyAnimal.canEatMeat() && enemyAnimal.canEatPlant() && plant == null
-        if(enemyAnimal !=null && enemyAnimal.canEatMeat() && enemyAnimal.predation > predation && starve < 0.5 ||
-                enemyAnimal !=null && enemyAnimal.canEatMeat() && enemyAnimal.predation > predation && minFoodDist > minDistToEnemy / 2){
+        if(enemyAnimal !=null && !enemyAnimal.canEatPlant() && enemyAnimal.damage > damage && starve < 0.5 ||
+                enemyAnimal !=null && !enemyAnimal.canEatPlant() && enemyAnimal.damage > damage && minFoodDist > minDistToEnemy / 2 ||
+                enemyAnimal !=null && enemyAnimal.damage > damage && enemyAnimal.canEatMeat() && enemyAnimal.canEatPlant() && plant == null){
             if(getObjectsInRange(maxRadiusView,Hole.class).size() > 0 && getObjectsInRange(maxRadiusView,Hole.class).get(0).size < enemyAnimal.animalSize){
                 turnTowards(getObjectsInRange(maxRadiusView,Hole.class).get(0).getX(), getObjectsInRange(maxRadiusView,Hole.class).get(0).getY());
                 rotationToTarget =getRotation();
@@ -1159,9 +1161,9 @@ public class Animal extends RealObject
     }
 
     public void searchForTeammate(){
-        if(enemyAnimal !=null && !enemyAnimal.canEatPlant() && enemyAnimal.predation > predation && starve < 0.5 ||
-                enemyAnimal !=null && !enemyAnimal.canEatPlant() && enemyAnimal.predation > predation && minFoodDist > minDistToEnemy / 2 ||
-                enemyAnimal !=null && enemyAnimal.predation > predation && enemyAnimal.canEatMeat() && enemyAnimal.canEatPlant() && plant == null){
+        if(enemyAnimal !=null && !enemyAnimal.canEatPlant() && enemyAnimal.damage > damage && starve < 0.5 ||
+                enemyAnimal !=null && !enemyAnimal.canEatPlant() && enemyAnimal.damage > damage && minFoodDist > minDistToEnemy / 2 ||
+                enemyAnimal !=null && enemyAnimal.damage > damage && enemyAnimal.canEatMeat() && enemyAnimal.canEatPlant() && plant == null){
             if(getObjectsInRange(maxRadiusView,Hole.class).size() > 0 && getObjectsInRange(maxRadiusView,Hole.class).get(0).size < enemyAnimal.animalSize){
                 turnTowards(getObjectsInRange(maxRadiusView,Hole.class).get(0).getX(), getObjectsInRange(maxRadiusView,Hole.class).get(0).getY());
                 rotationToTarget =getRotation();
@@ -1222,12 +1224,12 @@ public class Animal extends RealObject
     public void drink(){
         if(water < maxWater){
             if(location == 3 || location == 1 && touchWater) {
-                water = water + drink;
+                water += Math.min(drink, maxWater - water);
                 if (thirst > 0.1) {
                     isStopMoveForward = true;
                 }
             }
-            else if (touchWater && location == 0 && thirst > starve){
+            else if (touchWater && location == 0 && thirst > 0.2){
                 stopFlying();
             }
         }
@@ -1243,7 +1245,7 @@ public class Animal extends RealObject
     public void eat(){
         if(Math.pow(getX() - foodX, 2) + Math.pow(getY() - foodY, 2) < Math.pow(maxRadiusView, 2)){
             if(getOneObjectAtOffset(foodX - getX(), foodY - getY(), Plant.class) == null && canEatPlant() ||
-        getOneObjectAtOffset(foodX - getX(), foodY - getY(), DieAnimal.class) == null && canEatMeat()) {
+            getOneObjectAtOffset(foodX - getX(), foodY - getY(), DieAnimal.class) == null && canEatMeat()) {
                 foodX = -1;
                 foodY = -1;
             }
@@ -1251,7 +1253,7 @@ public class Animal extends RealObject
         if(touchingPl !=null && canEatPlant() && satiety < maxSatiety && location==2 || touchingPl !=null && canEatPlant() && satiety < maxSatiety && touchingPl.satiety > touchingPl.maxSatiety * (1 - ((double) animalSize / touchingPl.size))){
             if(location == 2 || location == touchingPl.location) {
                 touchingPl.satiety -= Math.min(eat, maxSatiety - satiety);
-                satiety += Math.min((int) (eat * (1 - predation)), maxSatiety - satiety);
+                satiety += Math.min((int) (eat * Math.pow(1 - predation, 2)), maxSatiety - satiety);
             }
             else if(location == 3 && touchingPl.location == 1){
                 up();
@@ -1271,7 +1273,7 @@ public class Animal extends RealObject
         if(touchingFood !=null && canEatMeat() && satiety < maxSatiety){
             if(location == 1) {
                 touchingFood.satiety -= Math.min(eat, maxSatiety - satiety);
-                satiety += Math.min((eat * predation), maxSatiety - satiety);
+                satiety += Math.min(eat * predation, maxSatiety - satiety);
             }
             else if(location == 3){
                 up();
@@ -1321,13 +1323,15 @@ public class Animal extends RealObject
                 pl.hunter =this;
             }
         }
-        else if(!canEatPlant() && touchingAn !=null && predation > touchingAn.predation && touchingAn.teamNum!=teamNum
-        || canEatMeat() && canEatPlant() && touchingAn !=null && touchingAn.teamNum!=teamNum && plant == null){
+        else if(!canEatPlant() && touchingAn !=null && damage > touchingAn.damage && touchingAn.teamNum!=teamNum
+        || canEatMeat() && canEatPlant() && touchingAn !=null && damage > touchingAn.damage && touchingAn.teamNum!=teamNum && plant == null){
             extraction = touchingAn;
             if(extraction.location==location){
                 extraction.hp -= (int) (poison * extraction.poisonProtection) + Math.max(damage - (int) (extraction.animalSize * extraction.protection), 0);
 
                 extraction.hunterAnimal =this;
+
+                extraction.die();
             }
             else if(location == 3 && extraction.location == 1){
                 up();
@@ -1338,10 +1342,10 @@ public class Animal extends RealObject
             else if(location == 0){
                 stopFlying();
             }
-            MyWorld mw = (MyWorld)getWorld();
+            /*MyWorld mw = (MyWorld)getWorld();
             if (!canEatPlant()) {
-                System.out.println(extraction.myAge + " " + (movementSpeed * animalSize) + " " + (extraction.movementSpeed * extraction.animalSize) + " " + maxSatiety + " " + (mw.chartTimer / 500));
-            }
+                System.out.println(extraction.predation + " " + predation + " " + extraction.myAge + " " + (movementSpeed * animalSize) + " " + (extraction.movementSpeed * extraction.animalSize) + " " + maxSatiety + " " + (mw.chartTimer / 500) + " " + extraction.maxSatiety);
+            }*/
         }
         else if(canEatMeat() && touchingEgg !=null && touchingEgg.teamNum!=teamNum && satiety < maxSatiety && touchingEgg.size <= animalSize){
             if(location == touchingEgg.location){
@@ -1367,9 +1371,13 @@ public class Animal extends RealObject
     public void defense(){
         if(isFullHp() && hunterAnimal !=null && location== hunterAnimal.location){
             hunterAnimal.hp -= (int) (poison * hunterAnimal.poisonProtection) + Math.max(damage - (int) (hunterAnimal.animalSize * hunterAnimal.protection), 0);
+
+            hunterAnimal.die();
         }
         if(isFullHp() && hunterPlant !=null && location == hunterPlant.location){
             hunterPlant.hp -= (damage + poison);
+
+            hunterPlant.die();
         }
         hunterAnimal =null;
         hunterPlant =null;
@@ -1385,7 +1393,7 @@ public class Animal extends RealObject
         startY = dy;
 
         if(!isStopMoveForward && !inHole || inHole && !isTurn && !isStopMoveForward){
-            if(location!=3 && flyingSpeed >=speed && flyingSpeed >= waterSpeed && starve < 0.7 && thirst < 0.7 && !isStopFly && isGrowUp() && !inHole || location==0 && !isStopFly){
+            if(location!=3 && flyingSpeed >=speed && flyingSpeed >= waterSpeed && starve < 0.7 && thirst < 0.7 && isGrowUp() && !inHole || location==0){
                 movementSpeed = flyingSpeed * (1 - protection);
 
                 doubleMove(movementSpeed * animalSize);
@@ -1458,7 +1466,7 @@ public class Animal extends RealObject
     }
 
     private void calcMask(){
-        maskCof = maxMaskCof * (1.0 - (isTurn ? 0.1 : 0) - (isMove ? 0.2 : 0));
+        maskCof = maxMaskCof * (1.0 - (isTurn ? 0.2 : 0) - (isMove ? 0.3 : 0));
     }
     
     double dx;
@@ -1614,7 +1622,7 @@ public class Animal extends RealObject
                 flyCof = 1;
             }
         }
-        if(fly){
+        else if(fly){
             if(flyCof >=1 && flyCof <2){
                 flyCof +=0.05;
             }
@@ -1645,7 +1653,7 @@ public class Animal extends RealObject
         if(air<=0){
             hp--;
         }
-        if(hp <=0){
+        if(hp <= 0 && getWorld() != null){
             if(MyWorld.observedAnimal ==this){
                 MyWorld.observedAnimal =null;
             }
@@ -1664,6 +1672,8 @@ public class Animal extends RealObject
             else{
                 myPlayer.myAn--;
             }
+            //MyWorld mw = (MyWorld)getWorld();
+            //System.out.println(predation + " " + satiety + " " + water + " " + air + " " + hunterAnimal + " " + hunterPlant + " " + (mw.chartTimer / 500));
             DieAnimal da=new DieAnimal(animalSize, satiety, maxSatiety);
             getWorld().addObject(da,getX(),getY());
             getWorld().removeObject(this);

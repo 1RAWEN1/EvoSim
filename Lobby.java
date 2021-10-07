@@ -139,7 +139,6 @@ public class Lobby extends World
         }
 
         Greenfoot.start();
-        Greenfoot.setSpeed(100);
     }
     Help h;
     public void act(){

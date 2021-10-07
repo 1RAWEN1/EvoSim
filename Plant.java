@@ -86,7 +86,6 @@ public class Plant extends RealObject
 
     //добыча
     Animal extraction;
-    Plant extraction1;
     
     //партнер
     Plant pl;
@@ -259,6 +258,10 @@ public class Plant extends RealObject
             cof = 3.5;
             dna.set(11, cof);
         }
+
+        if(cof > 5){
+            cof = 5;
+        }
         
         if(dna.get(12)>=0){
             poison= dna.get(12).intValue();
@@ -286,14 +289,14 @@ public class Plant extends RealObject
             rootLength = dna.get(14);
         }
         else{
-            rootLength =0.0;
+            rootLength = 0.0;
             dna.set(14, rootLength);
         }
-        if(rootLength >1){
-            rootLength =1;
+        if(rootLength > 1){
+            rootLength = 1;
         }
-        else if(rootLength <0){
-            rootLength =0;
+        else if(rootLength < 0){
+            rootLength = 0;
         }
         
         if(dna.get(15)>=0){
@@ -334,6 +337,9 @@ public class Plant extends RealObject
         if(ageFodGrow > myAge){
             size =(int)(maxSize *((double) myAge/ ageFodGrow));
         }
+        if(size <= 0){
+            size = 1;
+        }
 
         radius = (int) (((double) radius1 / maxSize) * size);
 
@@ -343,13 +349,6 @@ public class Plant extends RealObject
         }
         else if(location==3 || inHole){
             transparent=100;
-        }
-        
-        if(size <=0){
-            size =1;
-        }
-        if(size1<=0){
-            size1=1;
         }
         
         if(!hibernation){
@@ -366,7 +365,7 @@ public class Plant extends RealObject
         
         maxHp = size;
         area =50* size /20;
-        damage=(int)(size * predation);
+        damage=Math.min(1, (int)(size * predation));
         eat= size *2000;
         drink=2000* size;
     }
@@ -381,7 +380,7 @@ public class Plant extends RealObject
             for(int i=0;i<getIntersectingObjects(Water.class).size();i++){
                 w=getIntersectingObjects(Water.class).get(i);
                 dist=(int)Math.sqrt(Math.pow(getX()-w.getX(),2)+Math.pow(getY()-w.getY(),2));
-                if(dist<=(w.size/2)-(size /2)){
+                if(dist<=(w.size/2)-(size /2) || w.ocean){
                     touchWater=true;
                     break;
                 }
@@ -393,7 +392,7 @@ public class Plant extends RealObject
         canDrink =false;
         for(Water water : getObjectsInRange(getWorld().getWidth(),Water.class)){
             dist=(int) Math.sqrt(Math.pow(getX() - water.getX(), 2) + Math.pow(getY() - water.getY(), 2));
-            if(dist<=(int) ((water.size / 2) * (1 + rootLength)) && moveCof < 0.5){
+            if(touchWater || dist<=(int) ((water.size / 2) * (1 + rootLength)) && moveCof < 0.5){
                 canDrink =true;
             }
         }
@@ -563,7 +562,7 @@ public class Plant extends RealObject
         double randRot = Math.toRadians(Greenfoot.getRandomNumber(360));
         int dist = Greenfoot.getRandomNumber(distToChild);
 
-        if(pl!=null && inHole == pl.inHole && tim > period && pl.location == location && pl.tim > pl.period && Math.abs(pl.predation - predation) <= MyWorld.classificationOfSpecies){
+        if(pl!=null && inHole == pl.inHole && tim > period && pl.location == location && pl.tim > pl.period && Math.abs(pl.predation - predation) <= MyWorld.classificationOfSpecies && pl.myAge >= pl.ageFodGrow){
             for(int i = 0; i < fertility; i++){
                 dna2.clear();
                 for(int i1 = 0; i1 < dna.size(); i1++){
@@ -708,12 +707,13 @@ public class Plant extends RealObject
         }
         
         extraction =null;
-        extraction1 =null;
         if(animal != null && predation > 0.3){
             extraction = animal;
             if(extraction.location == location){
                 extraction.hp -= (int) (poison * extraction.poisonProtection) + Math.max(damage - (int) (extraction.animalSize * extraction.protection), 0);
                 extraction.hunterPlant = this;
+
+                extraction.die();
             }
         }
         
@@ -844,7 +844,7 @@ public class Plant extends RealObject
             if(location==1){
                 dive1();
             }
-            if(extraction !=null && extraction.location==1 && location==3 || extraction1 !=null && extraction1.location==1 && location==3){
+            if(extraction !=null && extraction.location==1 && location==3){
                 up();
             }
         }
@@ -875,7 +875,7 @@ public class Plant extends RealObject
         if(myAge >age){
             hp =0;
         }
-        if(hp <=0){
+        if(hp <= 0 && getWorld() != null){
             if(MyWorld.observedPlant == this){
                 MyWorld.observedPlant = null;
             }

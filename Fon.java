@@ -254,8 +254,10 @@ public class Fon extends Actor
             image.drawImage(unLab.updateImage2(),600-unLab.updateImage2().getWidth()/2,100);
         }
 
-        chart.updateImage();
-        image.drawImage(chart.getImage(), 0, 500);
+        if(MyWorld.isDrawImage) {
+            chart.updateImage();
+            image.drawImage(chart.getImage(), 0, 500);
+        }
         setImage(image);
     }
     public void act() 

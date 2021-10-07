@@ -502,7 +502,7 @@ public class Player extends RealObject
             for(int i=0;i<getIntersectingObjects(Water.class).size();i++){
                 w=getIntersectingObjects(Water.class).get(i);
                 dist=(int)Math.sqrt(Math.pow(getX()-w.getX(),2)+Math.pow(getY()-w.getY(),2));
-                if(dist<=(w.size/2)-(size3/2)){
+                if(dist<=(w.size/2)-(size3/2) || w.ocean){
                     touchWater=true;
                     break;
                 }
@@ -702,12 +702,12 @@ public class Player extends RealObject
             foodX =PlInR.getX();
             foodY =PlInR.getY();
         }
-        if(isAtEdge() || needTemp -7>tg || needTemp +7<tg){
+        if(isAtEdge() || needTemp -9>tg || needTemp +9<tg){
             startRot =getRotation();
-            if(needTemp -7>tg){
+            if(needTemp -9>tg){
                 r1=0;
             }
-            else if(needTemp +7<tg){
+            else if(needTemp +9<tg){
                 r1=180;
             }
             else{
