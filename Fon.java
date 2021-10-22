@@ -28,7 +28,7 @@ public class Fon extends Actor
     GreenfootImage think=new GreenfootImage("think.png");
     int winTimer;
 
-    Chart chart = new Chart(4, 1200, 200);
+
     public Fon(GreenfootImage im1){
         setImage(im1);
     }
@@ -254,8 +254,10 @@ public class Fon extends Actor
             image.drawImage(unLab.updateImage2(),600-unLab.updateImage2().getWidth()/2,100);
         }
 
-        chart.updateImage();
-        image.drawImage(chart.getImage(), 0, 500);
+        if(MyWorld.isDrawImage) {
+            MyWorld mw = (MyWorld) getWorld();
+            image.drawImage(mw.chart.getImage(), 0, 500);
+        }
         setImage(image);
     }
     public void act() 

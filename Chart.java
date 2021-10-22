@@ -5,25 +5,55 @@ public class Chart extends Actor{
 
     int x1;
     int y1;
-    int x2;
-    int y2;
+    double x2;
+    double y2;
     int x;
     int y;
 
-    int maxX;
-    int maxY;
+    double maxY;
 
     GreenfootImage myImage;
 
-    ArrayList<ArrayList<Integer>> valueX =new ArrayList<>();
-    ArrayList<ArrayList<Integer>> valueY =new ArrayList<>();
+    int typeOfChart = 0;
+    int maxTypeOfChart = MyWorld.dnaSizeOfAnimal + MyWorld.dnaSizeOfPlant + 1;
 
-    public Chart(int lines, int xSize, int ySize){
+    Label lab = new Label("", 30);
+
+    public void min() {
+       typeOfChart--;
+       if(typeOfChart < 0){
+           typeOfChart = maxTypeOfChart + typeOfChart;
+       }
+
+       updateImage();
+    }
+
+    public void max() {
+        typeOfChart++;
+
+        typeOfChart %= maxTypeOfChart;
+
+        updateImage();
+    }
+
+    ArrayList<ArrayList<Double>> valueY =new ArrayList<>();
+
+    public Chart(int xSize, int ySize){
         myImage = new GreenfootImage(xSize, ySize);
-        for(int i = 0; i < lines; i++){
-            valueX.add(new ArrayList<>());
+        for(int i = 0; i < maxTypeOfChart + 26; i++){
             valueY.add(new ArrayList<>());
         }
+
+        createImage();
+    }
+
+    public void createImage(){
+        myImage.clear();
+
+        myImage.setColor(Color.WHITE);
+        myImage.fill();
+
+        setImage(myImage);
     }
 
     public void updateImage(){
@@ -32,17 +62,34 @@ public class Chart extends Actor{
         myImage.setColor(Color.WHITE);
         myImage.fill();
 
-        myImage.setColor(Color.GREEN);
-        updateImage1(1, 200);
+        if(typeOfChart == 0) {
+            myImage.setColor(Color.GREEN);
+            updateImage1(1, 200);
 
-        myImage.setColor(Color.BLUE);
-        updateImage1(2, 200);
+            myImage.setColor(Color.BLUE);
+            updateImage1(2, 200);
 
-        myImage.setColor(new Color(75, 0, 130));
-        updateImage1(3, 200);
+            myImage.setColor(new Color(75, 0, 130));
+            updateImage1(3, 200);
 
-        myImage.setColor(Color.RED);
-        updateImage1(4, 200);
+            myImage.setColor(Color.RED);
+            updateImage1(4, 200);
+        }
+        else if(typeOfChart - 1 < 23){
+            updateImage2(5 + ((typeOfChart - 1) * 2));
+
+            lab.setValue(Lobby.descriptionOfParameters.get(typeOfChart - 1));
+            lab.setFillColor(new Color(0, 0, 0, 100));
+            myImage.drawImage(lab.updateImage2(),600-lab.updateImage2().getWidth()/2,50);
+        }
+        else{
+            myImage.setColor(Color.GREEN);
+            updateImage1(51 + (typeOfChart - 24), 0);
+
+            lab.setValue(Lobby.descriptionOfPlantParameters.get(typeOfChart - 24));
+            lab.setFillColor(new Color(0, 0, 0, 100));
+            myImage.drawImage(lab.updateImage2(),600-lab.updateImage2().getWidth()/2,50);
+        }
 
         setImage(myImage);
     }
@@ -50,26 +97,26 @@ public class Chart extends Actor{
     public void updateImage1(int num, int maxYPos){
         num--;
         x1=0;
+        maxY = 0;
 
-        for(int i = 0; i < valueX.get(num).size(); i++){
-            if(valueX.get(num).get(i)> maxX){
-                maxX = valueX.get(num).get(i);
-            }
-            if(valueY.get(num).get(i)> maxY){
-                maxY = valueY.get(num).get(i);
-            }
-        }
         if(maxYPos > 0){
             maxY = maxYPos;
         }
+        else{
+            for(int i = 0; i < valueY.get(num).size(); i++){
+                if(valueY.get(num).get(i)> maxY){
+                    maxY = valueY.get(num).get(i);
+                }
+            }
+        }
 
-        if(maxY > 0 && maxX > 0){
-            y1=myImage.getHeight()-((valueY.get(num).get(0) / maxY)*myImage.getHeight());
-            for(int i = 0; i< valueX.get(num).size(); i++){
-                x2= valueX.get(num).get(i);
+        if(maxY > 0){
+            y1=(int) (myImage.getHeight()-((valueY.get(num).get(0) / maxY)*myImage.getHeight()));
+            for(int i = 0; i< valueY.get(num).size(); i++){
+                x2= i;
                 y2= valueY.get(num).get(i);
-                x=(int)(((double)(x2)/ maxX)*myImage.getWidth());
-                y=myImage.getHeight()-(int)(((double)(y2)/ maxY)*myImage.getHeight());
+                x=(int)(((x2 + 1) / valueY.get(num).size())*myImage.getWidth());
+                y=myImage.getHeight()-(int)((y2 / maxY)*myImage.getHeight());
                 myImage.drawLine(x1,y1,x,y);
                 x1=x;
                 y1=y;
@@ -77,14 +124,52 @@ public class Chart extends Actor{
         }
     }
 
-    public void addValue(boolean xPos, int num, int value){
+    public void updateImage2(int num){
+        num--;
+        x1=0;
+        maxY = 0;
+
+        for(int i = 0; i < valueY.get(num).size(); i++){
+            if(valueY.get(num).get(i)> maxY){
+                maxY = valueY.get(num).get(i);
+            }
+        }
+        for(int i = 0; i < valueY.get(num + 1).size(); i++){
+            if(valueY.get(num + 1).get(i)> maxY){
+                maxY = valueY.get(num + 1).get(i);
+            }
+        }
+
+        if(maxY > 0){
+            myImage.setColor(Color.BLUE);
+            y1=(int) (myImage.getHeight()-((valueY.get(num).get(0) / maxY)*myImage.getHeight()));
+            for(int i = 0; i< valueY.get(num).size(); i++){
+                x2= i;
+                y2= valueY.get(num).get(i);
+                x=(int)(((x2 + 1) / valueY.get(num).size())*myImage.getWidth());
+                y=myImage.getHeight()-(int)((y2 / maxY)*myImage.getHeight());
+                myImage.drawLine(x1,y1,x,y);
+                x1=x;
+                y1=y;
+            }
+
+            myImage.setColor(Color.RED);
+            y1=(int) (myImage.getHeight()-((valueY.get(num + 1).get(0) / maxY)*myImage.getHeight()));
+            for(int i = 0; i< valueY.get(num + 1).size(); i++){
+                x2= i;
+                y2= valueY.get(num + 1).get(i);
+                x=(int)(((x2 + 1) / valueY.get(num + 1).size())*myImage.getWidth());
+                y=myImage.getHeight()-(int)((y2 / maxY)*myImage.getHeight());
+                myImage.drawLine(x1,y1,x,y);
+                x1=x;
+                y1=y;
+            }
+        }
+    }
+
+    public void addValue(int num, double value){
         num--;
 
-        if(xPos){
-            valueX.get(num).add(value);
-        }
-        else{
-            valueY.get(num).add(value);
-        }
+        valueY.get(num).add(value);
     }
 }
