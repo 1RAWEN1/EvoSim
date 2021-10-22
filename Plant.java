@@ -544,20 +544,16 @@ public class Plant extends RealObject
     public void photosynthesis(){
         fEnergy = (int) (size * size * 5 * cof * (1 - predation));
         if(location != 2 && moveCof < 0.5){
-            for(Plant p : getObjectsInRange(size + (int) (rootLength * size * 5), Plant.class)){
+            for(Plant p : getObjectsInRange((int) (rootLength * size * 5), Plant.class)){
                 if(p.moveCof < 0.5)
                 p.satiety -= (int) Math.pow(size, 3);
             }
         }
+        for(Plant p : getIntersectingObjects(Plant.class)){
+            p.satiety -= (int) Math.pow(size, 3);
+        }
 
-        /*if(location != 2){
-            for(Plant p : getIntersectingObjects(Plant.class)){
-                satiety -= (int) Math.pow(p.size, 3);
-            }
-        }*/
         water -= fEnergy;
-
-        //System.out.println(maxSatiety + " " + cof + " " + predation);
     }
     
     int childX;
