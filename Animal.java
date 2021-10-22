@@ -387,19 +387,6 @@ public class Animal extends RealObject
             if(myPlayer.predators < 2 && Greenfoot.getRandomNumber(50)==1 && canEatPlant()){
                 predation =  1.0;
                 dna.set(20, predation);
-
-                //radiusView = 40;
-                //dna.set(17, (double) radiusView);
-                //maxSatiety = (maxSatiety * 2) / 3;
-                //dna.set(21, (double) maxSatiety);
-
-                /*waterSpeed *= 1.2;
-                dna.set(12, waterSpeed);
-
-                if(speed > 0){
-                    speed *= 1.2;
-                    dna.set(16, speed);
-                }*/
             }
         }
         else{
@@ -621,7 +608,8 @@ public class Animal extends RealObject
                     waterY = w.getY();
                 }
                 else if(getY() < (getWorld().getHeight() / 2) + radiusView){
-
+                    waterX = getX();
+                    waterY = getWorld().getHeight() / 4;
                 }
             }
         }
@@ -1321,8 +1309,6 @@ public class Animal extends RealObject
         if(satiety > 0){
             starve = 1.0 - ((double)satiety / maxSatiety);
         }
-
-        //System.out.println(predation + " " + maxAnimalSize + " " + maxSatiety + " " + movementSpeed + " " + maxRadiusView);
     }
 
     public boolean isGrowUp(){
@@ -1344,16 +1330,9 @@ public class Animal extends RealObject
     public boolean canWin(Animal an){
         int enemyDamage = Math.max(0, an.damage - (int) (animalSize * protection)) + (int) (an.poison * poisonProtection);
         int myDamage = Math.max(0, damage - (int) (an.animalSize * an.protection)) + (int) (poison * an.poisonProtection);
-        //int enemyDamage = (int) Math.max(0, an.damage * (1 - protection)) + (int) (an.poison * poisonProtection);
-        //int myDamage = (int) Math.max(0, damage * (1 - an.protection)) + (int) (poison * an.poisonProtection);
-        return enemyDamage <=0 && myDamage > 0 ||
-                myDamage > 0 && hp / enemyDamage > an.hp / myDamage;
-        /*int enemyDamage = an.damage + (int) (an.poison * poisonProtection);
-        int myDamage = damage + (int) (poison * an.poisonProtection);
 
         return enemyDamage <=0 && myDamage > 0 ||
-                myDamage > 0 && (armor + hp) / enemyDamage > (an.armor + an.hp) / myDamage ||
-                myDamage > 0 && (armor + hp) % enemyDamage != 0;*/
+                myDamage > 0 && hp / enemyDamage > an.hp / myDamage;
     }
 
     public void attackAnimal(int damage){
@@ -1396,10 +1375,6 @@ public class Animal extends RealObject
             else if(location == 0 && starve > thirst){
                 stopFlying();
             }
-            /*MyWorld mw = (MyWorld)getWorld();
-            if (!canEatPlant()) {
-                System.out.println(extraction.predation + " " + predation + " " + extraction.myAge + " " + (movementSpeed * animalSize) + " " + (extraction.movementSpeed * extraction.animalSize) + " " + maxSatiety + " " + (mw.chartTimer / 500) + " " + extraction.maxSatiety);
-            }*/
         }
         else if(canEatMeat() && touchingEgg !=null && touchingEgg.teamNum!=teamNum && satiety < maxSatiety && touchingEgg.size <= animalSize){
             if(location == touchingEgg.location){
