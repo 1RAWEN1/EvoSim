@@ -24,14 +24,12 @@ public class Egg extends RealObject
     int timer;
     int location;
     double liveBirth;
-    double moveCof;
     ArrayList <Double> dna;
     public Egg(ArrayList<Double> dna1, int location, Player pl, int tn, boolean inHole){
         this.inHole = inHole;
         teamNum=tn;
         myPl=pl;
         this.location=location;
-        setRotation(Greenfoot.getRandomNumber(360));
         dna = new ArrayList<>(dna1);
         liveBirth = dna.get(4);
         predation = dna.get(20);
