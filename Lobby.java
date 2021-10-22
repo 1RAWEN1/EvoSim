@@ -13,6 +13,7 @@ public class Lobby extends World
 
     static ArrayList<String> buttons =new ArrayList<>();
     public static ArrayList<String> descriptionOfParameters =new ArrayList<>();
+    public static ArrayList<String> descriptionOfPlantParameters =new ArrayList<>();
     static boolean pressStart=false;
     static ArrayList<String> scenario=new ArrayList<>();
     /**
@@ -43,7 +44,7 @@ public class Lobby extends World
             descriptionOfParameters.add("Время между размножениями\nживотные будут быстрее увеличивать численность");
             descriptionOfParameters.add("Защита\nживотное будет получать меньше урона");
             descriptionOfParameters.add("Скорость в воде\nскорость плавания");
-            descriptionOfParameters.add("Личинка\nживотные смогут появлятся на большом расстоянии от родителей");
+            descriptionOfParameters.add("Защита от яда\nзащита от урона ядом");
             descriptionOfParameters.add("Максимальный возраст\nвремя жизни");
             descriptionOfParameters.add("Потомки\nколичество рожденных животных за один сезон");
             descriptionOfParameters.add("Скорость\nскорость на земле");
@@ -53,6 +54,26 @@ public class Lobby extends World
             descriptionOfParameters.add("Хищник\nрастительно-, все- ядное или хищник?");
             descriptionOfParameters.add("Запас жира\nживотное сможет дольше обходится без еды");
             descriptionOfParameters.add("Скорость копания\nсможет быстрее копать норки");
+        }
+
+        if(descriptionOfPlantParameters.size()==0) {
+            descriptionOfPlantParameters.add("Коэффициент передвижения");
+            descriptionOfPlantParameters.add("Возраст для взросления");
+            descriptionOfPlantParameters.add("Запас воды");
+            descriptionOfPlantParameters.add("Период между размножениями");
+            descriptionOfPlantParameters.add("Хищничество");
+            descriptionOfPlantParameters.add("Коэффициент согревания");
+            descriptionOfPlantParameters.add("Максимальный возраст");
+            descriptionOfPlantParameters.add("Максимальный размер");
+            descriptionOfPlantParameters.add("Плодовитость");
+            descriptionOfPlantParameters.add("Степень рассления");
+            descriptionOfPlantParameters.add("Радиус размножения");
+            descriptionOfPlantParameters.add("Коэффициент фотосинтеза");
+            descriptionOfPlantParameters.add("Урон от яда");
+            descriptionOfPlantParameters.add("Коэффициент спячки");
+            descriptionOfPlantParameters.add("Длина корня");
+            descriptionOfPlantParameters.add("Максимальный запас еды");
+            descriptionOfPlantParameters.add("Радиус обзора");
         }
         
         if(buttons.size()==0){

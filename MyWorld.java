@@ -18,7 +18,7 @@ public class MyWorld extends World
 
     public static final double classificationOfSpecies = 0.1;
     public static final int dnaSizeOfAnimal = 23;
-    public static final int dnaSizeOfPlant = 16;
+    public static final int dnaSizeOfPlant = 17;
     public static int an;
     public static int plants;
     public static final double cofOfEvolution = 0.1;
@@ -85,10 +85,10 @@ public class MyWorld extends World
                     (getHeight() / 4) + Greenfoot.getRandomNumber(50) - 25);
         }
         pl=new Player(1);
-        addObject(pl, 600, 600);
+        addObject(pl, 600, 350);
         if(MyWorld.plMode <2){
             bot =new Player(0);
-            addObject(bot, 600, 100);
+            addObject(bot, 600, 350);
         }
         addObject(fm, 600, 350);
         fon1=new Fon(null);
@@ -233,9 +233,12 @@ public class MyWorld extends World
         fon1.setImage1(im,image);
     }
 
+    Chart chart = new Chart(1200, 200);
     int chartTimer;
     boolean isPushG = false;
     static boolean isDrawImage = false;
+
+    boolean arrowPush = false;
     public void act(){
         if(Greenfoot.isKeyDown("G") && !isPushG && !isDrawImage){
             isPushG = true;
@@ -249,19 +252,62 @@ public class MyWorld extends World
             isPushG = false;
         }
 
+
+
         chartTimer ++;
         if(chartTimer % 500 == 0){
-            fon1.chart.addValue(true , 1, chartTimer);
-            fon1.chart.addValue(false , 1, Math.min(200, plants));
+            chart.addValue(1, Math.min(200, plants));
 
-            fon1.chart.addValue(false , 2, Math.min(200, pl.myAn));
-            fon1.chart.addValue(true , 2, chartTimer);
+            chart.addValue(2, Math.min(200, pl.myAn));
 
-            fon1.chart.addValue(false , 3, Math.min(200, pl.omnivorous));
-            fon1.chart.addValue(true , 3, chartTimer);
+            chart.addValue(3, Math.min(200, pl.omnivorous));
 
-            fon1.chart.addValue(false , 4, Math.min(200, pl.predators));
-            fon1.chart.addValue(true , 4, chartTimer);
+            chart.addValue(4, Math.min(200, pl.predators));
+
+            for(int j = 0; j < dnaSizeOfAnimal; j++) {
+                double parameter = 0;
+                double parameter1 = 0;
+
+                int animals = 0;
+                int hunters = 0;
+                for (int i = 0; i < getObjects(Animal.class).size(); i++) {
+                    if(getObjects(Animal.class).get(i).canEatPlant()) {
+                        animals++;
+                        parameter = (parameter * ((double) (animals - 1) / animals)) + (getObjects(Animal.class).get(i).dna.get(j) * (1.0 / animals));
+                    }
+                    else{
+                        hunters++;
+                        parameter1 = (parameter1 * ((double) (hunters - 1) / hunters)) + (getObjects(Animal.class).get(i).dna.get(j) * (1.0 / hunters));
+                    }
+                }
+
+                chart.addValue(5 + (j * 2), parameter);
+                chart.addValue(6 + (j * 2), parameter1);
+            }
+
+            for(int j = 0; j < dnaSizeOfPlant; j++) {
+                double parameter = 0;
+                for (int i = 0; i < getObjects(Plant.class).size(); i++) {
+                    parameter = parameter * ((double) i / (i + 1)) + (getObjects(Plant.class).get(i).dna.get(j) * (1.0 / (i + 1)));
+                }
+
+                chart.addValue(51 + j, parameter);
+            }
+
+            chart.updateImage();
+        }
+
+        if(Greenfoot.isKeyDown("left") && !arrowPush){
+            chart.min();
+            arrowPush = true;
+        }
+        else if(Greenfoot.isKeyDown("right") && !arrowPush){
+            chart.max();
+            arrowPush = true;
+        }
+
+        if(!Greenfoot.isKeyDown("left") && !Greenfoot.isKeyDown("right")){
+            arrowPush = false;
         }
 
         /*if(Greenfoot.mousePressed(null)){
