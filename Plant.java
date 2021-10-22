@@ -552,14 +552,8 @@ public class Plant extends RealObject
         for(Plant p : getIntersectingObjects(Plant.class)){
             p.satiety -= (int) Math.pow(size, 3);
         }
-        /*if(location != 2){
-            for(Plant p : getIntersectingObjects(Plant.class)){
-                satiety -= (int) Math.pow(p.size, 3);
-            }
-        }*/
-        water -= fEnergy;
 
-        //System.out.println(maxSatiety + " " + cof + " " + predation);
+        water -= fEnergy;
     }
     
     int childX;
