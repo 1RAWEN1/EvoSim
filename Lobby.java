@@ -25,7 +25,7 @@ public class Lobby extends World
     static int slide=0;
     static boolean train=true;
     public Lobby()
-    {    
+    {
         // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
         super(1200, 700, 1); 
         pressStart=false;
@@ -54,6 +54,7 @@ public class Lobby extends World
             descriptionOfParameters.add("Хищник\nрастительно-, все- ядное или хищник?");
             descriptionOfParameters.add("Запас жира\nживотное сможет дольше обходится без еды");
             descriptionOfParameters.add("Скорость копания\nсможет быстрее копать норки");
+            descriptionOfParameters.add("Коэффициент урона\nурон животного будет больше");
         }
 
         if(descriptionOfPlantParameters.size()==0) {
@@ -84,7 +85,7 @@ public class Lobby extends World
             buttons.add("3");
             buttons.add("=");
             buttons.add("-");
-            buttons.add("лкм");
+            buttons.add("пкм");
         }
         
         if(scenario.size()==0){
@@ -96,7 +97,7 @@ public class Lobby extends World
             scenario.add("Еще одним важным параметром является температура. Если разница температуры с 36 больше 10, то животное войдет в анабиоз и, если теспература не нормализуется, умрет.");
             scenario.add("Чтобы было удобнее, можно следить за параметрами животного, нажав на него правой кнопкой мыши. Что же, основы ты знаешь, теперь давай посмотрим другие планеты. Для этого нажми Backspace.");
             scenario.add("На новой планете будут соперники, которые хотят, чтобы именно их животные были главным видом планеты");
-            scenario.add("Для победы необходимо, чтобы именно твои животные первыми достигли численности 30. Удачи!");
+            scenario.add("Для победы необходимо, чтобы именно твои животные первыми достигли численности 100. Удачи!");
             for(int i=0;i<scenario.size();i++){
                 String s=scenario.get(i);
                 lIndex =getWidth()/15;
@@ -136,6 +137,7 @@ public class Lobby extends World
             da.r=Greenfoot.getRandomNumber(360);
             addObject(da,Greenfoot.getRandomNumber(getWidth()),Greenfoot.getRandomNumber(getHeight()));
         }
+        MyWorld.pl=new Player(1);
         EvoSim evoSim = new EvoSim();
         addObject(evoSim,600,180);
         Play play = new Play();

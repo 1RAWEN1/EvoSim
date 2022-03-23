@@ -16,12 +16,13 @@ public class MyWorld extends World
     ArrayList<Double> dna = new ArrayList<>();
     ArrayList<Double> dna1 = new ArrayList<>();
 
-    public static final double classificationOfSpecies = 0.1;
+    public static final double classificationOfSpecies = 0.2;
+    public static final double cofOfEvolution = 0.1;
+    public static final double classificationOfEnemies = classificationOfSpecies + cofOfEvolution;
     public static final int dnaSizeOfAnimal = 23;
     public static final int dnaSizeOfPlant = 17;
     public static int an;
     public static int plants;
-    public static final double cofOfEvolution = 0.1;
     public static final int temp=60;
 
     public static Player pl;
@@ -60,6 +61,8 @@ public class MyWorld extends World
     GreenfootImage ground=new GreenfootImage("ground1.jpg");
     GreenfootImage sand=new GreenfootImage("sand.png");
     int numOfWater;
+
+    public static Water ocean;
     public void prepare(){
         setPaintOrder(Fon.class, Animal.class, Player.class, Egg.class, DieAnimal.class, Plant.class, Hole.class, HoleRoom.class, Water.class);
 
@@ -68,7 +71,8 @@ public class MyWorld extends World
             Water water=new Water(false);
             addObject(water, Greenfoot.getRandomNumber(getWidth()), Greenfoot.getRandomNumber(getHeight())); 
         }
-        addObject(new Water(true), getWidth()/2, getHeight()/4);
+        ocean = new Water(true);
+        addObject(ocean, getWidth()/2, getHeight()/4);
         for(int i=0;i<10+Greenfoot.getRandomNumber(10)-5;i++){
             Hole h=new Hole(Greenfoot.getRandomNumber(9)+1,1);
             addObject(h, Greenfoot.getRandomNumber(getWidth()), Greenfoot.getRandomNumber(getHeight()));
@@ -80,7 +84,7 @@ public class MyWorld extends World
             dna1.add((double) (-1));
         }
         for(int i = 0;i < 2; i++){
-            addObject(new Plant(dna1, 0, 0, false),
+            addObject(new Plant(dna1, 0, 0, false, false),
                     (getWidth() / 2) + Greenfoot.getRandomNumber(50) - 25,
                     (getHeight() / 4) + Greenfoot.getRandomNumber(50) - 25);
         }
@@ -225,7 +229,7 @@ public class MyWorld extends World
                 }
                 eye.scale(eyeSize,eyeSize);
                 eye.rotate(an1.animalRotation);
-                int t = Math.min(an1.transparent, (int)(255*(1-an1.maskCof)));
+                int t = Math.min(an1.transparent, (int)(255*(Math.max(0, 1-an1.maskCof))));
                 eye.setTransparency(t);
                 im.drawImage(eye, (an1.animalSize %2)*(int)((Fon.cof/2)+0.5)+(int)(0.5+(an1.getX()-pl.getX()+(int)(600/Fon.cof))*Fon.cof)-eye.getWidth()/2, (an1.animalSize %2)*(int)((Fon.cof/2)+0.5)+(int)(0.5+(an1.getY()-pl.getY()+(int)(350/Fon.cof))*Fon.cof)-eye.getHeight()/2);
             }
@@ -271,7 +275,7 @@ public class MyWorld extends World
                 int animals = 0;
                 int hunters = 0;
                 for (int i = 0; i < getObjects(Animal.class).size(); i++) {
-                    if(getObjects(Animal.class).get(i).canEatPlant()) {
+                    if(getObjects(Animal.class).get(i).predation < 0.5) {
                         animals++;
                         parameter = (parameter * ((double) (animals - 1) / animals)) + (getObjects(Animal.class).get(i).dna.get(j) * (1.0 / animals));
                     }
@@ -291,7 +295,7 @@ public class MyWorld extends World
                     parameter = parameter * ((double) i / (i + 1)) + (getObjects(Plant.class).get(i).dna.get(j) * (1.0 / (i + 1)));
                 }
 
-                chart.addValue(51 + j, parameter);
+                chart.addValue(5 + (MyWorld.dnaSizeOfAnimal * 2) + j, parameter);
             }
 
             chart.updateImage();

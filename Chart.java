@@ -40,7 +40,7 @@ public class Chart extends Actor{
 
     public Chart(int xSize, int ySize){
         myImage = new GreenfootImage(xSize, ySize);
-        for(int i = 0; i < maxTypeOfChart + 26; i++){
+        for(int i = 0; i < maxTypeOfChart + MyWorld.dnaSizeOfAnimal + 3; i++){
             valueY.add(new ArrayList<>());
         }
 
@@ -75,19 +75,19 @@ public class Chart extends Actor{
             myImage.setColor(Color.RED);
             updateImage1(4, 200);
         }
-        else if(typeOfChart - 1 < 23){
+        else if(typeOfChart - 1 < MyWorld.dnaSizeOfAnimal){
             updateImage2(5 + ((typeOfChart - 1) * 2));
 
-            lab.setValue(Lobby.descriptionOfParameters.get(typeOfChart - 1));
             lab.setFillColor(new Color(0, 0, 0, 100));
+            lab.setValue(Lobby.descriptionOfParameters.get(typeOfChart - 1));
             myImage.drawImage(lab.updateImage2(),600-lab.updateImage2().getWidth()/2,50);
         }
         else{
             myImage.setColor(Color.GREEN);
-            updateImage1(51 + (typeOfChart - 24), 0);
+            updateImage1(5 + (MyWorld.dnaSizeOfAnimal * 2) + (typeOfChart - (MyWorld.dnaSizeOfAnimal + 1)), 0);
 
-            lab.setValue(Lobby.descriptionOfPlantParameters.get(typeOfChart - 24));
             lab.setFillColor(new Color(0, 0, 0, 100));
+            lab.setValue(Lobby.descriptionOfPlantParameters.get(typeOfChart - (MyWorld.dnaSizeOfAnimal + 1)));
             myImage.drawImage(lab.updateImage2(),600-lab.updateImage2().getWidth()/2,50);
         }
 
@@ -122,8 +122,14 @@ public class Chart extends Actor{
                 y1=y;
             }
         }
-    }
 
+        if(num > 3){
+            lab.setFillColor(Color.GREEN);
+            lab.setValue("Value: " + valueY.get(num).get(valueY.get(num).size() - 1));
+
+            myImage.drawImage(lab.updateImage2(),600-lab.updateImage2().getWidth()/2,100);
+        }
+    }
     public void updateImage2(int num){
         num--;
         x1=0;
@@ -165,6 +171,14 @@ public class Chart extends Actor{
                 y1=y;
             }
         }
+
+        lab.setFillColor(Color.BLUE);
+        lab.setValue("Value: " + valueY.get(num).get(valueY.get(num).size() - 1));
+        myImage.drawImage(lab.updateImage2(),600-lab.updateImage2().getWidth()/2,110);
+
+        lab.setFillColor(Color.RED);
+        lab.setValue("Value: " + valueY.get(num + 1).get(valueY.get(num + 1).size() - 1));
+        myImage.drawImage(lab.updateImage2(),600-lab.updateImage2().getWidth()/2,140);
     }
 
     public void addValue(int num, double value){

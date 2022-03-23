@@ -1,5 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
+import java.util.ArrayList;
+
 /**
  * Write a description of class AnimalWorld here.
  * 
@@ -26,6 +28,7 @@ public class AnimalWorld extends World
      * Prepare the world for the start of the program.
      * That is: create the initial objects and add them to the world.
      */
+    private ArrayList<Double> animalDNA=new ArrayList<>();
     Label lab;
     private void prepare()
     {
@@ -37,6 +40,14 @@ public class AnimalWorld extends World
         addObject(arrow,800,230);
         Arrow arrow2 = new Arrow(false);
         addObject(arrow2,800,370);
+        Back b=new Back();
+        addObject(b,100,100);
+
+        for(int i = 0; i < MyWorld.dnaSizeOfAnimal; i++){
+            animalDNA.add(0.0);
+        }
+
+        animalDNA = new ArrayList<>(new Animal(animalDNA, MyWorld.pl, 0, false, 0, 0, false).dna);
     }
     
     public void act(){
