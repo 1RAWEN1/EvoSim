@@ -25,7 +25,14 @@ public class Egg extends RealObject
     int location;
     double liveBirth;
     ArrayList <Double> dna;
-    public Egg(ArrayList<Double> dna1, int location, Player pl, int tn, boolean inHole){
+
+    double maskCof;
+
+    int food;
+    int water;
+
+    boolean mutate;
+    public Egg(ArrayList<Double> dna1, int location, Player pl, int tn, boolean inHole, int food, int water, boolean mutate){
         this.inHole = inHole;
         teamNum=tn;
         myPl=pl;
@@ -38,6 +45,12 @@ public class Egg extends RealObject
         if(size < 1){
             size = 1;
         }
+
+        this.mutate = mutate;
+
+        maskCof = 0.9 / size;
+        this.food = food;
+        this.water = water;
         updateImage(size, 255);
     }
     public void updateImage(int s, int t){
@@ -67,7 +80,7 @@ public class Egg extends RealObject
         }
         if(tim>= period){
             Animal an=new Animal(dna, myPl, teamNum, inHole
-                    , (int) (Math.pow(size, 3) * liveBirth), (int) (Math.pow(size, 3) * liveBirth));
+                    , food, water, mutate);
             getWorld().addObject(an, getX(), getY());
             getWorld().removeObject(this);
         }// Add your action code here.

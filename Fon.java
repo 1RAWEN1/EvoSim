@@ -62,8 +62,8 @@ public class Fon extends Actor
             image.drawImage(temp.updateImage(), 0,70);
         }
         if(MyWorld.bot !=null){
-            image.drawImage(drawBar(100,20,MyWorld.pl.myAn,30,Color.WHITE,new Color(0,255,255,255),"животные"),0,10);
-            image.drawImage(drawBar(100,20,MyWorld.bot.myAn,30,Color.WHITE,new Color(255,30,0,255),"животные"),0,40);
+            image.drawImage(drawBar(100,20,MyWorld.pl.myAn,50,Color.WHITE,new Color(0,255,255,255),"животные"),0,10);
+            image.drawImage(drawBar(100,20,MyWorld.bot.myAn,50,Color.WHITE,new Color(255,30,0,255),"животные"),0,40);
             image.drawImage(drawBar(100,20,MyWorld.plants,50,Color.WHITE,Color.GREEN,"растения"),0,70);
         }
         else{
@@ -100,7 +100,7 @@ public class Fon extends Actor
             image.drawImage(unLab.updateImage(),0,300);
         }
         if(MyWorld.plMode <2){
-            if(MyWorld.pl.myAn>=30 || MyWorld.bot.xp<=0){
+            if(MyWorld.pl.myAn>=50 || MyWorld.bot.xp<=0){
                 unLab.setValue("ПОБЕДА!");
                 unLab.setFillColor(Color.GREEN);
                 image.drawImage(unLab.updateImage2(),600-(unLab.updateImage().getWidth()/2),350);
@@ -108,7 +108,7 @@ public class Fon extends Actor
                     winTimer =100;
                 }
             }
-            else if(MyWorld.bot.myAn>=30 || MyWorld.pl.xp<=0){
+            else if(MyWorld.bot.myAn>=50 || MyWorld.pl.xp<=0){
                 unLab.setValue("ПОРАЖЕНИЕ!");
                 unLab.setFillColor(Color.RED);
                 image.drawImage(unLab.updateImage2(),600-(unLab.updateImage().getWidth()/2),350);
@@ -116,14 +116,14 @@ public class Fon extends Actor
                     winTimer =100;
                 }
             }
-            else if(MyWorld.plants>=50){
+            /*else if(MyWorld.plants>=50){
                 unLab.setValue("НИЧЬЯ!");
                 unLab.setFillColor(Color.BLACK);
                 image.drawImage(unLab.updateImage2(),600-(unLab.updateImage().getWidth()/2),350);
                 if(winTimer ==0){
                     winTimer =100;
                 }
-            }
+            }*/
             unLab.setFillColor(Color.BLACK);
             
             unLab.setValue("Evo: "+MyWorld.pl.elixir);
@@ -170,11 +170,11 @@ public class Fon extends Actor
             unLab.setFillColor(Color.BLACK);
             image.drawImage(unLab.updateImage(), 1150,180);
             image.drawImage(shield,1110,210);
-            unLab.setValue(""+(int)(MyWorld.observedAnimal.protection*100));
+            unLab.setValue(""+MyWorld.observedAnimal.getProtection());
             unLab.setFillColor(Color.BLACK);
             image.drawImage(unLab.updateImage(), 1150,210);
             image.drawImage(mask,1110,240);
-            unLab.setValue(""+(int)(MyWorld.observedAnimal.maxMaskCof *100));
+            unLab.setValue(""+(int)(MyWorld.observedAnimal.maskCof *100) + " %");
             unLab.setFillColor(Color.BLACK);
             image.drawImage(unLab.updateImage(), 1150,240);
             if(MyWorld.observedAnimal.predation <=0.3){
@@ -188,6 +188,9 @@ public class Fon extends Actor
             }
             unLab.setFillColor(Color.BLACK);
             image.drawImage(unLab.updateImage(), 1100,270);
+            unLab.setValue("" + ((int)(MyWorld.observedAnimal.predation * 1000) / 1000.0));
+            unLab.setFillColor(Color.BLACK);
+            image.drawImage(unLab.updateImage(), 1100,300);
         }
         else if(MyWorld.observedPlant != null){
             image.drawImage(drawBar(100,20,MyWorld.observedPlant.water, MyWorld.observedPlant.maxWater,new Color(153,217,234),new Color(0,126,232),"вода"),1100, 10);
@@ -216,6 +219,10 @@ public class Fon extends Actor
             unLab.setValue(""+(MyWorld.observedPlant.damage + MyWorld.observedPlant.poison));
             unLab.setFillColor(Color.BLACK);
             image.drawImage(unLab.updateImage(), 1150,150);
+            image.drawImage(mask,1110,180);
+            unLab.setValue(""+(int)(MyWorld.observedPlant.maskCof *100) + " %");
+            unLab.setFillColor(Color.BLACK);
+            image.drawImage(unLab.updateImage(), 1150,180);
         }
         if(MyWorld.pl.newSelection ==1){
             newSelect=new GreenfootImage(450,100);

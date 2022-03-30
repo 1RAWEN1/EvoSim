@@ -50,10 +50,10 @@ public class Water extends RealObject
                 if (cof < 1) {
                     cof /= 4;
                     cof = Math.min(cof, 0.5);
-                    size = (int) (1 / (surroundingTemp * 0.0001)) + Greenfoot.getRandomNumber((int) (getWorld().getWidth() * cof));
+                    size = Math.min(200, (int) (1 / (surroundingTemp * 0.0001))) + Greenfoot.getRandomNumber((int) (getWorld().getWidth() * cof));
                 } else if (cof >= 1) {
                     cof *= 4;
-                    size = (int) (1 / (surroundingTemp * 0.0001)) + Greenfoot.getRandomNumber((int) (getWorld().getWidth() / cof));
+                    size = Math.min(200, (int) (1 / (surroundingTemp * 0.0001))) + Greenfoot.getRandomNumber((int) (getWorld().getWidth() / cof));
                 }
                 if (size < 1) {
                     size = 1;
@@ -87,30 +87,30 @@ public class Water extends RealObject
                 setImage(image);
                 if (MyWorld.plMode != 2) {
                     for (int i = 0; i < 10; i++) {
-                        getWorld().addObject(new Plant(par2, 0, 0, false), getX() + Greenfoot.getRandomNumber(size) - size / 2, getY() + Greenfoot.getRandomNumber(size) - size / 2);
+                        getWorld().addObject(new Plant(par2, 0, 0, false, false), getX() + Greenfoot.getRandomNumber(size) - size / 2, getY() + Greenfoot.getRandomNumber(size) - size / 2);
                     }
                 }
 
                 start = 1;
             }
             timer++;
-            if (MyWorld.plants < 10 && surroundingTemp > 26 && !isTouching(Animal.class) && MyWorld.plMode != 2) {
+            if (MyWorld.plants < 10 && surroundingTemp >= 26 && !isTouching(Animal.class) && MyWorld.plMode != 2) {
                 for (int i = 0; i < 10; i++) {
                     rot = Greenfoot.getRandomNumber(360);
                     dist = Greenfoot.getRandomNumber(size / 2);
-                    getWorld().addObject(new Plant(par2, 0, 0, false), getX() + (int) (dist * Math.cos(Math.toRadians(rot))), getY() + (int) (dist * Math.sin(Math.toRadians(rot))));
+                    getWorld().addObject(new Plant(par2, 0, 0, false, false), getX() + (int) (dist * Math.cos(Math.toRadians(rot))), getY() + (int) (dist * Math.sin(Math.toRadians(rot))));
                 }
-            } else if (MyWorld.plants < 2 && surroundingTemp > 26 && MyWorld.plMode == 2 && Greenfoot.getRandomNumber(50) == 1) {
+            } /*else if (MyWorld.plants < 2 && surroundingTemp >= 26 && MyWorld.plMode == 2 && Greenfoot.getRandomNumber(50) == 1) {
                 rot = Greenfoot.getRandomNumber(360);
                 dist = Greenfoot.getRandomNumber(size / 2);
-                getWorld().addObject(new Plant(par2, 0, 0, false), getX() + (int) (dist * Math.cos(Math.toRadians(rot))), getY() + (int) (dist * Math.sin(Math.toRadians(rot))));
-            }
+                getWorld().addObject(new Plant(par2, 0, 0, false, false), getX() + (int) (dist * Math.cos(Math.toRadians(rot))), getY() + (int) (dist * Math.sin(Math.toRadians(rot))));
+            }*/
 
-            if (isTouching(Plant.class) && MyWorld.plMode == 2 && surroundingTemp > 26 && MyWorld.pl.myAn < 2 && MyWorld.plants > 50 && Greenfoot.getRandomNumber(100) == 1) {
+            if (isTouching(Plant.class) && MyWorld.plMode == 2 && surroundingTemp >= 26 && MyWorld.pl.myAn + MyWorld.pl.omnivorous < 2 && MyWorld.plants > 50 && Greenfoot.getRandomNumber(100) == 1) {
                 rot = Greenfoot.getRandomNumber(360);
                 dist = Greenfoot.getRandomNumber(size / 2);
                 par.set(20, 0.0);
-                getWorld().addObject(new Animal(par, MyWorld.pl, 0, false, 0, 0), getX() + (int) (dist * Math.cos(Math.toRadians(rot))), getY() + (int) (dist * Math.sin(Math.toRadians(rot))));
+                getWorld().addObject(new Animal(par, MyWorld.pl, 0, false, 0, 0, false), getX() + (int) (dist * Math.cos(Math.toRadians(rot))), getY() + (int) (dist * Math.sin(Math.toRadians(rot))));
             }
 
             if (timer == 10) {
@@ -139,7 +139,8 @@ public class Water extends RealObject
                     setImage(image);
                 }
                 timer = 0;
-                if (size == 1) {
+
+                if (size == 1 || !isTouching(Water.class)) {
                     getWorld().removeObject(this);
                 }
             }
@@ -174,7 +175,7 @@ public class Water extends RealObject
                 setImage(image);
                 if (MyWorld.plMode != 2) {
                     for (int i = 0; i < 10; i++) {
-                        getWorld().addObject(new Plant(par2, 0, 0, false), getX() + Greenfoot.getRandomNumber(getWorld().getWidth()) - getWorld().getWidth() / 2, getY() + Greenfoot.getRandomNumber(getWorld().getHeight() / 2) - getWorld().getHeight() / 4);
+                        getWorld().addObject(new Plant(par2, 0, 0, false, false), getX() + Greenfoot.getRandomNumber(getWorld().getWidth()) - getWorld().getWidth() / 2, getY() + Greenfoot.getRandomNumber(getWorld().getHeight() / 2) - getWorld().getHeight() / 4);
                     }
                 }
 
@@ -183,23 +184,23 @@ public class Water extends RealObject
                 start = 1;
             }
 
-            if (MyWorld.plants < 10 && !isTouching(Animal.class) && MyWorld.plMode != 2) {
+            /*if (MyWorld.plants < 10 && !isTouching(Animal.class) && MyWorld.plMode != 2) {
                 for (int i = 0; i < 10; i++) {
                     rot = Greenfoot.getRandomNumber(360);
-                    dist = Greenfoot.getRandomNumber(size / 2);
-                    getWorld().addObject(new Plant(par2, 0, 0, false), getX() + (int) (dist * Math.cos(Math.toRadians(rot))), getY() + (int) (dist * Math.sin(Math.toRadians(rot))));
+                    dist = Greenfoot.getRandomNumber(100);
+                    getWorld().addObject(new Plant(par2, 0, 0, false, false), getX() + (int) (dist * Math.cos(Math.toRadians(rot))), getY() + (int) (dist * Math.sin(Math.toRadians(rot))));
                 }
-            } else if (MyWorld.plants < 2 && MyWorld.plMode == 2 && Greenfoot.getRandomNumber(50) == 1) {
+            } else */if (MyWorld.plants < 2 && Greenfoot.getRandomNumber(50) == 1) {
                 rot = Greenfoot.getRandomNumber(360);
-                dist = Greenfoot.getRandomNumber(size / 2);
-                getWorld().addObject(new Plant(par2, 0, 0, false), getX() + (int) (dist * Math.cos(Math.toRadians(rot))), getY() + (int) (dist * Math.sin(Math.toRadians(rot))));
+                dist = Greenfoot.getRandomNumber(100);
+                getWorld().addObject(new Plant(par2, 0, 0, false, false), getX() + (int) (dist * Math.cos(Math.toRadians(rot))), getY() + (int) (dist * Math.sin(Math.toRadians(rot))));
             }
 
-            if (isTouching(Plant.class) && MyWorld.plMode == 2 && MyWorld.pl.myAn < 2 && MyWorld.plants > 50 && Greenfoot.getRandomNumber(100) == 1) {
+            if (isTouching(Plant.class) && MyWorld.plMode == 2 && MyWorld.pl.myAn + MyWorld.pl.omnivorous < 4 && MyWorld.plants > 50 && Greenfoot.getRandomNumber(100) == 1) {
                 rot = Greenfoot.getRandomNumber(360);
-                dist = Greenfoot.getRandomNumber(size / 2);
+                dist = Greenfoot.getRandomNumber(50);
                 par.set(20, 0.0);
-                getWorld().addObject(new Animal(par, MyWorld.pl, 0, false, 0, 0), getX() + (int) (dist * Math.cos(Math.toRadians(rot))), getY() + (int) (dist * Math.sin(Math.toRadians(rot))));
+                getWorld().addObject(new Animal(par, MyWorld.pl, 0, false, 0, 0, false), getX() + (int) (dist * Math.cos(Math.toRadians(rot))), getY() + (int) (dist * Math.sin(Math.toRadians(rot))));
             }
         }
     }    
