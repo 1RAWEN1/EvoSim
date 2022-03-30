@@ -1126,7 +1126,7 @@ public class Animal extends RealObject
                     // && (int) (plant.poison * (1 - poisonProtection)) <= 0 && plant.damage - (int) (protection * animalSize) <=0
                     //distToObject / plant.satietyValueForBar < minFoodDist / this.plant.satietyValueForBar && plant.satietyValueForBar > 3
                     if (this.plant == null ||
-                            distToObject / Math.max(1 ,getValueOfSatietyICanEat(plant)) < minFoodDist / Math.max(1, getValueOfSatietyICanEat(this.plant))) {
+                            getValueOfSatietyICanEat(plant) > getValueOfSatietyICanEat(this.plant)) {
                         if (Math.pow(getX() - plant.getX(), 2) + Math.pow(getY() - plant.getY(), 2) < Math.pow(maxRadiusView - (int) (plant.maskCof * maxRadiusView), 2)) {
                             this.plant = plant;
 
@@ -1192,7 +1192,7 @@ public class Animal extends RealObject
         //                canEatPlant() && canEatMeat() && plant != null && minFoodDist * (food != null ? predation * food.satiety : 0) < minDistToExtraction * (1 - predation) * (plant.satiety - (plant.maxSatiety * ((double)Math.max(0, plant.size - animalSize) / plant.size)))
         //                        && minFoodDist * (enemyAnimal != null ? (movementSpeed - enemyAnimal.movementSpeed) * enemyAnimal.satiety * predation : 0) < minDistToEnemy * movementSpeed * (plant.satiety - (plant.maxSatiety * ((double)Math.max(0, plant.size - animalSize) / plant.size))) * (1 - predation)
         else if (canEatPlant() && !canEatMeat() && plant != null ||
-                 canEatPlant() && canEatMeat() && plant != null && minFoodDist * (food != null ? getValueOfFoodICanEAt(food) : 0) < minDistToExtraction * (1 - predation) * getValueOfSatietyICanEat(plant)
+                 canEatPlant() && canEatMeat() && plant != null && minFoodDist * (food != null ? getValueOfFoodICanEat(food) : 0) < getValueOfSatietyICanEat(plant)
                                 && (enemyAnimal != null ? enemyAnimal.satiety * predation : 0) < getValueOfSatietyICanEat(plant)) {
             turnTowards(plant.getX(), plant.getY());
             rotationToTarget = getRotation();
@@ -1202,7 +1202,7 @@ public class Animal extends RealObject
         //            enemyAnimal != null && canEatMeat() && MyWorld.plMode == 2 && food == null*/
         // && minDistToExtraction > minDistToEnemy && isGrowUp() ||
         //                enemyAnimal != null && canEatMeat() && MyWorld.plMode == 2 && food == null
-        else if (canEatMeat() && enemyAnimal != null && MyWorld.plMode < 2 || enemyAnimal != null && canEatMeat() && MyWorld.plMode == 2 && food == null || enemyAnimal != null && canEatMeat() && MyWorld.plMode == 2 && minDistToExtraction * (movementSpeed - enemyAnimal.movementSpeed) * enemyAnimal.satiety > minDistToEnemy * movementSpeed * getValueOfFoodICanEAt(food)) {
+        else if (canEatMeat() && enemyAnimal != null && MyWorld.plMode < 2 || enemyAnimal != null && canEatMeat() && MyWorld.plMode == 2 && food == null || enemyAnimal != null && canEatMeat() && MyWorld.plMode == 2 && enemyAnimal.satiety * predation > getValueOfFoodICanEat(food)) {
             turnTowards(enemyAnimal.getX(), enemyAnimal.getY());
             rotationToTarget = getRotation();
             canTurn = true;
@@ -1234,7 +1234,7 @@ public class Animal extends RealObject
         return canClimb || p.location == 3 ? Math.max(0, p.satiety - (p.maxSatiety * predation)) : Math.max(0, Math.min(p.satiety - (p.maxSatiety * predation), p.satiety - (p.maxSatiety * ((double)Math.max(0, p.size - animalSize) / p.size))));
     }
 
-    public double getValueOfFoodICanEAt(DieAnimal d){
+    public double getValueOfFoodICanEat(DieAnimal d){
         return Math.max(0, d.satiety - (d.maxSatiety * (1 - predation)));
     }
 
