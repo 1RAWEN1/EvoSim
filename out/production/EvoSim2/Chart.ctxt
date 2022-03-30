@@ -1,0 +1,19 @@
+#BlueJ class context
+comment0.target=Chart
+comment1.params=
+comment1.target=void\ min()
+comment2.params=
+comment2.target=void\ max()
+comment3.params=xSize\ ySize
+comment3.target=Chart(int,\ int)
+comment4.params=
+comment4.target=void\ createImage()
+comment5.params=
+comment5.target=void\ updateImage()
+comment6.params=num\ maxYPos
+comment6.target=void\ updateImage1(int,\ int)
+comment7.params=num
+comment7.target=void\ updateImage2(int)
+comment8.params=num\ value
+comment8.target=void\ addValue(int,\ double)
+numComments=9
