@@ -98,7 +98,7 @@ public class Plant extends RealObject
     Egg egg;
     DieAnimal food;
 
-    private final int foodCof = 5000;//7000
+    private final int foodCof = 7000;//7000
     
     public Plant(ArrayList<Double> dna1, int food1, int water1, boolean inHole, boolean mutate){
         this.inHole=inHole;
@@ -271,7 +271,7 @@ public class Plant extends RealObject
         if(cof > 2.4){
             cof = 2.4;
         }*/
-        cof = 1.4;//1.6
+        cof = 1.8;//1.6
         
         if(dna.get(12)>=0){
             poison = (int)(dna.get(12) * 100);

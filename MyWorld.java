@@ -11,7 +11,7 @@ public class MyWorld extends World
 
     /**
      * Constructor for objects of class MyWorld.
-     * 
+     *
      */
     ArrayList<Double> dna = new ArrayList<>();
     ArrayList<Double> dna1 = new ArrayList<>();
