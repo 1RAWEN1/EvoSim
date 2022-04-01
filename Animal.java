@@ -1126,7 +1126,7 @@ public class Animal extends RealObject
                     // && (int) (plant.poison * (1 - poisonProtection)) <= 0 && plant.damage - (int) (protection * animalSize) <=0
                     //distToObject / plant.satietyValueForBar < minFoodDist / this.plant.satietyValueForBar && plant.satietyValueForBar > 3
                     if (this.plant == null && getValueOfSatietyICanEat(plant) > 0 ||
-                            this.plant != null && distToObject / Math.max(1 ,getValueOfSatietyICanEat(plant)) < minFoodDist / Math.max(1, getValueOfSatietyICanEat(this.plant))) {
+                            this.plant != null && minFoodDist * getValueOfSatietyICanEat(plant) > distToObject * getValueOfSatietyICanEat(this.plant)) {
                         if (Math.pow(getX() - plant.getX(), 2) + Math.pow(getY() - plant.getY(), 2) < Math.pow(maxRadiusView - (int) (plant.maskCof * maxRadiusView), 2)) {
                             this.plant = plant;
 
@@ -1144,7 +1144,7 @@ public class Animal extends RealObject
         if(canEatMeat() && !inHole){
             for (DieAnimal food : getObjectsInRange(maxRadiusView, DieAnimal.class)) {
                 distToObject = Math.pow(food.getX() - getX(), 2) + Math.pow(food.getY() - getY(), 2);
-                if (this.food == null && getValueOfFoodICanEat(food) > 0 || this.food != null && distToObject / Math.max(1, getValueOfFoodICanEat(food)) < minDistToExtraction / Math.max(1, getValueOfFoodICanEat(this.food))) {
+                if (this.food == null && getValueOfFoodICanEat(food) > 0 || this.food != null && minDistToExtraction * getValueOfFoodICanEat(food) > distToObject * getValueOfFoodICanEat(this.food)) {
                     this.food = food;
 
                     minDistToExtraction = distToObject;
@@ -1572,8 +1572,8 @@ public class Animal extends RealObject
     // - (isTurn ? 0.25 : 0)
     private void calcMask(){
         // + Math.min(0.5, touchingPl != null ? Math.pow(touchingPl.size, 2) : 0 * 0.5 / Math.pow(animalSize, 2)))
-        // + (0.9 / Math.pow(animalSize, 2))
-        maskCof = Math.min(1.0, ((maxMaskCof) * (1.0 - (isMove ? 0.5 : 0))));
+        //
+        maskCof = Math.min(1.0, ((maxMaskCof + (0.9 / Math.pow(animalSize, 2))) * (1.0 - (isMove ? 0.5 : 0))));
     }
     
     double dx;
