@@ -248,7 +248,7 @@ public class Plant extends RealObject
             }
         }
         else{
-            distToChild = 180;//200
+            distToChild = 120;//200
             dna.set(9, (double) distToChild);
         }
         
@@ -256,7 +256,7 @@ public class Plant extends RealObject
             radius= dna.get(10).intValue();
         }
         else{
-            radius = 180;//200
+            radius = 120;//200
             dna.set(10, (double) radius);
         }
         
@@ -271,7 +271,7 @@ public class Plant extends RealObject
         if(cof > 2.4){
             cof = 2.4;
         }*/
-        cof = 1.8;//1.6
+        cof = 1.6;//1.6
         
         if(dna.get(12)>=0){
             poison = (int)(dna.get(12) * 100);
