@@ -16,7 +16,7 @@ public class MyWorld extends World
     ArrayList<Double> dna = new ArrayList<>();
     ArrayList<Double> dna1 = new ArrayList<>();
 
-    public static final double classificationOfSpecies = 0.2;
+    public static final double classificationOfSpecies = 0.1;
     public static final double cofOfEvolution = 0.1;
     public static final double classificationOfEnemies = classificationOfSpecies + cofOfEvolution;
     public static final int dnaSizeOfAnimal = 23;
