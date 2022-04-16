@@ -165,6 +165,8 @@ public class Plant extends RealObject
             period = 3;//3
             dna.set(3, 3.5);
         }
+
+        period = Math.max(period, 1);
         
         if(dna.get(4)>=0){
             predation = dna.get(4);
@@ -184,7 +186,7 @@ public class Plant extends RealObject
             heatCof = dna.get(5);
         }
         else{
-            heatCof =0.6;
+            heatCof =0.45;
             dna.set(5, heatCof);
         }
         if(heatCof >0.9){
@@ -271,7 +273,7 @@ public class Plant extends RealObject
         if(cof > 2.4){
             cof = 2.4;
         }*/
-        cof = 1.6;//1.6
+        cof = 3.4;//1.6
         
         if(dna.get(12)>=0){
             poison = (int)(dna.get(12) * 100);
@@ -482,7 +484,7 @@ public class Plant extends RealObject
         if(start==0){
             //Math.max(200, Math.min(getY(), 500))
             //Math.min(Math.max(getX(), 300), 900)
-            setLocation(Math.min(Math.max(getX(), 300), 900), getY());
+            setLocation(getX(), getY());
             dx = getX();
             dy = getY();
             start=1;
@@ -570,7 +572,7 @@ public class Plant extends RealObject
     }
     
     public void photosynthesis(){
-        fEnergy = (int) (size * size * 5 * cof * (1 - predation));
+        fEnergy = (int) (size * size * 5 * cof * (1 - predation) * (1 - heatCof));
         if(location != 2 && moveCof < 0.5){
             for(Plant p : getObjectsInRange((int) (rootLength * size), Plant.class)){
                 if(p.moveCof < 0.5 && p.rootLength > 0)
@@ -862,7 +864,7 @@ public class Plant extends RealObject
     }
 
     private void calcMask(){
-        maskCof = (0.9 / Math.pow(size, 2)) * (1.0 - (move ? 0.5 : 0));
+        maskCof = (0.8 / Math.pow(size, 2)) * (1.0 - (move ? 0.5 : 0));
     }
     
     double dx;
