@@ -63,7 +63,6 @@ public class Plant extends RealObject
     int maxHp;
     
     int fertility;
-    int area;
     
     int distToChild;
     
@@ -340,8 +339,7 @@ public class Plant extends RealObject
         }
         maxHp = getFullSize() * 10;
         hp = maxHp;
-        area =50* size /20;
-        damage=(int)(5 * predation);
+        damage = (int)(getFullSize() * predation * 8) + (getFullSize() * 2);
         tim=0;
         radiusView = radius1 / maxSize;
         updateImage();
@@ -388,7 +386,6 @@ public class Plant extends RealObject
         setImage(image);
         
         maxHp = getFullSize() * 10;
-        area =50* size /20;
         damage=(int)(5 * predation);
         eat= size *2000;
         drink=2000* size;
