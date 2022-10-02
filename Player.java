@@ -148,7 +148,7 @@ public class Player extends RealObject
         if(Greenfoot.isKeyDown(Lobby.buttons.get(0)) && elixir>=5 && newSelection ==0 && botOrNo ==1 && pushE ==0 || botOrNo ==0 && elixir>=5 && Greenfoot.getRandomNumber(100)==0){
             elixir-=5;
             for(int i=0;i<6;i+=2){
-                parameters[i]=Greenfoot.getRandomNumber(22);
+                parameters[i]=Greenfoot.getRandomNumber(MyWorld.dnaSizeOfAnimal);
                 parameters[i+1]=Greenfoot.getRandomNumber(2);
             }
             newSelection =1;
@@ -250,7 +250,7 @@ public class Player extends RealObject
         if(sel==1){
             for(int i=0;i<3;i++){
                 pl=new Plant(plantDna,0, 0, false, false);
-                pl.myAge =pl.ageFodGrow;
+                pl.myAge =pl.ageForGrow;
                 getWorld().addObject(pl, getX() + Greenfoot.getRandomNumber(50)-50/2, getY() + Greenfoot.getRandomNumber(50)-50/2);
             }
         }
@@ -848,7 +848,7 @@ public class Player extends RealObject
     public void attack(){
         if(predation >0.3 && tEgg!=null && tEgg.teamNum!=teamNum){
             if(sit1< maxSatiety && tEgg.image.getWidth()<=image.getWidth() && location==tEgg.location){
-                sit1=sit1+(tEgg.image.getWidth()*35000);
+                sit1=sit1+(tEgg.food);
                 getWorld().removeObject(tEgg);
                 tEgg=null;
             }

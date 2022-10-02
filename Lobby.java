@@ -48,13 +48,14 @@ public class Lobby extends World
             descriptionOfParameters.add("Максимальный возраст\nвремя жизни");
             descriptionOfParameters.add("Потомки\nколичество рожденных животных за один сезон");
             descriptionOfParameters.add("Скорость\nскорость на земле");
-            descriptionOfParameters.add("Радиус обзора\nрасстояние видиния животного");
+            descriptionOfParameters.add("Дальность видимости\nрасстояние видиния животного");
             descriptionOfParameters.add("Размер\nразмер животного");
             descriptionOfParameters.add("Мех\nживотное сможет выдерживать большую разницу температур");
             descriptionOfParameters.add("Хищник\nрастительно-, все- ядное или хищник?");
             descriptionOfParameters.add("Запас жира\nживотное сможет дольше обходится без еды");
             descriptionOfParameters.add("Скорость копания\nсможет быстрее копать норки");
-            descriptionOfParameters.add("Коэффициент урона\nурон животного будет больше");
+            descriptionOfParameters.add("Еда для потомка\nстартовый запас воды и еды, который получает потомок");
+            descriptionOfParameters.add("Радиус обзора\nможет ли животное видеть предметы сзади себя");
         }
 
         if(descriptionOfPlantParameters.size()==0) {
@@ -69,7 +70,7 @@ public class Lobby extends World
             descriptionOfPlantParameters.add("Плодовитость");
             descriptionOfPlantParameters.add("Степень рассления");
             descriptionOfPlantParameters.add("Радиус размножения");
-            descriptionOfPlantParameters.add("Коэффициент фотосинтеза");
+            descriptionOfPlantParameters.add("Еда для потомков");
             descriptionOfPlantParameters.add("Урон от яда");
             descriptionOfPlantParameters.add("Коэффициент спячки");
             descriptionOfPlantParameters.add("Длина корня");

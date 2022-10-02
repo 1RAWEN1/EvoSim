@@ -39,7 +39,7 @@ public class DieAnimal extends RealObject
     
     int size1;
     public void updateImage(){
-        size1=(int)(((double) satiety / maxSatiety)*size);
+        size1=(int)(Math.sqrt((double) satiety / maxSatiety) * size);
         if(size1<1){
             size1=1;
         }
