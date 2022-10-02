@@ -16,10 +16,10 @@ public class MyWorld extends World
     ArrayList<Double> dna = new ArrayList<>();
     ArrayList<Double> dna1 = new ArrayList<>();
 
-    public static final double classificationOfSpecies = 0.2;
     public static final double cofOfEvolution = 0.1;
+    public static final double classificationOfSpecies = cofOfEvolution * 2;
     public static final double classificationOfEnemies = classificationOfSpecies + cofOfEvolution;
-    public static final int dnaSizeOfAnimal = 23;
+    public static final int dnaSizeOfAnimal = 25;
     public static final int dnaSizeOfPlant = 17;
     public static int an;
     public static int plants;
@@ -73,7 +73,7 @@ public class MyWorld extends World
         }
         ocean = new Water(true);
         addObject(ocean, getWidth()/2, getHeight()/4);
-        for(int i=0;i<10+Greenfoot.getRandomNumber(10)-5;i++){
+        for(int i=0;i<10+Greenfoot.getRandomNumber(10);i++){
             Hole h=new Hole(Greenfoot.getRandomNumber(9)+1,1);
             addObject(h, Greenfoot.getRandomNumber(getWidth()), Greenfoot.getRandomNumber(getHeight()));
         }
@@ -85,8 +85,8 @@ public class MyWorld extends World
         }
         for(int i = 0;i < 2; i++){
             addObject(new Plant(dna1, 0, 0, false, false),
-                    (getWidth() / 2) + Greenfoot.getRandomNumber(50) - 25,
-                    (getHeight() / 4) + Greenfoot.getRandomNumber(50) - 25);
+                    (getWidth() / 2) + Greenfoot.getRandomNumber(100) - 50,
+                    275 + Greenfoot.getRandomNumber(100) - 50);
         }
         pl=new Player(1);
         addObject(pl, 600, 350);
@@ -97,7 +97,6 @@ public class MyWorld extends World
         addObject(fm, 600, 350);
         fon1=new Fon(null);
         addObject(fon1, 600, 350);
-        Greenfoot.setSpeed(100);
     }
     Actor subject;
     

@@ -175,7 +175,7 @@ public class Water extends RealObject
                 setImage(image);
                 if (MyWorld.plMode != 2) {
                     for (int i = 0; i < 10; i++) {
-                        getWorld().addObject(new Plant(par2, 0, 0, false, false), getX() + Greenfoot.getRandomNumber(getWorld().getWidth()) - getWorld().getWidth() / 2, getY() + Greenfoot.getRandomNumber(getWorld().getHeight() / 2) - getWorld().getHeight() / 4);
+                        getWorld().addObject(new Plant(par2, 0, 0, false, false), getX() + Greenfoot.getRandomNumber(getWorld().getWidth()) - (getWorld().getWidth() / 2), getY() + Greenfoot.getRandomNumber(getWorld().getHeight() / 2) - (getWorld().getHeight() / 4));
                     }
                 }
 
@@ -192,15 +192,17 @@ public class Water extends RealObject
                 }
             } else */if (MyWorld.plants < 2 && Greenfoot.getRandomNumber(50) == 1) {
                 rot = Greenfoot.getRandomNumber(360);
-                dist = Greenfoot.getRandomNumber(100);
-                getWorld().addObject(new Plant(par2, 0, 0, false, false), getX() + (int) (dist * Math.cos(Math.toRadians(rot))), getY() + (int) (dist * Math.sin(Math.toRadians(rot))));
+                dist = Greenfoot.getRandomNumber(50);
+                getWorld().addObject(new Plant(par2, 0, 0, false, false), getX() + (int) (dist * Math.cos(Math.toRadians(rot))), getY() + 100 + (int) (dist * Math.sin(Math.toRadians(rot))));
             }
 
             if (isTouching(Plant.class) && MyWorld.plMode == 2 && MyWorld.pl.myAn + MyWorld.pl.omnivorous < 4 && MyWorld.plants > 50 && Greenfoot.getRandomNumber(100) == 1) {
                 rot = Greenfoot.getRandomNumber(360);
                 dist = Greenfoot.getRandomNumber(50);
                 par.set(20, 0.0);
-                getWorld().addObject(new Animal(par, MyWorld.pl, 0, false, 0, 0, false), getX() + (int) (dist * Math.cos(Math.toRadians(rot))), getY() + (int) (dist * Math.sin(Math.toRadians(rot))));
+                //int x = getOneIntersectingObject(Plant.class).getX();
+                //int y = getOneIntersectingObject(Plant.class).getY();
+                getWorld().addObject(new Animal(par, MyWorld.pl, 0, false, 0, 0, false), getX() + (int) (dist * Math.cos(Math.toRadians(rot))), getY() + 100 + (int) (dist * Math.sin(Math.toRadians(rot))));
             }
         }
     }    
