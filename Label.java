@@ -168,7 +168,7 @@ public class Label extends Actor
             Lobby.buttons.set(4,"3");
             Lobby.buttons.set(5,"=");
             Lobby.buttons.set(6,"-");
-            Lobby.buttons.set(7,"лкм");
+            Lobby.buttons.set(7,"пкм");
         }
     }
 }

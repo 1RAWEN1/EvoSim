@@ -113,7 +113,7 @@ public class Water extends RealObject
                 getWorld().addObject(new Animal(par, MyWorld.pl, 0, false, 0, 0, false), getX() + (int) (dist * Math.cos(Math.toRadians(rot))), getY() + (int) (dist * Math.sin(Math.toRadians(rot))));
             }
 
-            if (timer == 10) {
+            if (timer == 10 && !isTouching(Water.class)) {
                 surroundingTemp = (int) ((double) (getX()) / getWorld().getWidth() * MyWorld.temp);
                 size -= (int) (size * surroundingTemp * 0.0001);
                 if (size < 1) {
@@ -140,7 +140,7 @@ public class Water extends RealObject
                 }
                 timer = 0;
 
-                if (size == 1 || !isTouching(Water.class)) {
+                if (size == 1) {
                     getWorld().removeObject(this);
                 }
             }

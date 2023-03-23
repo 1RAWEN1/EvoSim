@@ -48,7 +48,7 @@ public class Egg extends RealObject
 
         this.mutate = mutate;
 
-        maskCof = 0.9 / size;
+        maskCof = 0.9 / Math.pow(size, 2);
         this.food = food;
         this.water = water;
         updateImage(size, 255);
@@ -56,7 +56,7 @@ public class Egg extends RealObject
     public void updateImage(int s, int t){
         image = new GreenfootImage(s, s);
         image.setColor(new Color(255, 255, 255, t));
-        image.fillOval(0, 0, s, s);
+        image.fill();
         setImage(image);
     }
     public void act() 
@@ -73,6 +73,12 @@ public class Egg extends RealObject
             }
             start=1;
         }
+
+        if(location == 2 && !isTouching(Plant.class)){
+            location = 1;
+            updateImage(size, 255);
+        }
+
         timer++;
         if(timer>=50){
             timer=0;
@@ -84,6 +90,6 @@ public class Egg extends RealObject
             getWorld().addObject(an, getX(), getY());
             getWorld().removeObject(this);
         }// Add your action code here.
-    }    
+    }
 }
 

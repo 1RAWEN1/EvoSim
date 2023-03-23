@@ -17,7 +17,7 @@ public class MyWorld extends World
     ArrayList<Double> dna1 = new ArrayList<>();
 
     public static final double cofOfEvolution = 0.1;
-    public static final double classificationOfSpecies = cofOfEvolution * 2;
+    public static final double classificationOfSpecies = cofOfEvolution;
     public static final double classificationOfEnemies = classificationOfSpecies + cofOfEvolution;
     public static final int dnaSizeOfAnimal = 25;
     public static final int dnaSizeOfPlant = 17;
@@ -73,7 +73,7 @@ public class MyWorld extends World
         }
         ocean = new Water(true);
         addObject(ocean, getWidth()/2, getHeight()/4);
-        for(int i=0;i<10+Greenfoot.getRandomNumber(10);i++){
+        for(int i=0;i<20+Greenfoot.getRandomNumber(20);i++){
             Hole h=new Hole(Greenfoot.getRandomNumber(9)+1,1);
             addObject(h, Greenfoot.getRandomNumber(getWidth()), Greenfoot.getRandomNumber(getHeight()));
         }
@@ -182,7 +182,7 @@ public class MyWorld extends World
         if(plMode ==0){
             subject =pl;
             eye=new GreenfootImage("eye.png");
-            eyeSize =(int)(subject.getImage().getWidth()*Fon.cof*0.85);
+            eyeSize =(int)(subject.getImage().getWidth() * Fon.cof * 0.85);
             if(eyeSize <1){
                 eyeSize =1;
             }
@@ -230,7 +230,7 @@ public class MyWorld extends World
                 eye.rotate(an1.animalRotation);
                 int t = Math.min(an1.transparent, (int)(255*(Math.max(0, 1-an1.maskCof))));
                 eye.setTransparency(t);
-                im.drawImage(eye, (an1.animalSize %2)*(int)((Fon.cof/2)+0.5)+(int)(0.5+(an1.getX()-pl.getX()+(int)(600/Fon.cof))*Fon.cof)-eye.getWidth()/2, (an1.animalSize %2)*(int)((Fon.cof/2)+0.5)+(int)(0.5+(an1.getY()-pl.getY()+(int)(350/Fon.cof))*Fon.cof)-eye.getHeight()/2);
+                im.drawImage(eye, ((int)an1.animalSize %2)*(int)((Fon.cof/2)+0.5)+(int)(0.5+(an1.getX()-pl.getX()+(int)(600/Fon.cof))*Fon.cof)-eye.getWidth()/2, ((int)an1.animalSize %2)*(int)((Fon.cof/2)+0.5)+(int)(0.5+(an1.getY()-pl.getY()+(int)(350/Fon.cof))*Fon.cof)-eye.getHeight()/2);
             }
         }
         fon1.setImage1(im,image);

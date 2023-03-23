@@ -225,7 +225,7 @@ public class Fon extends Actor
             image.drawImage(unLab.updateImage(), 1150,180);
         }
         if(MyWorld.pl.newSelection ==1){
-            newSelect=new GreenfootImage(450,100);
+            newSelect=new GreenfootImage(401,100);
             for(int i=0;i<6;i+=2){
                 newSelect.setColor(Color.WHITE);
                 newSelect.drawImage(think,(i/2)*100+(i/2)*50,0);
@@ -237,9 +237,9 @@ public class Fon extends Actor
                 }
                 newSelect.drawRect((i/2)*100+(i/2)*50,0,100,99);
             }
-            image.drawImage(newSelect,600-newSelect.getWidth()/2,400);
             image.setColor(Color.RED);
             image.drawOval(600-(int)(50*cof),350-(int)(50*cof),(int)(100*cof),(int)(100*cof));
+            image.drawImage(newSelect,600-newSelect.getWidth()/2,400);
         }
         if(MyWorld.pl.newSelection ==1 && MyWorld.pl.selection!=0){
             unLab.setValue(Lobby.descriptionOfParameters.get(MyWorld.pl.parameters[(MyWorld.pl.selection-1)*2]));
