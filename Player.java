@@ -156,7 +156,7 @@ public class Player extends RealObject
             val=0.5;
             if(botOrNo ==0){
                 selection=Greenfoot.getRandomNumber(3);
-                updateAnimals(parameters[selection*2],parameters[(selection*2)+1],val);
+                updateAnimals(parameters[selection*2],parameters[(selection*2)+1],0.1);
                 newSelection =0;
             }
         }
@@ -768,6 +768,13 @@ public class Player extends RealObject
             setRotation(r);
             turnToR1 =1;
         }
+        else if(PlInR != null){
+            r=getRotation();
+            turnTowards(PlInR.getX(), PlInR.getY());
+            r1=getRotation();
+            setRotation(r);
+            turnToR1 =1;
+        }
         else{
             randomMove();
         }
@@ -819,7 +826,7 @@ public class Player extends RealObject
             foodX =0;
             foodY =0;
         }
-        if(tPl!=null && predation <0.7 && sit1< maxSatiety && location==2 || tPl!=null && predation <0.7 && sit1< maxSatiety && location==tPl.location){
+        if(tPl!=null && predation <0.7 && sit2 < 7 && location==2 || tPl!=null && predation <0.7 && sit2 < 7 && location==tPl.location){
             sit1=sit1+(int)(eat*(1- predation));
             tPl.satiety -=eat;
             xp-=tPl.poison;
@@ -1167,24 +1174,24 @@ public class Player extends RealObject
         } 
     }
     public ArrayList<Water> getWList(){
-        return (ArrayList<Water>)getObjectsInRange(Fon.w, Water.class);
+        return (ArrayList<Water>)getWorld().getObjects(Water.class);
     }
     public ArrayList<WaterRadius> getWRList(){
-        return (ArrayList<WaterRadius>)getObjectsInRange(Fon.w, WaterRadius.class);
+        return (ArrayList<WaterRadius>)getWorld().getObjects(WaterRadius.class);
     }
     public ArrayList<Animal> getAList(){
-        return (ArrayList<Animal>)getObjectsInRange(Fon.w, Animal.class);
+        return (ArrayList<Animal>)getWorld().getObjects(Animal.class);
     }
     public ArrayList<Plant> getPList(){
-        return (ArrayList<Plant>)getObjectsInRange(Fon.w, Plant.class);
+        return (ArrayList<Plant>)getWorld().getObjects(Plant.class);
     }
     public ArrayList<DieAnimal> getDAList(){
-        return (ArrayList<DieAnimal>)getObjectsInRange(Fon.w, DieAnimal.class);
+        return (ArrayList<DieAnimal>)getWorld().getObjects(DieAnimal.class);
     }
     public ArrayList<Hole> getHList(){
-        return (ArrayList<Hole>)getObjectsInRange(Fon.w, Hole.class);
+        return (ArrayList<Hole>)getWorld().getObjects(Hole.class);
     }
     public ArrayList<HoleRoom> getHRList(){
-        return (ArrayList<HoleRoom>)getObjectsInRange(Fon.w, HoleRoom.class);
+        return (ArrayList<HoleRoom>)getWorld().getObjects(HoleRoom.class);
     }
 }
