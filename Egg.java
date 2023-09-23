@@ -18,7 +18,7 @@ public class Egg extends RealObject
     int start;
     double predation;
     GreenfootImage image;
-    int size;
+    double size;
     int period;
     int tim;
     int timer;
@@ -31,7 +31,13 @@ public class Egg extends RealObject
     int food;
     int water;
 
+    int foodX;
+    int foodY;
+    int waterX;
+    int waterY;
+
     boolean mutate;
+    int type;
     public Egg(ArrayList<Double> dna1, int location, Player pl, int tn, boolean inHole, int food, int water, boolean mutate){
         this.inHole = inHole;
         teamNum=tn;
@@ -51,7 +57,7 @@ public class Egg extends RealObject
         maskCof = 0.9 / Math.pow(size, 2);
         this.food = food;
         this.water = water;
-        updateImage(size, 255);
+        updateImage((int)size, 255);
     }
     public void updateImage(int s, int t){
         image = new GreenfootImage(s, s);
@@ -66,17 +72,17 @@ public class Egg extends RealObject
                 updateImage((int)(size *1.5), 255);
             }
             else if(location==3 || inHole){
-                updateImage(size, 100);
+                updateImage((int)size, 100);
             }
             else if(location==1){
-                updateImage(size, 255);
+                updateImage((int)size, 255);
             }
             start=1;
         }
 
         if(location == 2 && !isTouching(Plant.class)){
             location = 1;
-            updateImage(size, 255);
+            updateImage((int)size, 255);
         }
 
         timer++;
@@ -87,6 +93,11 @@ public class Egg extends RealObject
         if(tim>= period){
             Animal an=new Animal(dna, myPl, teamNum, inHole
                     , food, water, mutate);
+            an.foodX = foodX;
+            an.foodY = foodY;
+            an.waterX = waterX;
+            an.waterY = waterY;
+            an.type = type;
             getWorld().addObject(an, getX(), getY());
             getWorld().removeObject(this);
         }// Add your action code here.
