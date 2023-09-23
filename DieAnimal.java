@@ -12,16 +12,16 @@ public class DieAnimal extends RealObject
      * Act - do whatever the DieAnimal wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
-    int size;
+    double size;
     int satiety;
     int maxSatiety;
     
     GreenfootImage myImage;
-    public DieAnimal(int size1, int satiety1, int maxSatiety1){
+    public DieAnimal(double size1, int satiety1, int maxSatiety1){
         size = size1;
         maxSatiety = maxSatiety1;
         satiety = satiety1;
-        myImage =new GreenfootImage(size,size);
+        myImage =new GreenfootImage((int)size, (int)size);
         myImage.setColor(Color.BLACK);
         myImage.fill();
         updateImage();

@@ -64,7 +64,7 @@ public class MyWorld extends World
 
     public static Water ocean;
     public void prepare(){
-        setPaintOrder(Fon.class, Animal.class, Player.class, Egg.class, DieAnimal.class, Plant.class, Hole.class, HoleRoom.class, Water.class);
+        setPaintOrder(Fon.class, Plant.class, Animal.class, Player.class, Egg.class, DieAnimal.class, Hole.class, HoleRoom.class, Water.class);
 
         numOfWater = Greenfoot.getRandomNumber(2)+1;
         for(int i = 0; i< numOfWater; i++){
@@ -214,7 +214,7 @@ public class MyWorld extends World
                     pl1.fillOval(0, 0, pl1.getWidth() - 1, pl1.getHeight() - 1);
                 }
 
-                im.drawImage(pl1, (plant.size %2)*(int)((Fon.cof/2)+0.5)+(int)(0.5+(plant.getX()-pl.getX()+(int)(600/Fon.cof))*Fon.cof)-pl1.getWidth()/2, (plant.size %2)*(int)((Fon.cof/2)+0.5)+(int)(0.5+(plant.getY()-pl.getY()+(int)(350/Fon.cof))*Fon.cof)-pl1.getHeight()/2);
+                im.drawImage(pl1, (int)(plant.size %2)*(int)((Fon.cof/2)+0.5)+(int)(0.5+(plant.getX()-pl.getX()+(int)(600/Fon.cof))*Fon.cof)-pl1.getWidth()/2, (int)(plant.size %2)*(int)((Fon.cof/2)+0.5)+(int)(0.5+(plant.getY()-pl.getY()+(int)(350/Fon.cof))*Fon.cof)-pl1.getHeight()/2);
             }
         }
         for(int i=0;i<pl.getAList().size();i++){
@@ -222,7 +222,7 @@ public class MyWorld extends World
                 an1=pl.getAList().get(i);
                 eye=new GreenfootImage("eye.png");
                 int eyeSize;
-                eyeSize=(int)(an1.animalSize *0.85*Fon.cof);
+                eyeSize=(int)((int)an1.animalSize * 0.85 * Fon.cof * (an1.location == 2 ? 1.5 : 1));
                 if(eyeSize<1){
                     eyeSize=1;
                 }
